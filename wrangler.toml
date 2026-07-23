@@ -1,0 +1,6 @@
+name = "prime-analytics"
+compatibility_date = "2026-07-23"
+
+[assets]
+directory = "./website"
+not_found_handling = "404-page"
