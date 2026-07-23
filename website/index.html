@@ -106,6 +106,36 @@ h2{font-family:'Bitter',serif;font-weight:800;font-size:clamp(1.5rem,3vw,2.1rem)
 .card h3{font-size:1.08rem;font-weight:600;margin-bottom:10px}
 .card p{font-size:.94rem;color:var(--muted)}
 
+/* ---------- Challenges ---------- */
+.pains{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.pain{
+  display:flex;gap:16px;align-items:flex-start;
+  background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;
+}
+.pain .x{
+  flex-shrink:0;width:26px;height:26px;border-radius:7px;
+  background:rgba(232,161,60,.14);color:var(--amber);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.95rem;
+}
+.pain p{font-size:.94rem;color:var(--ink);margin:0}
+
+/* ---------- FAQ ---------- */
+.faq{max-width:42em}
+.faq details{border-bottom:1px solid var(--line);padding:18px 0}
+.faq details:first-child{border-top:1px solid var(--line)}
+.faq summary{
+  cursor:pointer;font-weight:600;font-size:1rem;list-style:none;
+  display:flex;justify-content:space-between;align-items:center;gap:16px;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{
+  content:'+';font-family:'IBM Plex Mono',monospace;color:var(--cobalt);
+  font-size:1.3rem;flex-shrink:0;
+}
+.faq details[open] summary::after{content:'−'}
+.faq details p{color:var(--muted);margin-top:12px;font-size:.93rem;max-width:38em}
+
 /* ---------- How we work ---------- */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;counter-reset:step}
 .step{border-top:3px solid var(--cobalt);padding-top:18px}
@@ -121,10 +151,14 @@ h2{font-family:'Bitter',serif;font-weight:800;font-size:clamp(1.5rem,3vw,2.1rem)
   background:var(--ink);border-radius:14px;padding:36px 40px;
   display:flex;flex-wrap:wrap;gap:14px 34px;align-items:center;justify-content:center;
 }
-.stack span{
-  font-family:'IBM Plex Mono',monospace;color:#B9C6D6;font-size:.95rem;letter-spacing:.02em;
-}
 .stack .lead{color:#fff;font-family:'IBM Plex Sans',sans-serif;font-weight:600;width:100%;text-align:center;margin-bottom:6px}
+.stack .tool{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'IBM Plex Mono',monospace;color:#B9C6D6;font-size:.88rem;letter-spacing:.02em;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);
+  padding:8px 16px;border-radius:20px;
+}
+.stack .tool::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0}
 
 /* ---------- About ---------- */
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
@@ -149,7 +183,7 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
 /* ---------- Responsive ---------- */
 @media (max-width:860px){
   .hero-grid{grid-template-columns:1fr;gap:40px}
-  .cards,.steps{grid-template-columns:1fr}
+  .cards,.steps,.pains{grid-template-columns:1fr}
   .about-grid{grid-template-columns:1fr;gap:28px}
   .nav-links a:not(.btn){display:none}
   header.hero{padding:56px 0 48px}
@@ -167,7 +201,8 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
       <a href="#services">Services</a>
       <a href="#process">How we work</a>
       <a href="#about">About</a>
-      <a class="btn" href="#contact">Email us</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn" href="https://calendly.com/eduardo-primeanalytics/30min" target="_blank" rel="noopener">Book a call</a>
     </div>
   </div>
 </nav>
@@ -179,13 +214,13 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
       <h1>Know which dollar <em>actually</em> drove the sale.</h1>
       <p class="lede">We build the pipelines, models, and dashboards that turn your marketing and product data into decisions — from raw events to a warehouse your whole team trusts.</p>
       <div class="hero-ctas">
-        <a class="btn" href="#contact">Email us</a>
+        <a class="btn" href="https://calendly.com/eduardo-primeanalytics/30min" target="_blank" rel="noopener">Book a call</a>
         <a class="btn ghost" href="#services">See what we do</a>
       </div>
     </div>
 
     <div class="schematic" aria-label="Diagram: data sources flow into a warehouse, then into models, then into decisions">
-      <svg viewBox="0 0 440 300" role="img">
+      <svg viewBox="0 0 440 308" role="img">
         <!-- Sources -->
         <text x="16" y="24" class="sc-label">SOURCES</text>
         <rect x="16" y="36" width="120" height="34" rx="8" class="sc-node"/>
@@ -214,18 +249,51 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
         <text x="342" y="125" class="sc-node-title">dbt · MTA</text>
 
         <!-- Output metrics -->
-        <text x="16" y="212" class="sc-label">OUTPUT — WHAT YOUR TEAM SEES</text>
-        <rect x="16" y="224" width="408" height="56" rx="8" class="sc-node"/>
-        <text x="34" y="248" class="sc-metric">blended CAC ↓ 18%</text>
-        <text x="34" y="268" class="sc-label">after reallocating spend to true top channel</text>
-        <text x="268" y="248" class="sc-metric">ROAS by channel</text>
-        <text x="268" y="268" class="sc-label">refreshed daily, one source of truth</text>
+        <text x="16" y="208" class="sc-label">OUTPUT — WHAT YOUR TEAM SEES</text>
+        <rect x="16" y="220" width="408" height="72" rx="8" class="sc-node"/>
+        <text x="34" y="240" class="sc-metric">blended CAC ↓ 18%</text>
+        <text x="34" y="256" class="sc-label">
+          <tspan x="34" dy="0">after reallocating spend</tspan>
+          <tspan x="34" dy="14">to the true top channel</tspan>
+        </text>
+        <text x="240" y="240" class="sc-metric">ROAS by channel</text>
+        <text x="240" y="256" class="sc-label">
+          <tspan x="240" dy="0">refreshed daily,</tspan>
+          <tspan x="240" dy="14">one source of truth</tspan>
+        </text>
 
-        <path class="sc-flow" d="M371 142 C 371 190, 220 190, 220 224"/>
+        <path class="sc-flow" d="M371 142 C 371 186, 220 186, 220 220"/>
       </svg>
     </div>
   </div>
 </header>
+
+<section id="challenges">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Sound familiar?</h2>
+      <p>None of these are unusual — they're just expensive to leave unfixed.</p>
+    </div>
+    <div class="pains">
+      <div class="pain">
+        <span class="x">×</span>
+        <p>Marketing spend and revenue live in five dashboards that don't agree, so nobody fully trusts the "blended CAC" number in the Monday meeting.</p>
+      </div>
+      <div class="pain">
+        <span class="x">×</span>
+        <p>A simple "why did conversions drop last week" question turns into half a day of pulling CSVs instead of one dashboard click.</p>
+      </div>
+      <div class="pain">
+        <span class="x">×</span>
+        <p>Attribution is either a black-box tool nobody understands, or a spreadsheet only one person knows how to update.</p>
+      </div>
+      <div class="pain">
+        <span class="x">×</span>
+        <p>Whoever owns your data spends more time firefighting broken pipelines than building anything new.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section id="services">
   <div class="wrap">
@@ -276,13 +344,39 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
   </div>
 </section>
 
+<section id="guarantees">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>What we guarantee</h2>
+      <p>The usual risks of hiring a small, unfamiliar shop — addressed upfront.</p>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <span class="tag">Pricing</span>
+        <h3>Fixed price, quoted after the audit</h3>
+        <p>You get a number before you commit to anything — not an open-ended bill that grows with the project.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Access</span>
+        <h3>Both founders, no hand-offs</h3>
+        <p>No account managers, no rotating junior staff. You work directly with the two people who scoped the project.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Ownership</span>
+        <h3>You own everything, no lock-in</h3>
+        <p>The warehouse, the models, the documentation — all yours. If you want to walk away after handoff, you can.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section>
   <div class="wrap">
     <div class="stack">
       <span class="lead">Tools we work with daily</span>
-      <span>Snowflake</span><span>dbt</span><span>BigQuery</span><span>Sigma</span>
-      <span>Hex</span><span>Fivetran</span><span>Python</span><span>SQL</span>
-      <span>Mixpanel</span><span>GA4</span><span>Looker</span><span>Tableau</span>
+      <span class="tool">Snowflake</span><span class="tool">dbt</span><span class="tool">BigQuery</span><span class="tool">Sigma</span>
+      <span class="tool">Hex</span><span class="tool">Fivetran</span><span class="tool">Python</span><span class="tool">SQL</span>
+      <span class="tool">Mixpanel</span><span class="tool">GA4</span><span class="tool">Looker</span><span class="tool">Tableau</span>
     </div>
   </div>
 </section>
@@ -303,13 +397,48 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
   </div>
 </section>
 
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Questions we get asked</h2>
+      <p>If yours isn't here, that's what the call is for.</p>
+    </div>
+    <div class="faq">
+      <details>
+        <summary>What does a project actually cost?</summary>
+        <p>It depends on scope — a full warehouse-and-dashboard build is a different investment than a lightweight attribution model on data you already have clean. We quote a fixed price after the audit, before you commit to anything, so there's no open-ended bill.</p>
+      </details>
+      <details>
+        <summary>How long does an engagement take?</summary>
+        <p>The audit is one week. The build after that ships in weekly increments you review as it goes — total timeline depends on scope, but you're never waiting months for a single reveal.</p>
+      </details>
+      <details>
+        <summary>What tools do you use?</summary>
+        <p>Snowflake or BigQuery for the warehouse, dbt for transformation, and Sigma, Hex, or Looker for dashboards — whichever fits what your team already knows. See the full list above.</p>
+      </details>
+      <details>
+        <summary>Do you sign NDAs and handle our data securely?</summary>
+        <p>Yes — NDAs and data processing agreements are standard practice for us, not a special request.</p>
+      </details>
+      <details>
+        <summary>Do you work with companies outside the US?</summary>
+        <p>Yes. We're remote-first, based in Honduras (CST), which overlaps every US time zone's core hours, and we work in fully fluent English.</p>
+      </details>
+      <details>
+        <summary>What happens after the project ends — are we locked in?</summary>
+        <p>No. You get full documentation and recorded walkthroughs, and you own the warehouse, models, and pipelines outright. Plenty of clients come back for new work, but nothing here requires it.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
 <section id="contact">
   <div class="wrap">
     <div class="contact">
       <h2>Let's look at your data together</h2>
       <p>A 30-minute call is enough to tell you honestly whether we can help — and roughly what it would cost. No deck, no pressure.</p>
-      <a class="btn" href="mailto:hello@primeanalytics.ai?subject=Intro%20call">Email us</a>
-      <div class="mono">hello@primeanalytics.ai</div>
+      <a class="btn" href="https://calendly.com/eduardo-primeanalytics/30min" target="_blank" rel="noopener">Book a call</a>
+      <div class="mono">or email hello@primeanalytics.ai</div>
     </div>
   </div>
 </section>
