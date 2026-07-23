@@ -31,41 +31,26 @@ Don't push straight to `main`. Suggested workflow:
 3. Each partner reviews the other's PRs before merge. This is the same veto-round discipline from your naming process, applied to the repo instead of a spreadsheet.
 4. Protect `main` in GitHub repo settings (Settings → Branches → require PR before merge) so this isn't just a norm you can forget under deadline pressure.
 
-## Outstanding before this goes live
+## Status
 
-Pulled from the partner's launch notes — treat this as the actual punch list, not the README as decoration:
+Live at **https://primeanalytics.ai** (and `www.`). Deployed as a Cloudflare Workers static-assets project (`wrangler.toml` at repo root, `directory = "./website"`), connected to this GitHub repo for auto-deploy on push to `master`.
 
-- [ ] **About section** — currently credits only one founder. Add the second partner's name and credential line (marked with a TODO comment in `index.html`).
-- [ ] **"Book a call" buttons** — currently `mailto:` links, but labeled as if they book a calendar slot. Either relabel to "Email us" honestly, or wire up Calendly/Cal.com so the label matches the behavior.
+- [x] **About section** — credits both founders (Eduardo Chacón and Jose Bardales).
+- [x] **"Book a call" buttons** — relabeled to "Email us" to match the actual `mailto:` behavior.
+- [x] **Deploy** — Cloudflare Workers (static assets), account `Educhac23@gmail.com's Account` (the one that already owns the `primeanalytics.ai` DNS zone).
+- [x] **Domain DNS** — `primeanalytics.ai` and `www.primeanalytics.ai` attached as custom domains on the Worker, SSL provisioned.
+- [x] **Business email** — `hello@primeanalytics.ai` set up as a Google Workspace alias on the `eduardo@` mailbox (free, no extra seat). Confirmed working.
 - [ ] **Case studies** — even one anonymized project (the anchor client, once wrapped) would do more for conversion than any copy polish.
-- [ ] **Deploy** — see below.
-- [ ] **Domain DNS** — point primeanalytics.ai at the deploy host.
-- [ ] **Business email** — hello@primeanalytics.ai needs to actually exist and receive mail before the mailto link is worth anything.
 - [ ] **Legal/invoicing structure** for cross-border USD billing.
 
-## Deploy
+GitHub account for this repo: `eduardo-primeanalytics` (renamed once from a typo'd signup, `eduardo-primeanaytics`). Two unrelated personal GitHub accounts (`eduardo-hellomood`, `DA-educhac`) are also authenticated locally — not used for this repo.
 
-GitHub hosts the code; it doesn't put it on the internet at your domain by itself. Pick one:
+## Deploy details
 
-- **Cloudflare Pages** — connect the repo, auto-deploys on push to `main`, free, and if you're already managing `primeanalytics.ai` DNS through Cloudflare, the domain connection is a couple of clicks.
-- **Netlify** — same idea, marginally friendlier UI, one more account to manage.
-- **GitHub Pages** — zero extra services, but weaker for custom domain + redirect edge cases than the two above.
+Redeploys automatically on push to `master` via the Cloudflare-GitHub integration. To deploy manually:
 
-Whichever you pick, connect it to the repo so every merge to `main` deploys automatically — no manual "drag the file to the host" step to forget.
+```bash
+npx wrangler deploy
+```
 
-## Handoff status (for the next Claude session)
-
-Project was moved from `~/Downloads` into this folder (`C:\Users\educh\OneDrive\Personales\prime-analytics`) and `git init` has been run here. **No commits yet** — `index.html` and `README.md` are untracked.
-
-Decisions made so far:
-- GitHub repo should be created under a **new** account, username `eduardo-primeanalytics`, email `eduardo@primeanalytics.ai` (this address already works — forwards to/reads via Gmail).
-- User confirmed they want the assistant to eventually handle the whole punch list above ("do everything"), but stopped short of authorizing account creation in this session.
-
-Blocked / pending user input:
-- **GitHub account creation** is the very next step and is *not done*. Two options were offered and the user dismissed the question without picking one — ask again before proceeding:
-  1. User signs up themselves (github.com/signup, username `eduardo-primeanalytics`, email `eduardo@primeanalytics.ai`), tells the assistant once done, then assistant runs `gh auth login` to connect it.
-  2. Assistant drives the signup form via browser tooling, but the user types the password and email verification code themselves (don't auto-fill secrets or read the verification email autonomously).
-- Two other GitHub accounts (`eduardo-hellomood`, `DA-educhac`) are already authenticated locally via `gh auth status` — do not use either for this repo; a dedicated agency account was explicitly requested instead.
-- Repo visibility/name not yet confirmed — default assumption is a repo named `prime-analytics`, but confirm before running `gh repo create`.
-
-Once the repo exists: `git add`, first commit, push, then work the punch list above. The "Book a call" mislabeling and About-section TODO can be fixed in `index.html` without needing any external account — safe to do before or independently of the GitHub signup.
+`wrangler.toml` pins `account_id` to the Cloudflare account that owns the DNS zone — don't remove it, since the authenticated user may have access to more than one Cloudflare account and wrangler will otherwise guess wrong.
