@@ -8,13 +8,15 @@ Marketing attribution, data infrastructure, and dashboards for US SaaS, e-commer
 
 ```
 prime-analytics/
-├── wrangler.toml    # Cloudflare Workers config — points at website/ for static assets
+├── README.md        # this file — NOT inside website/, so it's never served publicly
+├── wrangler.toml     # Cloudflare Workers config — points at website/ for static assets
 └── website/
-    ├── index.html   # the entire site — HTML, CSS, and JS inline
-    └── README.md    # this file
+    └── index.html    # the entire site — HTML, CSS, and JS inline
 ```
 
 One HTML file on purpose. Don't split into a framework or add a build step until there's a real reason (a blog, case study pages, a CMS). A static HTML file is the fastest thing to deploy and the easiest for two people to review in a pull request.
+
+**Keep this file out of `website/`.** Anything in that folder is uploaded as a public static asset by `wrangler deploy` — a README with account IDs and internal infra notes previously ended up live at `primeanalytics.ai/README.md` before this was caught and fixed.
 
 ## Local development
 
