@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prime Analytics — Marketing attribution & data infrastructure</title>
+<meta name="description" content="We build the data infrastructure behind confident marketing decisions. Attribution modeling, Snowflake + dbt pipelines, and dashboards your team actually uses.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F7FA;
+  --ink:#16283C;
+  --cobalt:#2456C7;
+  --amber:#E8A13C;
+  --muted:#5B6B7D;
+  --line:#D7DEE7;
+  --card:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'IBM Plex Sans',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.6;
+  background-image:radial-gradient(circle, #C9D3DE 1px, transparent 1px);
+  background-size:28px 28px;
+}
+a{color:var(--cobalt)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+/* ---------- Nav ---------- */
+nav{
+  position:sticky;top:0;z-index:10;
+  background:rgba(245,247,250,.92);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;max-width:1080px;margin:0 auto}
+.logo{font-family:'Bitter',serif;font-weight:800;font-size:1.15rem;text-decoration:none;color:var(--ink);letter-spacing:-.01em}
+.logo span{color:var(--cobalt)}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{text-decoration:none;color:var(--muted);font-size:.92rem;font-weight:500}
+.nav-links a:hover{color:var(--ink)}
+.btn{
+  display:inline-block;background:var(--cobalt);color:#fff !important;
+  padding:11px 22px;border-radius:8px;text-decoration:none;
+  font-weight:600;font-size:.95rem;border:none;cursor:pointer;
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(36,86,199,.28)}
+.btn.ghost{background:transparent;color:var(--cobalt) !important;border:1.5px solid var(--cobalt)}
+.btn.ghost:hover{box-shadow:none;background:rgba(36,86,199,.06)}
+
+/* ---------- Hero ---------- */
+header.hero{padding:88px 0 72px}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--cobalt);margin-bottom:18px;font-weight:500;
+}
+h1{
+  font-family:'Bitter',serif;font-weight:800;
+  font-size:clamp(2.1rem,4.6vw,3.3rem);line-height:1.12;letter-spacing:-.02em;
+  margin-bottom:20px;
+}
+h1 em{font-style:normal;color:var(--cobalt)}
+.hero p.lede{font-size:1.13rem;color:var(--muted);max-width:34em;margin-bottom:32px}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
+
+/* ---------- Pipeline schematic (signature) ---------- */
+.schematic{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:26px 22px;box-shadow:0 12px 32px rgba(22,40,60,.08);
+}
+.schematic svg{width:100%;height:auto;display:block}
+.sc-label{font-family:'IBM Plex Mono',monospace;font-size:11px;fill:var(--muted)}
+.sc-node{fill:#fff;stroke:var(--line);stroke-width:1.5;rx:8}
+.sc-node-title{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;fill:var(--ink)}
+.sc-flow{stroke:var(--cobalt);stroke-width:2;fill:none;stroke-dasharray:6 6;animation:flow 1.4s linear infinite}
+.sc-metric{font-family:'IBM Plex Mono',monospace;font-size:12px;fill:var(--cobalt);font-weight:500}
+@keyframes flow{to{stroke-dashoffset:-24}}
+@media (prefers-reduced-motion: reduce){
+  .sc-flow{animation:none}
+  html{scroll-behavior:auto}
+}
+
+/* ---------- Sections ---------- */
+section{padding:72px 0}
+.sec-head{margin-bottom:44px;max-width:38em}
+h2{font-family:'Bitter',serif;font-weight:800;font-size:clamp(1.5rem,3vw,2.1rem);letter-spacing:-.015em;margin-bottom:12px}
+.sec-head p{color:var(--muted)}
+
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:28px 24px;transition:transform .15s ease, box-shadow .15s ease;
+}
+.card:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(22,40,60,.09)}
+.card .tag{
+  font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--amber);font-weight:500;display:block;margin-bottom:12px;
+}
+.card h3{font-size:1.08rem;font-weight:600;margin-bottom:10px}
+.card p{font-size:.94rem;color:var(--muted)}
+
+/* ---------- How we work ---------- */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;counter-reset:step}
+.step{border-top:3px solid var(--cobalt);padding-top:18px}
+.step h3{font-size:1.02rem;font-weight:600;margin-bottom:8px}
+.step h3::before{
+  counter-increment:step;content:counter(step,decimal-leading-zero);
+  font-family:'IBM Plex Mono',monospace;color:var(--cobalt);margin-right:10px;font-weight:500;
+}
+.step p{font-size:.93rem;color:var(--muted)}
+
+/* ---------- Stack strip ---------- */
+.stack{
+  background:var(--ink);border-radius:14px;padding:36px 40px;
+  display:flex;flex-wrap:wrap;gap:14px 34px;align-items:center;justify-content:center;
+}
+.stack span{
+  font-family:'IBM Plex Mono',monospace;color:#B9C6D6;font-size:.95rem;letter-spacing:.02em;
+}
+.stack .lead{color:#fff;font-family:'IBM Plex Sans',sans-serif;font-weight:600;width:100%;text-align:center;margin-bottom:6px}
+
+/* ---------- About ---------- */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.about p{color:var(--muted);margin-bottom:16px}
+.fact{
+  display:flex;gap:14px;align-items:baseline;border-bottom:1px solid var(--line);padding:14px 0;
+}
+.fact .k{font-family:'IBM Plex Mono',monospace;font-size:.8rem;color:var(--cobalt);min-width:130px}
+.fact .v{font-size:.95rem}
+
+/* ---------- Contact ---------- */
+.contact{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:56px 48px;text-align:center;box-shadow:0 12px 32px rgba(22,40,60,.07);
+}
+.contact p{color:var(--muted);max-width:32em;margin:0 auto 28px}
+.contact .mono{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:var(--muted);margin-top:18px}
+
+footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
+.foot{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:.85rem}
+
+/* ---------- Responsive ---------- */
+@media (max-width:860px){
+  .hero-grid{grid-template-columns:1fr;gap:40px}
+  .cards,.steps{grid-template-columns:1fr}
+  .about-grid{grid-template-columns:1fr;gap:28px}
+  .nav-links a:not(.btn){display:none}
+  header.hero{padding:56px 0 48px}
+  section{padding:52px 0}
+  .contact{padding:40px 24px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="#top">Prime<span>&nbsp;Analytics</span></a>
+    <div class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#process">How we work</a>
+      <a href="#about">About</a>
+      <a class="btn" href="#contact">Email us</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Marketing attribution · Data infrastructure</div>
+      <h1>Know which dollar <em>actually</em> drove the sale.</h1>
+      <p class="lede">We build the pipelines, models, and dashboards that turn your marketing and product data into decisions — from raw events to a warehouse your whole team trusts.</p>
+      <div class="hero-ctas">
+        <a class="btn" href="#contact">Email us</a>
+        <a class="btn ghost" href="#services">See what we do</a>
+      </div>
+    </div>
+
+    <div class="schematic" aria-label="Diagram: data sources flow into a warehouse, then into models, then into decisions">
+      <svg viewBox="0 0 440 300" role="img">
+        <!-- Sources -->
+        <text x="16" y="24" class="sc-label">SOURCES</text>
+        <rect x="16" y="36" width="120" height="34" rx="8" class="sc-node"/>
+        <text x="30" y="58" class="sc-node-title">ads_spend</text>
+        <rect x="16" y="80" width="120" height="34" rx="8" class="sc-node"/>
+        <text x="30" y="102" class="sc-node-title">web_events</text>
+        <rect x="16" y="124" width="120" height="34" rx="8" class="sc-node"/>
+        <text x="30" y="146" class="sc-node-title">crm_deals</text>
+
+        <!-- Flows to warehouse -->
+        <path class="sc-flow" d="M136 53 C 180 53, 180 120, 214 120"/>
+        <path class="sc-flow" d="M136 97 C 175 97, 180 118, 214 119"/>
+        <path class="sc-flow" d="M136 141 C 180 141, 180 122, 214 121"/>
+
+        <!-- Warehouse -->
+        <text x="214" y="86" class="sc-label">WAREHOUSE</text>
+        <rect x="214" y="98" width="110" height="44" rx="8" class="sc-node"/>
+        <text x="232" y="125" class="sc-node-title">snowflake</text>
+
+        <!-- Flow to models -->
+        <path class="sc-flow" d="M324 120 C 356 120, 356 120, 388 120" transform="translate(-40,0)"/>
+
+        <!-- Models -->
+        <text x="318" y="86" class="sc-label">MODELS</text>
+        <rect x="318" y="98" width="106" height="44" rx="8" class="sc-node"/>
+        <text x="342" y="125" class="sc-node-title">dbt · MTA</text>
+
+        <!-- Output metrics -->
+        <text x="16" y="212" class="sc-label">OUTPUT — WHAT YOUR TEAM SEES</text>
+        <rect x="16" y="224" width="408" height="56" rx="8" class="sc-node"/>
+        <text x="34" y="248" class="sc-metric">blended CAC ↓ 18%</text>
+        <text x="34" y="268" class="sc-label">after reallocating spend to true top channel</text>
+        <text x="268" y="248" class="sc-metric">ROAS by channel</text>
+        <text x="268" y="268" class="sc-label">refreshed daily, one source of truth</text>
+
+        <path class="sc-flow" d="M371 142 C 371 190, 220 190, 220 224"/>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<section id="services">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>What we do</h2>
+      <p>Three ways to engage, depending on where your data is today.</p>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <span class="tag">Attribution</span>
+        <h3>Marketing attribution modeling</h3>
+        <p>Multi-touch attribution built on your own data — not a black box. Understand which channels, campaigns, and touchpoints actually drive revenue, and reallocate spend with confidence.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Infrastructure</span>
+        <h3>Data warehouse &amp; pipelines</h3>
+        <p>Snowflake or BigQuery warehouse, dbt transformation layer, automated ingestion, and QA checks. A modern data stack set up right the first time — documented so your team owns it.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Analytics</span>
+        <h3>Dashboards &amp; decision support</h3>
+        <p>Sigma, Hex, Looker, or Tableau dashboards designed around the decisions your team makes weekly — not vanity metrics. Includes training so adoption actually sticks.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>How we work</h2>
+      <p>Fixed-scope projects with a clear finish line — no open-ended retainers unless you want one.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <h3>Audit</h3>
+        <p>One week mapping your current stack, tracking gaps, and the decisions you can't answer today. You get a written findings doc either way.</p>
+      </div>
+      <div class="step">
+        <h3>Build</h3>
+        <p>We design and ship the pipeline, models, and dashboards in weekly increments you can review — nothing disappears into a black box for months.</p>
+      </div>
+      <div class="step">
+        <h3>Handoff</h3>
+        <p>Full documentation, recorded walkthroughs, and a transition plan. Our goal is that you don't need us — which is usually why clients come back.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="stack">
+      <span class="lead">Tools we work with daily</span>
+      <span>Snowflake</span><span>dbt</span><span>BigQuery</span><span>Sigma</span>
+      <span>Hex</span><span>Fivetran</span><span>Python</span><span>SQL</span>
+      <span>Mixpanel</span><span>GA4</span><span>Looker</span><span>Tableau</span>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap about-grid">
+    <div class="about">
+      <h2>About</h2>
+      <p>Prime Analytics is co-founded by Eduardo Chacón and Jose Bardales, who bring a combined 10+ years of hands-on analytics experience to every engagement. Jose is a senior data and product analyst who has built data infrastructure from scratch for US SaaS companies — most recently the full Snowflake + dbt + Sigma stack for a market-leading analytics platform. Eduardo rounds out that experience translating messy, real-world data into the pipelines and decisions growing companies actually act on.</p>
+      <p>We work with US and international clients remotely, in your time zone's core hours, with fully fluent English communication and documentation.</p>
+    </div>
+    <div>
+      <div class="fact"><span class="k">BASED_IN</span><span class="v">Honduras (CST — overlaps all US time zones)</span></div>
+      <div class="fact"><span class="k">CLIENTS</span><span class="v">US SaaS, e-commerce, and services companies</span></div>
+      <div class="fact"><span class="k">BILLING</span><span class="v">USD, project-based or monthly</span></div>
+      <div class="fact"><span class="k">PORTFOLIO</span><span class="v"><a href="https://josefbardales.github.io">josefbardales.github.io</a></span></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact">
+      <h2>Let's look at your data together</h2>
+      <p>A 30-minute call is enough to tell you honestly whether we can help — and roughly what it would cost. No deck, no pressure.</p>
+      <a class="btn" href="mailto:hello@primeanalytics.ai?subject=Intro%20call">Email us</a>
+      <div class="mono">hello@primeanalytics.ai</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <span>© 2026 Prime Analytics</span>
+    <span>Tegucigalpa, Honduras · Working worldwide</span>
+  </div>
+</footer>
+
+</body>
+</html>
