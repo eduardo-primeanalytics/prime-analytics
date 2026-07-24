@@ -47,6 +47,7 @@
   --ink:#16283C;
   --cobalt:#2456C7;
   --amber:#E8A13C;
+  --amber-ink:#A6630F;
   --muted:#5B6B7D;
   --line:#D7DEE7;
   --card:#FFFFFF;
@@ -137,7 +138,7 @@ h2{font-family:'Bitter',serif;font-weight:800;font-size:clamp(1.5rem,3vw,2.1rem)
 .card:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(22,40,60,.09)}
 .card .tag{
   font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--amber);font-weight:500;display:block;margin-bottom:12px;
+  text-transform:uppercase;color:var(--amber-ink);font-weight:500;display:block;margin-bottom:12px;
 }
 .card h3{font-size:1.08rem;font-weight:600;margin-bottom:10px}
 .card p{font-size:.94rem;color:var(--muted)}
@@ -256,6 +257,8 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
   </div>
 </nav>
 
+<main>
+
 <header class="hero" id="top">
   <div class="wrap hero-grid">
     <div>
@@ -268,8 +271,8 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
       </div>
     </div>
 
-    <div class="schematic" aria-label="Diagram: data sources flow into a warehouse, then into models, then into decisions. Output metrics shown are an illustrative example, not results from a specific client.">
-      <svg viewBox="0 0 440 308" role="img">
+    <div class="schematic" role="img" aria-label="Diagram: data sources flow into a warehouse, then into models, then into decisions. Output metrics shown are an illustrative example, not results from a specific client.">
+      <svg viewBox="0 0 440 308" role="img" aria-hidden="true">
         <!-- Sources -->
         <text x="16" y="24" class="sc-label">SOURCES</text>
         <rect x="16" y="36" width="120" height="34" rx="8" class="sc-node"/>
@@ -492,6 +495,8 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
     </div>
   </div>
 </section>
+
+</main>
 
 <footer>
   <div class="wrap foot">
