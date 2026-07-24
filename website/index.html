@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prime Analytics — Marketing attribution & data infrastructure</title>
-<meta name="description" content="We build the data infrastructure behind confident marketing decisions. Attribution modeling, Snowflake + dbt pipelines, and dashboards your team actually uses.">
+<title>Marketing Attribution & Data Infrastructure — Prime Analytics</title>
+<meta name="description" content="We build the data infrastructure behind confident marketing decisions. Attribution modeling, Snowflake + dbt pipelines, dashboards your team uses.">
 
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png">
@@ -14,14 +14,14 @@
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://primeanalytics.ai/">
-<meta property="og:title" content="Prime Analytics — Marketing attribution & data infrastructure">
-<meta property="og:description" content="We build the data infrastructure behind confident marketing decisions. Attribution modeling, Snowflake + dbt pipelines, and dashboards your team actually uses.">
+<meta property="og:title" content="Marketing Attribution & Data Infrastructure — Prime Analytics">
+<meta property="og:description" content="We build the data infrastructure behind confident marketing decisions. Attribution modeling, Snowflake + dbt pipelines, dashboards your team uses.">
 <meta property="og:image" content="https://primeanalytics.ai/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Prime Analytics — Marketing attribution & data infrastructure">
-<meta name="twitter:description" content="We build the data infrastructure behind confident marketing decisions. Attribution modeling, Snowflake + dbt pipelines, and dashboards your team actually uses.">
+<meta name="twitter:title" content="Marketing Attribution & Data Infrastructure — Prime Analytics">
+<meta name="twitter:description" content="We build the data infrastructure behind confident marketing decisions. Attribution modeling, Snowflake + dbt pipelines, dashboards your team uses.">
 <meta name="twitter:image" content="https://primeanalytics.ai/og-image.png">
 
 <script type="application/ld+json">
@@ -38,6 +38,45 @@
   "founder": [
     { "@type": "Person", "name": "Eduardo Chacón", "sameAs": "https://www.linkedin.com/in/eduardo-chacon/" },
     { "@type": "Person", "name": "Jose Bardales", "sameAs": "https://josefbardales.github.io" }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does a project actually cost?",
+      "acceptedAnswer": { "@type": "Answer", "text": "The audit is $2,000 fixed and credited toward the build if you move forward. The build itself depends on scope — a full warehouse-and-dashboard build is a different investment than a lightweight attribution model — so we don't post a blanket number, but you'll have a fixed one in hand before committing to it." }
+    },
+    {
+      "@type": "Question",
+      "name": "How long does an engagement take?",
+      "acceptedAnswer": { "@type": "Answer", "text": "The audit is one week. The build after that ships in weekly increments you review as it goes — total timeline depends on scope, but you're never waiting months for a single reveal." }
+    },
+    {
+      "@type": "Question",
+      "name": "What tools do you use?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Snowflake or BigQuery for the warehouse, dbt for transformation, and Sigma, Hex, or Looker for dashboards — whichever fits what your team already knows." }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you sign NDAs and handle our data securely?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes — NDAs and data processing agreements are standard practice for us, not a special request." }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you work with companies outside the US?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. We're remote-first, based in Honduras (CST), which overlaps every US time zone's core hours, and we work in fully fluent English." }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens after the project ends — are we locked in?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. You get full documentation and recorded walkthroughs, and you own the warehouse, models, and pipelines outright. Plenty of clients come back for new work, but nothing here requires it." }
+    }
   ]
 }
 </script>
@@ -81,7 +120,7 @@ nav{
 .logo span{color:var(--cobalt)}
 .nav-links{display:flex;gap:28px;align-items:center}
 .nav-toggle-input{display:none}
-.nav-toggle-btn{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;margin-left:12px}
+.nav-toggle-btn{display:none;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;padding:14px;margin-left:8px}
 .nav-toggle-btn span{width:22px;height:2px;background:var(--ink);display:block;border-radius:2px;transition:transform .15s ease}
 .nav-links a{text-decoration:none;color:var(--muted);font-size:.92rem;font-weight:500}
 .nav-links a:hover{color:var(--ink)}
@@ -163,11 +202,12 @@ h2{font-family:'Bitter',serif;font-weight:800;font-size:clamp(1.5rem,3vw,2.1rem)
 
 /* ---------- FAQ ---------- */
 .faq{max-width:42em}
-.faq details{border-bottom:1px solid var(--line);padding:18px 0}
+.faq details{border-bottom:1px solid var(--line);padding:8px 0}
 .faq details:first-child{border-top:1px solid var(--line)}
 .faq summary{
   cursor:pointer;font-weight:600;font-size:1rem;list-style:none;
   display:flex;justify-content:space-between;align-items:center;gap:16px;
+  padding:10px 0;
 }
 .faq summary::-webkit-details-marker{display:none}
 .faq summary::after{
@@ -498,7 +538,7 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
       <h2>Let's look at your data together</h2>
       <p>A 20-minute call is enough to tell you honestly whether we can help — and roughly what it would cost. No deck, no pressure.</p>
       <a class="btn" href="https://calendly.com/eduardo-primeanalytics/20min" target="_blank" rel="noopener">Book a call</a>
-      <div class="mono">or email hello@primeanalytics.ai</div>
+      <div class="mono">or email <a href="mailto:hello@primeanalytics.ai">hello@primeanalytics.ai</a></div>
     </div>
   </div>
 </section>
