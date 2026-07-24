@@ -14,6 +14,7 @@ prime-analytics/
 └── website/
     ├── index.html    # the main page — HTML, CSS, and JS inline
     ├── privacy.html
+    ├── sample-blueprint.html
     ├── 404.html
     ├── sitemap.xml
     └── (favicon/OG image assets)
@@ -36,7 +37,7 @@ python3 -m http.server 8000 --directory website
 
 ## Site sections (in order)
 
-Nav → Hero → proof strip → **Challenges** ("Sound familiar?") → Services → **Revenue Data Blueprint** → How We Work → risk reduction → Tool stack → About/founders → **FAQ** → Contact → Footer.
+Nav → Hero → proof strip → **Challenges** → buyer questions → Services → fit guidance → **Revenue Data Blueprint** → How We Work → risk reduction → Tool stack → About/founders → **FAQ** → Contact → Footer.
 
 Challenges and FAQ were added after benchmarking four competitor agency sites (datasolutions.com, datasolutionsagency.com, value10x.ai, proiq.com). The July 2026 launch audit then replaced the vague "guarantees" framing with explicit project-risk controls and turned the audit into a named, deliverable-based offer. See "Launch UX audit record" below.
 
@@ -116,7 +117,7 @@ The hybrid preserves the original headline's punch while avoiding the claim that
 - [ ] **Check the $2,000 economics after 1–2 engagements.** Record real hours, meetings, and revisions; change price or scope if the Blueprint cannot be delivered profitably in five business days.
 - [ ] **Complete brand/legal due diligence.** Search results contain unrelated companies called Prime Analytics, including a `prime-analytics.ai` business. Check US trademark risk and decide whether a consistent descriptor such as "Prime Analytics — Revenue Data Systems" is needed.
 - [ ] **Claim consistent social profiles.** Use the same company name, descriptor, domain, logo, founder links, and summary on LinkedIn and any other public profile.
-- [ ] **Create one proof artifact that is not a case study.** A redacted sample Blueprint, sample architecture, metric dictionary, or reporting-spec excerpt will let prospects inspect the quality of the work without inventing client results.
+- [x] **Create one proof artifact that is not a case study.** `/sample-blueprint` is a clearly labeled fictional deliverable showing representative findings, architecture, metric conflicts, roadmap, and build boundaries without implying client work.
 - [ ] **Verify analytics.** Confirm Cloudflare Web Analytics records page views and Calendly outbound clicks without introducing cookies inconsistent with the privacy policy.
 - [ ] **Run real-device QA.** Test current iPhone Safari, Android Chrome, desktop Chrome, Edge, Firefox, keyboard-only navigation, 200% zoom, reduced motion, and slow/mobile connections.
 - [ ] **Request reindexing after deployment.** Resubmit the sitemap and request homepage indexing in Google Search Console after the new title and description are live.
@@ -126,6 +127,57 @@ The hybrid preserves the original headline's punch while avoiding the claim that
 - [ ] **Add professional founder photos only when both are ready.** Use consistent, real portraits; do not use stock imagery or AI-generated people.
 - [ ] **Add certifications only if current and verifiable.** Link badges to the issuer where possible.
 - [ ] **Do not add testimonials, logos, client counts, outcome percentages, or "clients come back" language until each is real and permissioned.**
+
+## Competitor benchmark checklist
+
+This checklist records the July 2026 review of ProIQ, DataSolutions, Data Solutions Agency, Value10x, SmartSites, Pegasus One, and Element / The Data Agency. Items are ranked by likely impact for Prime Analytics, not by how frequently competitors use them.
+
+### Highest impact — implemented
+
+- [x] Add a precise **who this is for** section based on business conditions rather than company size alone.
+- [x] Add a restrained **not the right fit** section without rejecting profitable spreadsheet or lightweight work.
+- [x] State the technology-agnostic principle: recommend the smallest system that reliably solves the problem.
+- [x] Add three problem-based entry paths: attribution, conflicting reporting, and infrastructure readiness.
+- [x] Explain the complete fit call → kickoff → assessment → findings → buyer decision journey.
+- [x] State exactly when the five-business-day delivery clock begins.
+- [x] Explain that the buyer may implement the Blueprint internally, use another team, or hire Prime.
+- [x] Publish a fictional sample Blueprint that prospects can inspect without relying on case studies.
+- [x] Make the sample obviously fictional in the page banner, title, company name, and explanatory copy.
+- [x] Show the expected depth of the deliverable: executive finding, inventory, metric conflicts, architecture, 90-day roadmap, and implementation boundary.
+- [x] Clarify that Prime builds measurement and reporting infrastructure but does not manage media, SEO, creative, or campaigns.
+- [x] State that outside specialists are never introduced without prior disclosure of identity, purpose, and access.
+- [x] Add a one-business-day email response expectation.
+- [x] Add the sample Blueprint to the sitemap.
+
+### High impact — requires owner preparation
+
+- [ ] Build the internal production templates behind all eight promised Blueprint deliverables; the public fictional sample is a sales artifact, not the complete operating template.
+- [ ] Define the maximum number of stakeholder interviews, source systems, reports, and revision rounds included in the $2,000 Blueprint.
+- [ ] Create a written credential-access procedure covering password sharing, MFA, least privilege, secret storage, and revocation.
+- [ ] Decide whether both founders join every kickoff and findings call and align Calendly capacity with that promise.
+- [ ] Create the reviewed NDA, DPA, MSA, and Blueprint statement-of-work templates.
+- [ ] Confirm whether outside specialists will ever be used; if yes, define vetting, contracting, confidentiality, and access requirements.
+- [ ] Decide which founder owns commercial follow-up and guarantee the one-business-day response expectation during travel or leave.
+
+### Add after enough operating evidence exists
+
+- [ ] Publish realistic implementation-duration bands after several completed builds; do not copy competitor timelines.
+- [ ] Convert common Blueprint outcomes into one or two bounded implementation packages once repeated patterns are proven.
+- [ ] Add a five-question data-maturity self-assessment only if its output gives useful guidance without inventing financial losses.
+- [ ] Add separate attribution, infrastructure, and reporting pages when each can contain genuinely distinct buyer guidance.
+- [ ] Add focused industry or business-model pages only after demand shows where Prime consistently wins.
+- [ ] Publish a short technical article explaining what attribution can and cannot prove.
+- [ ] Add a concise client-access/security page after the operating procedure and legal documents exist.
+- [ ] Consider a short inquiry form if analytics show visitors avoid Calendly and email; do not add fields without a clear follow-up workflow.
+
+### Explicitly rejected for now
+
+- [ ] Do not add AI services merely because competitors lead with AI.
+- [ ] Do not add a speculative ROI or “money left on the table” calculator.
+- [ ] Do not add an ROI guarantee before delivery economics and attribution boundaries are proven.
+- [ ] Do not manufacture industry specialization, project counts, return-client rates, awards, or performance percentages.
+- [ ] Do not create thin SEO landing pages, a generic high-volume blog, live chat, or phone support that the two founders cannot maintain.
+- [ ] Do not expand the service list unless the new service supports the core revenue-data positioning.
 
 ## Accounts & infrastructure
 

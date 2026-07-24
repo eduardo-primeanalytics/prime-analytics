@@ -78,6 +78,16 @@
       "@type": "Question",
       "name": "What happens after the project ends — are we locked in?",
       "acceptedAnswer": { "@type": "Answer", "text": "No. You get full documentation and recorded walkthroughs, and you own the warehouse, models, dashboards, and pipelines outright. Ongoing support is optional." }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you manage advertising campaigns?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. We build the data foundation, measurement logic, and reporting that show how campaigns contribute to pipeline and revenue. Your internal team or marketing agency continues to manage media, creative, SEO, and campaigns." }
+    },
+    {
+      "@type": "Question",
+      "name": "Will anyone outside the two founders work on our project?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Not without telling you first. If a project would benefit from a specialist, we explain who they are, why they are needed, and what access they would receive before involving them." }
     }
   ]
 }
@@ -202,6 +212,23 @@ h2{font-family:'Bitter',serif;font-weight:800;font-size:clamp(1.5rem,3vw,2.1rem)
 .card h3{font-size:1.08rem;font-weight:600;margin-bottom:10px}
 .card p{font-size:.94rem;color:var(--muted)}
 .cards.two{grid-template-columns:repeat(2,1fr)}
+.question-card{border-top:3px solid var(--cobalt)}
+.question-card a{display:inline-block;margin-top:14px;font-weight:600;font-size:.9rem;text-decoration:none}
+
+/* ---------- Fit ---------- */
+.fit-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:20px}
+.fit-panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px}
+.fit-panel h3{font-size:1.08rem;margin-bottom:16px}
+.fit-list{list-style:none}
+.fit-list li{position:relative;padding:0 0 12px 26px;color:var(--muted);font-size:.94rem}
+.fit-list li::before{position:absolute;left:0;color:var(--cobalt);font-weight:600}
+.fit-list.yes li::before{content:'✓'}
+.fit-list.no li::before{content:'—'}
+.principle{
+  margin-top:20px;padding:18px 20px;border-left:3px solid var(--amber);
+  background:rgba(232,161,60,.08);font-weight:600;
+}
+.principle span{display:block;color:var(--muted);font-weight:400;font-size:.88rem;margin-top:4px}
 
 /* ---------- Blueprint ---------- */
 .blueprint{
@@ -212,6 +239,7 @@ h2{font-family:'Bitter',serif;font-weight:800;font-size:clamp(1.5rem,3vw,2.1rem)
 .blueprint-price{font-family:'Bitter',serif;font-size:2rem;font-weight:800;color:var(--cobalt);line-height:1.15;margin:14px 0 4px}
 .blueprint-time{font-family:'IBM Plex Mono',monospace;color:var(--muted);font-size:.82rem;margin-bottom:20px}
 .blueprint-copy p{color:var(--muted);margin-bottom:18px}
+.blueprint-copy .btn{margin:0 8px 8px 0}
 .deliverables{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:12px 22px}
 .deliverables li{position:relative;padding-left:24px;font-size:.92rem}
 .deliverables li::before{content:'✓';position:absolute;left:0;color:var(--cobalt);font-weight:600}
@@ -248,7 +276,7 @@ h2{font-family:'Bitter',serif;font-weight:800;font-size:clamp(1.5rem,3vw,2.1rem)
 .faq details p{color:var(--muted);margin-top:12px;font-size:.93rem;max-width:38em}
 
 /* ---------- How we work ---------- */
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;counter-reset:step}
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;counter-reset:step}
 .step{border-top:3px solid var(--cobalt);padding-top:18px}
 .step h3{font-size:1.02rem;font-weight:600;margin-bottom:8px}
 .step h3::before{
@@ -300,7 +328,7 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
 @media (max-width:860px){
   body.menu-open{overflow:hidden}
   .hero-grid{grid-template-columns:1fr;gap:40px}
-  .cards,.cards.two,.steps,.pains{grid-template-columns:1fr}
+  .cards,.cards.two,.steps,.pains,.fit-grid{grid-template-columns:1fr}
   .proof-strip{grid-template-columns:1fr 1fr}
   .proof-item:nth-child(2){border-right:0}
   .proof-item:nth-child(-n+2){border-bottom:1px solid rgba(255,255,255,.14)}
@@ -448,6 +476,35 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
   </div>
 </section>
 
+<section id="questions">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Start with the question, not the tool</h2>
+      <p>You do not need to know whether the answer is a spreadsheet, an attribution model, or a warehouse. That is part of what we determine.</p>
+    </div>
+    <div class="cards">
+      <div class="card question-card">
+        <span class="tag">Attribution</span>
+        <h3>Which channels create pipeline and revenue?</h3>
+        <p>Connect campaign and touchpoint data to CRM opportunities and closed business using definitions your team can inspect.</p>
+        <a href="#blueprint">See how we assess it →</a>
+      </div>
+      <div class="card question-card">
+        <span class="tag">Reporting</span>
+        <h3>Why do our dashboards disagree?</h3>
+        <p>Trace conflicting metrics back to their sources, definitions, transformations, refresh schedules, and ownership.</p>
+        <a href="#blueprint">See how we assess it →</a>
+      </div>
+      <div class="card question-card">
+        <span class="tag">Infrastructure</span>
+        <h3>What should we build before we scale?</h3>
+        <p>Determine the smallest reliable system your current decisions require—and what can wait until later.</p>
+        <a href="#blueprint">See how we assess it →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="services">
   <div class="wrap">
     <div class="sec-head">
@@ -474,6 +531,40 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
   </div>
 </section>
 
+<section id="fit">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Is the Blueprint the right starting point?</h2>
+      <p>It is designed for consequential reporting problems, not for selling you the most complicated technology.</p>
+    </div>
+    <div class="fit-grid">
+      <div class="fit-panel">
+        <h3>A strong fit when…</h3>
+        <ul class="fit-list yes">
+          <li>An important revenue or reporting question remains unanswered.</li>
+          <li>Marketing, CRM, product, billing, or finance reports disagree.</li>
+          <li>Weekly reporting requires fragile exports, manual cleanup, or one indispensable person.</li>
+          <li>You need an independent recommendation before investing in infrastructure or hiring internally.</li>
+          <li>You want a solution your team can inspect, operate, and own.</li>
+        </ul>
+        <div class="principle">
+          We recommend the smallest system that reliably solves the problem.
+          <span>If a well-designed Google Sheet is the right answer, we will say so. Complexity is not the product; a dependable decision is.</span>
+        </div>
+      </div>
+      <div class="fit-panel">
+        <h3>Probably not the right fit when…</h3>
+        <ul class="fit-list no">
+          <li>You need an agency to manage advertising campaigns, SEO, or media buying.</li>
+          <li>You only want extra hands following an already-complete technical specification.</li>
+          <li>No decision-maker or system owner can participate in the assessment.</li>
+          <li>The relevant systems, reports, or business definitions cannot be made available.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="blueprint">
   <div class="wrap">
     <div class="blueprint">
@@ -484,6 +575,7 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
         <div class="blueprint-price">$2,000 fixed</div>
         <div class="blueprint-time">DELIVERED IN FIVE BUSINESS DAYS</div>
         <a class="btn" href="https://calendly.com/eduardo-primeanalytics/20min" target="_blank" rel="noopener">See if it fits</a>
+        <a class="btn ghost" href="/sample-blueprint">View a fictional sample</a>
       </div>
       <div>
         <h3>What you receive</h3>
@@ -510,16 +602,24 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
     </div>
     <div class="steps">
       <div class="step">
-        <h3>Blueprint</h3>
-        <p>In five business days, we map your sources, definitions, reporting gaps, and technical risks. You receive a prioritized roadmap and a fixed build proposal. The $2,000 fee is credited in full if you move forward.</p>
+        <h3>Fit call</h3>
+        <p>In 20 minutes, we determine whether the Blueprint fits the problem. No system access or preparation is required.</p>
       </div>
       <div class="step">
-        <h3>Build</h3>
-        <p>We design and ship the pipeline, models, and dashboards in weekly increments you can review — nothing disappears into a black box for months.</p>
+        <h3>Kickoff</h3>
+        <p>We agree on the decision, stakeholders, sources, minimum access, and delivery boundaries before the five-day clock starts.</p>
       </div>
       <div class="step">
-        <h3>Handoff</h3>
-        <p>Full documentation, recorded walkthroughs, access removal, and a transition plan. Your team owns and can operate what we build. Ongoing support is available, never required.</p>
+        <h3>Assessment</h3>
+        <p>We map sources, definitions, reporting gaps, and technical risks, then design the smallest reliable path forward.</p>
+      </div>
+      <div class="step">
+        <h3>Findings</h3>
+        <p>You receive the complete Blueprint and a recorded presentation, including the roadmap and fixed build proposal.</p>
+      </div>
+      <div class="step">
+        <h3>Your decision</h3>
+        <p>Implement internally, use another team, or hire us. If we build it, the $2,000 Blueprint fee is credited in full.</p>
       </div>
     </div>
   </div>
@@ -629,6 +729,14 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
         <summary>What happens after the project ends — are we locked in?</summary>
         <p>No. You get full documentation and recorded walkthroughs, and you own the warehouse, models, dashboards, and pipelines outright. Ongoing support is optional.</p>
       </details>
+      <details>
+        <summary>Do you manage advertising campaigns?</summary>
+        <p>No. We build the data foundation, measurement logic, and reporting that show how campaigns contribute to pipeline and revenue. Your internal team or marketing agency continues to manage media, creative, SEO, and campaigns.</p>
+      </details>
+      <details>
+        <summary>Will anyone outside the two founders work on our project?</summary>
+        <p>Not without telling you first. If a project would benefit from a specialist, we explain who they are, why they are needed, and what access they would receive before involving them.</p>
+      </details>
     </div>
   </div>
 </section>
@@ -639,7 +747,7 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
       <h2>Bring us the reporting question nobody trusts</h2>
       <p>In 20 minutes, we'll determine whether the Revenue Data Blueprint fits your situation and explain the next step. No preparation, deck, or commitment required.</p>
       <a class="btn" href="https://calendly.com/eduardo-primeanalytics/20min" target="_blank" rel="noopener">Discuss your data</a>
-      <div class="mono">or email <a href="mailto:hello@primeanalytics.ai">hello@primeanalytics.ai</a></div>
+      <div class="mono">or email <a href="mailto:hello@primeanalytics.ai">hello@primeanalytics.ai</a> · We respond within one business day</div>
     </div>
   </div>
 </section>

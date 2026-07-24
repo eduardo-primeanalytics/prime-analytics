@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sample Revenue Data Blueprint | Prime Analytics</title>
+<meta name="description" content="See a fictional example of the findings, architecture, risk assessment, and 90-day roadmap included in a Prime Analytics Revenue Data Blueprint.">
+<link rel="canonical" href="https://primeanalytics.ai/sample-blueprint">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F7FA;--ink:#16283C;--cobalt:#2456C7;--amber:#E8A13C;
+  --muted:#5B6B7D;--line:#D7DEE7;--card:#FFFFFF;--good:#287A58;--risk:#B84C3D;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--paper);color:var(--ink);line-height:1.6}
+a{color:var(--cobalt)}
+a:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.wrap{max-width:980px;margin:0 auto;padding:0 24px}
+nav{background:rgba(245,247,250,.96);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
+.nav-inner{max-width:980px;margin:0 auto;padding:15px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{font-family:'Bitter',serif;font-weight:800;text-decoration:none;color:var(--ink)}
+.logo span{color:var(--cobalt)}
+.back{text-decoration:none;font-size:.9rem;font-weight:600}
+.sample-banner{background:var(--amber);color:#4A2C06;text-align:center;padding:9px 20px;font-family:'IBM Plex Mono',monospace;font-size:.78rem;font-weight:500;letter-spacing:.04em}
+.cover{padding:72px 0 48px}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cobalt);margin-bottom:16px}
+h1,h2{font-family:'Bitter',serif;font-weight:800;letter-spacing:-.015em}
+h1{font-size:clamp(2.2rem,5vw,3.6rem);line-height:1.08;max-width:760px;margin-bottom:20px}
+h2{font-size:1.65rem;margin-bottom:16px}
+h3{font-size:1.05rem;margin-bottom:8px}
+.lede{font-size:1.12rem;color:var(--muted);max-width:700px}
+.meta{display:grid;grid-template-columns:repeat(4,1fr);margin-top:40px;background:var(--ink);border-radius:12px;overflow:hidden}
+.meta div{padding:18px 20px;border-right:1px solid rgba(255,255,255,.14)}
+.meta div:last-child{border:0}
+.meta strong{display:block;color:#fff;font-size:.87rem}
+.meta span{display:block;color:#B9C6D6;font-size:.78rem;margin-top:2px}
+section{padding:48px 0;border-top:1px solid var(--line)}
+.intro{color:var(--muted);max-width:720px;margin-bottom:24px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.grid.three{grid-template-columns:repeat(3,1fr)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px}
+.panel p{font-size:.92rem;color:var(--muted)}
+.tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--cobalt);margin-bottom:10px}
+.finding{border-left:3px solid var(--cobalt)}
+.finding.risk{border-left-color:var(--risk)}
+.finding.good{border-left-color:var(--good)}
+.finding strong{display:block;margin-bottom:5px}
+ul{padding-left:20px}
+li{margin-bottom:8px;color:var(--muted);font-size:.93rem}
+.decision{font-family:'Bitter',serif;font-weight:700;font-size:1.25rem;line-height:1.35;margin-bottom:12px}
+.table-wrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:720px}
+th,td{text-align:left;padding:14px 16px;border-bottom:1px solid var(--line);font-size:.86rem;vertical-align:top}
+th{font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.06em;color:var(--muted);background:#EDF1F6}
+tr:last-child td{border-bottom:0}
+.status{font-family:'IBM Plex Mono',monospace;font-size:.72rem;font-weight:500}
+.status.high{color:var(--risk)}.status.medium{color:#A6630F}.status.low{color:var(--good)}
+.architecture{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:12px;align-items:stretch}
+.arch-node{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px}
+.arch-node strong{display:block;margin-bottom:8px}
+.arch-node span{display:block;color:var(--muted);font-size:.82rem;margin-top:3px}
+.arrow{align-self:center;color:var(--cobalt);font-size:1.4rem;font-weight:600}
+.principle{margin-top:18px;background:rgba(232,161,60,.1);border-left:3px solid var(--amber);padding:18px 20px}
+.roadmap{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.phase{border-top:3px solid var(--cobalt);padding-top:16px}
+.phase .days{font-family:'IBM Plex Mono',monospace;font-size:.74rem;color:var(--cobalt);margin-bottom:7px}
+.phase ul{margin-top:12px}
+.scope{background:var(--ink);color:#fff;border-radius:14px;padding:30px}
+.scope h2{color:#fff}.scope p,.scope li{color:#B9C6D6}
+.cta{text-align:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:42px 28px}
+.cta p{color:var(--muted);max-width:560px;margin:0 auto 22px}
+.btn{display:inline-block;background:var(--cobalt);color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;font-weight:600}
+footer{padding:34px 0;color:var(--muted);font-size:.82rem}
+@media(max-width:760px){
+  .meta,.grid,.grid.three,.roadmap{grid-template-columns:1fr}
+  .meta div{border-right:0;border-bottom:1px solid rgba(255,255,255,.14)}
+  .architecture{grid-template-columns:1fr}
+  .arrow{transform:rotate(90deg);justify-self:center}
+}
+@media print{
+  nav,.sample-banner,.cta,footer{display:none}
+  body{background:#fff}
+  .cover{padding-top:20px}
+  section{break-inside:avoid}
+  .panel,.table-wrap,.scope,.meta{box-shadow:none}
+}
+</style>
+</head>
+<body>
+
+<div class="sample-banner">FICTIONAL EXAMPLE · NOT CLIENT WORK · ALL COMPANIES, SYSTEMS, AND FINDINGS ARE INVENTED</div>
+<nav aria-label="Sample navigation">
+  <div class="nav-inner">
+    <a class="logo" href="/">Prime<span>&nbsp;Analytics</span></a>
+    <a class="back" href="/">← Back to the main site</a>
+  </div>
+</nav>
+
+<main>
+  <header class="cover">
+    <div class="wrap">
+      <div class="eyebrow">Representative deliverable</div>
+      <h1>Revenue Data Blueprint</h1>
+      <p class="lede">A fictional example showing the level of clarity, prioritization, and technical detail included in a real engagement.</p>
+      <div class="meta">
+        <div><strong>Company</strong><span>Northstar Software (fictional)</span></div>
+        <div><strong>Business model</strong><span>B2B SaaS</span></div>
+        <div><strong>Primary question</strong><span>Which channels create revenue?</span></div>
+        <div><strong>Delivery window</strong><span>Five business days</span></div>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">01 · Executive summary</div>
+      <h2>The decision Northstar cannot make today</h2>
+      <div class="panel finding">
+        <div class="decision">“Should we move budget from paid search to partner marketing next quarter?”</div>
+        <p>The company cannot answer this reliably because campaign cost, lead source, opportunity, and closed-revenue data use different identifiers and attribution rules. Three executive reports currently produce three versions of customer acquisition cost.</p>
+      </div>
+      <div class="grid three" style="margin-top:18px">
+        <div class="panel finding risk">
+          <span class="tag">Primary risk</span>
+          <strong>No shared account key</strong>
+          <p>Marketing activity is stored at contact level while revenue is stored at account and opportunity level.</p>
+        </div>
+        <div class="panel finding risk">
+          <span class="tag">Decision risk</span>
+          <strong>Conflicting CAC logic</strong>
+          <p>Finance includes salaries and tools; marketing includes media spend only; the board sheet mixes both.</p>
+        </div>
+        <div class="panel finding good">
+          <span class="tag">Opportunity</span>
+          <strong>No new warehouse required yet</strong>
+          <p>The current BigQuery environment can support a reliable first version without a platform migration.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">02 · Source and reporting inventory</div>
+      <h2>What currently feeds the decision</h2>
+      <p class="intro">The real Blueprint records ownership, refresh behavior, access, identifiers, and known quality issues for each source. This shortened example shows the decision-relevant subset.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>SOURCE</th><th>OWNER</th><th>KEY DATA</th><th>REFRESH</th><th>OBSERVATION</th></tr></thead>
+          <tbody>
+            <tr><td>HubSpot</td><td>Revenue Operations</td><td>Contacts, companies, opportunities</td><td>Live</td><td>Original source is overwritten during imports</td></tr>
+            <tr><td>Google Ads</td><td>Demand Generation</td><td>Campaign, cost, clicks, conversions</td><td>Live</td><td>UTM naming changed twice this year</td></tr>
+            <tr><td>Partner spreadsheet</td><td>Partnerships</td><td>Referrals, partner name, submitted date</td><td>Weekly</td><td>No stable contact or account identifier</td></tr>
+            <tr><td>Stripe</td><td>Finance</td><td>Customer, invoice, recurring revenue</td><td>Daily</td><td>Customer ID not written back to HubSpot</td></tr>
+            <tr><td>Board reporting sheet</td><td>Finance</td><td>CAC, pipeline, new ARR</td><td>Monthly</td><td>Manual copy/paste with undocumented adjustments</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">03 · Metric conflict register</div>
+      <h2>Why the dashboards disagree</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>METRIC</th><th>MARKETING</th><th>FINANCE</th><th>RECOMMENDED DEFINITION</th><th>RISK</th></tr></thead>
+          <tbody>
+            <tr><td>Customer acquisition cost</td><td>Media spend ÷ new customers</td><td>Sales + marketing cost ÷ new customers</td><td>Publish both as Paid CAC and Fully Loaded CAC</td><td><span class="status high">HIGH</span></td></tr>
+            <tr><td>Sourced pipeline</td><td>First-touch campaign</td><td>Opportunity source field</td><td>Separate sourced, influenced, and self-reported views</td><td><span class="status high">HIGH</span></td></tr>
+            <tr><td>New ARR</td><td>Deal amount</td><td>Normalized subscription value</td><td>Use finance-normalized annual recurring value</td><td><span class="status medium">MEDIUM</span></td></tr>
+            <tr><td>Lead</td><td>Any form submission</td><td>Not used</td><td>Report inquiry, MQL, and accepted lead separately</td><td><span class="status medium">MEDIUM</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">04 · Recommended architecture</div>
+      <h2>The smallest reliable system</h2>
+      <p class="intro">Northstar already has BigQuery. The recommendation is to repair identity and metric logic inside the current environment—not introduce Snowflake, a new BI tool, or an attribution vendor.</p>
+      <div class="architecture" aria-label="Recommended data flow">
+        <div class="arch-node"><strong>Business systems</strong><span>HubSpot</span><span>Google Ads</span><span>Partner sheet</span><span>Stripe</span></div>
+        <div class="arrow">→</div>
+        <div class="arch-node"><strong>BigQuery + dbt</strong><span>Account identity map</span><span>Campaign taxonomy</span><span>Tested revenue models</span><span>Metric definitions</span></div>
+        <div class="arrow">→</div>
+        <div class="arch-node"><strong>Decision layer</strong><span>Channel-to-pipeline view</span><span>Paid and fully loaded CAC</span><span>Executive scorecard</span><span>Data-quality alerts</span></div>
+      </div>
+      <div class="principle"><strong>Recommendation:</strong> keep the current tools, create one stable account identity layer, and publish governed revenue metrics before attempting algorithmic multi-touch attribution.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">05 · Prioritized roadmap</div>
+      <h2>What to do over the next 90 days</h2>
+      <div class="roadmap">
+        <div class="phase">
+          <div class="days">DAYS 01–30 · TRUST</div>
+          <h3>Reconcile the foundation</h3>
+          <ul>
+            <li>Approve the metric dictionary</li>
+            <li>Create the account identity map</li>
+            <li>Preserve original source fields</li>
+            <li>Standardize campaign naming</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="days">DAYS 31–60 · VISIBILITY</div>
+          <h3>Ship decision reporting</h3>
+          <ul>
+            <li>Build tested revenue models</li>
+            <li>Publish sourced and influenced pipeline</li>
+            <li>Separate paid and fully loaded CAC</li>
+            <li>Add freshness and quality alerts</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="days">DAYS 61–90 · LEARNING</div>
+          <h3>Improve attribution</h3>
+          <ul>
+            <li>Capture self-reported attribution</li>
+            <li>Measure partner influence</li>
+            <li>Compare rule-based models</li>
+            <li>Document budget experiments</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="scope">
+        <div class="eyebrow" style="color:#E8A13C">06 · Implementation boundary</div>
+        <h2>What the proposed build would—and would not—include</h2>
+        <div class="grid">
+          <div>
+            <h3>Included</h3>
+            <ul>
+              <li>HubSpot, Google Ads, partner, and Stripe models</li>
+              <li>Account identity resolution rules</li>
+              <li>Governed metric definitions and tests</li>
+              <li>Executive and channel reporting</li>
+              <li>Documentation, training, and handoff</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Not included</h3>
+            <ul>
+              <li>Campaign strategy or media management</li>
+              <li>Migration away from BigQuery</li>
+              <li>Machine-learning attribution</li>
+              <li>Historical data repair before the agreed date</li>
+              <li>Ongoing support unless separately requested</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="cta">
+        <h2>Your Blueprint will reflect your systems and decisions</h2>
+        <p>This fictional sample is intentionally abbreviated. A real engagement includes the complete inventory, evidence behind each finding, implementation assumptions, and a fixed-price build proposal.</p>
+        <a class="btn" href="https://calendly.com/eduardo-primeanalytics/20min" target="_blank" rel="noopener">Discuss your data</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">© 2026 Prime Analytics · <a href="/privacy">Privacy Policy</a> · <a href="/">Main site</a></div>
+</footer>
+
+</body>
+</html>
