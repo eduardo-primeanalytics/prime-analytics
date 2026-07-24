@@ -5,6 +5,39 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Prime Analytics — Marketing attribution & data infrastructure</title>
 <meta name="description" content="We build the data infrastructure behind confident marketing decisions. Attribution modeling, Snowflake + dbt pipelines, and dashboards your team actually uses.">
+
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://primeanalytics.ai/">
+<meta property="og:title" content="Prime Analytics — Marketing attribution & data infrastructure">
+<meta property="og:description" content="We build the data infrastructure behind confident marketing decisions. Attribution modeling, Snowflake + dbt pipelines, and dashboards your team actually uses.">
+<meta property="og:image" content="https://primeanalytics.ai/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Prime Analytics — Marketing attribution & data infrastructure">
+<meta name="twitter:description" content="We build the data infrastructure behind confident marketing decisions. Attribution modeling, Snowflake + dbt pipelines, and dashboards your team actually uses.">
+<meta name="twitter:image" content="https://primeanalytics.ai/og-image.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Prime Analytics",
+  "url": "https://primeanalytics.ai",
+  "description": "Marketing attribution modeling, data warehouse and pipeline builds, and decision-support dashboards for US SaaS, e-commerce, and services companies.",
+  "email": "hello@primeanalytics.ai",
+  "areaServed": "US",
+  "founder": [
+    { "@type": "Person", "name": "Eduardo Chacón", "sameAs": "https://www.linkedin.com/in/eduardo-chacon/" },
+    { "@type": "Person", "name": "Jose Bardales", "sameAs": "https://josefbardales.github.io" }
+  ]
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -38,10 +71,13 @@ nav{
   background:rgba(245,247,250,.92);backdrop-filter:blur(8px);
   border-bottom:1px solid var(--line);
 }
-.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;max-width:1080px;margin:0 auto}
+.nav-inner{position:relative;display:flex;align-items:center;justify-content:space-between;padding:16px 24px;max-width:1080px;margin:0 auto}
 .logo{font-family:'Bitter',serif;font-weight:800;font-size:1.15rem;text-decoration:none;color:var(--ink);letter-spacing:-.01em}
 .logo span{color:var(--cobalt)}
 .nav-links{display:flex;gap:28px;align-items:center}
+.nav-toggle-input{display:none}
+.nav-toggle-btn{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;margin-left:12px}
+.nav-toggle-btn span{width:22px;height:2px;background:var(--ink);display:block;border-radius:2px;transition:transform .15s ease}
 .nav-links a{text-decoration:none;color:var(--muted);font-size:.92rem;font-weight:500}
 .nav-links a:hover{color:var(--ink)}
 .btn{
@@ -185,7 +221,16 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
   .hero-grid{grid-template-columns:1fr;gap:40px}
   .cards,.steps,.pains{grid-template-columns:1fr}
   .about-grid{grid-template-columns:1fr;gap:28px}
-  .nav-links a:not(.btn){display:none}
+  .nav-toggle-btn{display:flex}
+  .nav-links{
+    position:absolute;top:100%;left:0;right:0;
+    flex-direction:column;align-items:stretch;gap:0;
+    background:var(--paper);border-bottom:1px solid var(--line);
+    max-height:0;overflow:hidden;transition:max-height .25s ease;
+  }
+  .nav-links a:not(.btn){display:block;padding:16px 24px;border-bottom:1px solid var(--line);color:var(--ink)}
+  .nav-links .btn{display:inline-block;margin:16px 24px}
+  .nav-toggle-input:checked ~ .nav-links{max-height:400px}
   header.hero{padding:56px 0 48px}
   section{padding:52px 0}
   .contact{padding:40px 24px}
@@ -197,6 +242,10 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
 <nav>
   <div class="nav-inner">
     <a class="logo" href="#top">Prime<span>&nbsp;Analytics</span></a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle-input">
+    <label for="nav-toggle" class="nav-toggle-btn" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </label>
     <div class="nav-links">
       <a href="#services">Services</a>
       <a href="#process">How we work</a>
@@ -219,7 +268,7 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
       </div>
     </div>
 
-    <div class="schematic" aria-label="Diagram: data sources flow into a warehouse, then into models, then into decisions">
+    <div class="schematic" aria-label="Diagram: data sources flow into a warehouse, then into models, then into decisions. Output metrics shown are an illustrative example, not results from a specific client.">
       <svg viewBox="0 0 440 308" role="img">
         <!-- Sources -->
         <text x="16" y="24" class="sc-label">SOURCES</text>
@@ -249,7 +298,7 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
         <text x="348" y="125" class="sc-node-title">dbt · MTA</text>
 
         <!-- Output metrics -->
-        <text x="16" y="208" class="sc-label">OUTPUT — WHAT YOUR TEAM SEES</text>
+        <text x="16" y="208" class="sc-label">OUTPUT — WHAT YOUR TEAM SEES · ILLUSTRATIVE EXAMPLE</text>
         <rect x="16" y="220" width="408" height="72" rx="8" class="sc-node"/>
         <text x="34" y="240" class="sc-metric">blended CAC ↓ 18%</text>
         <text x="34" y="256" class="sc-label">
@@ -392,7 +441,8 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
       <div class="fact"><span class="k">BASED_IN</span><span class="v">Honduras (CST — overlaps all US time zones)</span></div>
       <div class="fact"><span class="k">CLIENTS</span><span class="v">US SaaS, e-commerce, and services companies</span></div>
       <div class="fact"><span class="k">BILLING</span><span class="v">USD, project-based or monthly</span></div>
-      <div class="fact"><span class="k">PORTFOLIO</span><span class="v"><a href="https://josefbardales.github.io">josefbardales.github.io</a></span></div>
+      <div class="fact"><span class="k">EDUARDO</span><span class="v"><a href="https://www.linkedin.com/in/eduardo-chacon/">linkedin.com/in/eduardo-chacon</a></span></div>
+      <div class="fact"><span class="k">JOSE</span><span class="v"><a href="https://josefbardales.github.io">josefbardales.github.io</a></span></div>
     </div>
   </div>
 </section>
@@ -418,7 +468,7 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
       </details>
       <details>
         <summary>Do you sign NDAs and handle our data securely?</summary>
-        <p>Yes — NDAs and data processing agreements are standard practice for us, not a special request.</p>
+        <p>Yes — NDAs and data processing agreements are standard practice for us, not a special request. See our <a href="/privacy.html">privacy policy</a> for how we handle data on this site itself.</p>
       </details>
       <details>
         <summary>Do you work with companies outside the US?</summary>
@@ -445,10 +495,18 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
 
 <footer>
   <div class="wrap foot">
-    <span>© 2026 Prime Analytics</span>
+    <span>© 2026 Prime Analytics · <a href="/privacy.html">Privacy Policy</a></span>
     <span>Tegucigalpa, Honduras · Working worldwide</span>
   </div>
 </footer>
+
+<script>
+document.querySelectorAll('.nav-links a').forEach(function(a){
+  a.addEventListener('click', function(){
+    document.getElementById('nav-toggle').checked = false;
+  });
+});
+</script>
 
 </body>
 </html>
