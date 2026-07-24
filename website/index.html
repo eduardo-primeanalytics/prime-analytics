@@ -106,7 +106,7 @@ body{
   background-size:28px 28px;
 }
 a{color:var(--cobalt)}
-a:focus-visible,button:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+a:focus-visible,button:focus-visible,[role="button"]:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
 .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
 
 /* ---------- Nav ---------- */
@@ -120,7 +120,7 @@ nav{
 .logo span{color:var(--cobalt)}
 .nav-links{display:flex;gap:28px;align-items:center}
 .nav-toggle-input{display:none}
-.nav-toggle-btn{display:none;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;padding:14px;margin-left:8px}
+.nav-toggle-btn{display:none;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;padding:14px;margin-left:8px;background:none;border:none;font:inherit}
 .nav-toggle-btn span{width:22px;height:2px;background:var(--ink);display:block;border-radius:2px;transition:transform .15s ease}
 .nav-links a{text-decoration:none;color:var(--muted);font-size:.92rem;font-weight:500}
 .nav-links a:hover{color:var(--ink)}
@@ -291,10 +291,10 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
   <div class="nav-inner">
     <a class="logo" href="#top">Prime<span>&nbsp;Analytics</span></a>
     <input type="checkbox" id="nav-toggle" class="nav-toggle-input">
-    <label for="nav-toggle" class="nav-toggle-btn" aria-label="Toggle menu">
+    <button type="button" class="nav-toggle-btn" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
       <span></span><span></span><span></span>
-    </label>
-    <div class="nav-links">
+    </button>
+    <div class="nav-links" id="nav-links">
       <a href="#services">What we do</a>
       <a href="#process">How we work</a>
       <a href="#about">About</a>
@@ -491,8 +491,8 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
       <div class="fact"><span class="k">BASED_IN</span><span class="v">Honduras (CST — overlaps all US time zones)</span></div>
       <div class="fact"><span class="k">CLIENTS</span><span class="v">US SaaS, e-commerce, and services companies</span></div>
       <div class="fact"><span class="k">BILLING</span><span class="v">USD, fixed price per engagement</span></div>
-      <div class="fact"><span class="k">EDUARDO</span><span class="v"><a href="https://www.linkedin.com/in/eduardo-chacon/">linkedin.com/in/eduardo-chacon</a></span></div>
-      <div class="fact"><span class="k">JOSE</span><span class="v"><a href="https://josefbardales.github.io">josefbardales.github.io</a></span></div>
+      <div class="fact"><span class="k">EDUARDO</span><span class="v"><a href="https://www.linkedin.com/in/eduardo-chacon/" target="_blank" rel="noopener">linkedin.com/in/eduardo-chacon</a></span></div>
+      <div class="fact"><span class="k">JOSE</span><span class="v"><a href="https://josefbardales.github.io" target="_blank" rel="noopener">josefbardales.github.io</a></span></div>
     </div>
   </div>
 </section>
@@ -553,9 +553,22 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
 </footer>
 
 <script>
+var navToggle = document.getElementById('nav-toggle');
+var navToggleBtn = document.querySelector('.nav-toggle-btn');
+
+function syncNavExpanded(){
+  navToggleBtn.setAttribute('aria-expanded', navToggle.checked ? 'true' : 'false');
+}
+
+navToggleBtn.addEventListener('click', function(){
+  navToggle.checked = !navToggle.checked;
+  syncNavExpanded();
+});
+
 document.querySelectorAll('.nav-links a').forEach(function(a){
   a.addEventListener('click', function(){
-    document.getElementById('nav-toggle').checked = false;
+    navToggle.checked = false;
+    syncNavExpanded();
   });
 });
 </script>

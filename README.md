@@ -50,7 +50,7 @@ The three bolded sections (Challenges, Guarantees, FAQ) were added after benchma
 | Business email | Google Workspace | `eduardo@primeanalytics.ai` is a paid Workspace seat; `hello@primeanalytics.ai` is a **free alias** on that same seat (Workspace allows multiple aliases per seat at no extra cost — don't create it as a separate user, that costs another license). MX record for the domain points to `smtp.google.com`; do **not** set up Cloudflare Email Routing for this zone, it would conflict with the existing Workspace MX. |
 | Scheduling | Calendly (free tier) | https://calendly.com/eduardo-primeanalytics/20min — all three "Book a call" buttons on the site link here. Shortened from 30 to 20 minutes to lower the commitment for cold traffic with no case studies yet. |
 | SEO / indexing | Google Search Console | Domain verified, `sitemap.xml` submitted, and indexing requested for the homepage. As of setup, `site:primeanalytics.ai` returned zero results — brand-new domain with no backlinks, so this was expected. Give it a few days before re-checking. |
-| Email authentication | DNS TXT records | DKIM is correctly configured (Google Workspace default). **SPF and DMARC are missing** — verified via direct DNS lookup, not assumed. See "Open items" for the exact records to add; without them, mail from `hello@`/`eduardo@primeanalytics.ai` is more likely to land in spam. |
+| Email authentication | DNS TXT records | DKIM, SPF, and DMARC all confirmed live via direct DNS lookup: SPF is `v=spf1 include:_spf.google.com ~all`, DMARC is `v=DMARC1; p=none; rua=mailto:hello@primeanalytics.ai` (monitor-only — tighten to `p=quarantine`/`p=reject` later once reports look clean). |
 
 ## Deploy
 
@@ -80,10 +80,6 @@ Don't push straight to `main`. Suggested workflow:
 
 ## Open items
 
-- [ ] **Add SPF and DMARC DNS records.** Found via direct DNS lookup — DKIM works, but SPF is entirely missing and `_dmarc.primeanalytics.ai` doesn't exist. Add these two TXT records in the Cloudflare DNS dashboard:
-  - `@` (root) → `v=spf1 include:_spf.google.com ~all`
-  - `_dmarc` → `v=DMARC1; p=none; rua=mailto:hello@primeanalytics.ai`
-  (`p=none` is monitor-only, the safe starting point — tighten to `p=quarantine` or `p=reject` later once DMARC reports look clean.)
 - [ ] **Re-price the audit after the first 1–2 real engagements.** The published $2,000 / ~20-hour cap (see "Pricing anchor" below) is benchmark-derived, not costed — nobody has actually timed a real audit yet. Track real hours on the first couple of clients and revisit the number once there's real data, rather than leaving a guessed number live indefinitely. This is the follow-up that matters most, more than the exact figure.
 - [ ] **Certification/partner badges** — if either founder holds a Snowflake, dbt, or GA4 certification, add it as a trust signal. Costs nothing, needs no client, not yet done.
 - [ ] **Compliance/data-handling as a visible guarantee, not just a `/privacy` mention.** Given the shop is Honduras-based pitching to US companies, being explicit about NDA/DPA practice somewhere more prominent than the privacy page could preempt an objection before it's asked.
