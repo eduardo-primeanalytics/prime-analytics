@@ -48,3 +48,21 @@ Review monthly until traffic is sufficient for weekly review:
 
 Analytics Engine records clicks, not completed bookings. Reconcile scheduling clicks with Calendly's completed bookings rather than treating every click as a lead.
 
+## Internal metrics page
+
+The Worker also serves a protected internal dashboard at `/metrics`.
+
+It requires two runtime values:
+
+- `ACCOUNT_ID` in `[vars]` so the Worker can reach the Analytics Engine SQL API
+- `ANALYTICS_API_TOKEN` as a secret with `Account Analytics | Read`
+- `METRICS_PASSWORD` as a secret for HTTP basic auth
+
+The page renders:
+
+- total tracked events in the last 30 days
+- counts by event name
+- counts by event plus page path
+- the exact SQL query used to generate the view
+
+If those values are missing, the route returns a setup notice instead of live data.

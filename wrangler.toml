@@ -3,6 +3,9 @@ main = "worker.js"
 compatibility_date = "2026-07-23"
 account_id = "334696cbcfac3868e5a054bb7771257d"
 
+[vars]
+ACCOUNT_ID = "334696cbcfac3868e5a054bb7771257d"
+
 [assets]
 directory = "./website"
 binding = "ASSETS"

@@ -134,6 +134,17 @@ The hybrid preserves the original headline's punch while avoiding the claim that
 - [ ] **Add certifications only if current and verifiable.** Link badges to the issuer where possible.
 - [ ] **Do not add testimonials, logos, client counts, outcome percentages, or "clients come back" language until each is real and permissioned.**
 
+### Meeting action items from July 24
+
+These came out of the Eduardo/Jose call and should stay in the working checklist until they are either done or intentionally dropped.
+
+- [ ] **Jose: create the Upwork agency account.** Investigate Agency Plus and confirm the best agency setup before spending money on it.
+- [ ] **Eduardo: revisit pricing.** Compare the $2,000 Blueprint against a free discovery call plus a paid follow-on structure, and decide which model is actually strongest for launch.
+- [ ] **Eduardo: bring the tech stack higher on the page.** Keep the stack visible near the top for credibility, not buried low on the page.
+- [ ] **Eduardo: finish calendly availability blocking.** Make sure both founders can join when needed and that booking never conflicts with real availability.
+- [ ] **Eduardo/Jose: keep the site at MVP level.** Remove visual clutter, but do not add case-study-style claims or decorative sections that weaken the offer.
+- [ ] **Eduardo: keep the partnership idea warm.** Follow up on the Fanny introduction only if the partner actually has active lead-gen clients that fit the offer.
+
 ## Competitor benchmark checklist
 
 This checklist records the July 2026 review of ProIQ, DataSolutions, Data Solutions Agency, Value10x, SmartSites, Pegasus One, and Element / The Data Agency. Items are ranked by likely impact for Prime Analytics, not by how frequently competitors use them.
@@ -254,6 +265,14 @@ This pass was implemented after the initial launch audit. Its goal was to remove
 Cloudflare Web Analytics remains the source for aggregate page traffic and performance. It does not provide custom conversion events, so the Worker now accepts a strict allowlist of click events at `POST /__events` and writes them to the `prime_analytics_events` Analytics Engine dataset.
 
 Only the approved event name and page path are written. The implementation does not add form contents, email addresses, IP addresses, user-agent strings, or query parameters to this dataset. The endpoint rejects unapproved event names and cross-origin browser posts. See [`operations/analytics.md`](operations/analytics.md) for the event dictionary, sample query, and funnel-review procedure.
+
+An internal dashboard is also available at `/metrics` once these runtime values are configured:
+
+- `ACCOUNT_ID` in `wrangler.toml`
+- `ANALYTICS_API_TOKEN` as a Cloudflare API secret with `Account Analytics | Read`
+- `METRICS_PASSWORD` as the HTTP basic-auth password for the internal page
+
+That page renders the same 30-day funnel data in one place so you do not need to run the SQL query by hand every time you want a status check.
 
 ### Delivery credibility
 
