@@ -8,11 +8,16 @@ Marketing attribution, data infrastructure, and dashboards for US SaaS, e-commer
 
 ```
 prime-analytics/
-├── README.md        # this file — NOT inside website/, so it's never served publicly
-├── wrangler.toml     # Cloudflare Workers config — points at website/ for static assets
-├── worker.js         # the Worker script — redirects + security headers, see below
+├── README.md        # permanent product, UX, and infrastructure decision log
+├── operations/      # internal delivery, security, legal-readiness, and analytics checklists
+├── wrangler.toml    # Cloudflare config, static assets, and Analytics Engine binding
+├── worker.js        # redirects, security headers, and first-party event endpoint
 └── website/
-    ├── index.html    # the main page — HTML, CSS, and JS inline
+    ├── index.html    # broad revenue-data homepage
+    ├── analytics.js # shared, first-party click measurement
+    ├── fonts.css     # self-hosted font declarations
+    ├── fonts/        # local WOFF2 files; no Google Fonts request
+    ├── marketing-attribution-consulting.html # focused acquisition page
     ├── privacy.html
     ├── sample-blueprint.html
     ├── sample-blueprint-services.html
@@ -21,7 +26,7 @@ prime-analytics/
     └── (favicon/OG image assets)
 ```
 
-HTML/CSS/JS inline, no build step, by design. Don't add a framework or bundler until there's a real reason (a blog, case study pages, a CMS). Static files are the fastest thing to deploy and the easiest for two people to review in a pull request.
+HTML/CSS is page-local and the small measurement script is shared; there is no build step. Don't add a framework or bundler until there's a real reason (a blog, case study pages, or a CMS). Static files are fast to deploy and easy for two people to review in a pull request.
 
 **This is not a pure static-assets project — it has a real Worker script (`worker.js`).** It redirects `http://` → `https://` and `www.` → apex, and attaches security headers (HSTS, CSP, etc.) to every response, then falls through to serving the static files in `website/`. This requires `run_worker_first = true` in `wrangler.toml` — by default, Cloudflare serves static-asset-matching requests (like `/`) directly and **skips the Worker script entirely**, which silently defeats any redirect/header logic unless that flag is set. If headers or redirects ever stop working after a config change, check this first.
 
@@ -38,7 +43,7 @@ python3 -m http.server 8000 --directory website
 
 ## Site sections (in order)
 
-Nav → Hero → proof strip → **Challenges** → buyer questions → Services → fit guidance → **Revenue Data Blueprint** → How We Work → risk reduction → Tool stack → About/founders → **FAQ** → Contact → Footer.
+Nav → Hero → proof strip → **Challenges/business questions** → Services → fit guidance → **Revenue Data Blueprint** → How We Work → risk reduction → Tool stack → About/founders → **FAQ** → Contact → Footer.
 
 Challenges and FAQ were added after benchmarking four competitor agency sites (datasolutions.com, datasolutionsagency.com, value10x.ai, proiq.com). The July 2026 launch audit then replaced the vague "guarantees" framing with explicit project-risk controls and turned the audit into a named, deliverable-based offer. See "Launch UX audit record" below.
 
@@ -110,20 +115,20 @@ The hybrid preserves the original headline's punch while avoiding the claim that
 ### Required owner checks before or immediately after launch
 
 - [ ] **Verify every founder claim.** Both founders must confirm the combined 10+ years figure, individual role descriptions, named technology experience, and "fluent English" statement.
-- [ ] **Operationalize the Blueprint.** Create the actual reusable templates for all eight promised deliverables before accepting payment.
+- [x] **Define the Blueprint delivery workflow.** The internal checklist now defines scope defaults, start-clock criteria, all eight deliverables, QA, review, and handoff. The founders still need to turn these specifications into the working document templates before accepting payment.
 - [ ] **Prepare the legal documents.** Have a reviewed NDA, DPA, master services agreement, statement of work, and USD invoicing process ready; do not rely on website copy alone.
-- [ ] **Define access handling.** Document how credentials are received, where secrets are stored, whether MFA is required, who receives access, and the handoff/revocation checklist.
+- [x] **Define access handling.** The internal security checklist covers credential transfer, secret storage, MFA, least privilege, named access, client-owned work locations, and revocation/deletion.
 - [ ] **Confirm Calendly routing.** Test the complete booking journey on desktop and mobile, including confirmation email, timezone handling, reminders, and the meeting link.
 - [ ] **Confirm shared-lead behavior.** Decide whether both founders join every first call; the site promises direct founder access but currently books through Eduardo's calendar.
 - [ ] **Check the $2,000 economics after 1–2 engagements.** Record real hours, meetings, and revisions; change price or scope if the Blueprint cannot be delivered profitably in five business days.
 - [ ] **Complete brand/legal due diligence.** Search results contain unrelated companies called Prime Analytics, including a `prime-analytics.ai` business. Check US trademark risk and decide whether a consistent descriptor such as "Prime Analytics — Revenue Data Systems" is needed.
 - [ ] **Claim consistent social profiles.** Use the same company name, descriptor, domain, logo, founder links, and summary on LinkedIn and any other public profile.
 - [x] **Create proof artifacts that are not case studies.** `/sample-blueprint` and `/sample-blueprint-services` are clearly labeled fictional deliverables. Visitors can switch between a B2B SaaS attribution problem that uses BigQuery/dbt and a professional-services reporting problem whose recommended solution is HubSpot plus Google Sheets.
-- [ ] **Verify analytics.** Confirm Cloudflare Web Analytics records page views and Calendly outbound clicks without introducing cookies inconsistent with the privacy policy.
+- [x] **Implement conversion measurement.** Cloudflare Web Analytics remains the aggregate traffic source; a first-party endpoint records an allowlisted set of CTA and sample interactions in Analytics Engine without cookies or direct identifiers. Production delivery still needs verification after each deploy.
 - [ ] **Run real-device QA.** Test current iPhone Safari, Android Chrome, desktop Chrome, Edge, Firefox, keyboard-only navigation, 200% zoom, reduced motion, and slow/mobile connections.
 - [ ] **Request reindexing after deployment.** Resubmit the sitemap and request homepage indexing in Google Search Console after the new title and description are live.
 - [ ] **Monitor brand search monthly.** Track `Prime Analytics`, `Prime Analytics revenue data`, and `primeanalytics.ai`; branded discoverability is currently weak because established namesakes dominate.
-- [ ] **Self-host fonts when practical.** This removes a third-party request, improves resilience, and simplifies the privacy story.
+- [x] **Self-host fonts.** Bitter and IBM Plex font files are served from `/fonts/`, removing the Google Fonts request and simplifying the privacy story.
 - [ ] **Tighten the CSP when CSS/JS are externalized.** Inline CSS/JS currently requires `'unsafe-inline'`; do this only when the maintenance benefit justifies splitting the single file.
 - [ ] **Add professional founder photos only when both are ready.** Use consistent, real portraits; do not use stock imagery or AI-generated people.
 - [ ] **Add certifications only if current and verifiable.** Link badges to the issuer where possible.
@@ -155,9 +160,9 @@ This checklist records the July 2026 review of ProIQ, DataSolutions, Data Soluti
 
 ### High impact — requires owner preparation
 
-- [ ] Build the internal production templates behind all eight promised Blueprint deliverables; the public fictional sample is a sales artifact, not the complete operating template.
-- [ ] Define the maximum number of stakeholder interviews, source systems, reports, and revision rounds included in the $2,000 Blueprint.
-- [ ] Create a written credential-access procedure covering password sharing, MFA, least privilege, secret storage, and revocation.
+- [ ] Build the working document templates behind all eight Blueprint deliverables using the production checklist; the public fictional sample is a sales artifact, not the complete operating template.
+- [ ] Approve or revise the recommended limit of one decision, five sources, three reports, two stakeholder interviews, and one clarification round before putting it in the SOW.
+- [x] Create a written credential-access procedure covering password sharing, MFA, least privilege, secret storage, and revocation.
 - [ ] Decide whether both founders join every kickoff and findings call and align Calendly capacity with that promise.
 - [ ] Create the reviewed NDA, DPA, MSA, and Blueprint statement-of-work templates.
 - [ ] Confirm whether outside specialists will ever be used; if yes, define vetting, contracting, confidentiality, and access requirements.
@@ -203,15 +208,14 @@ Prime should borrow the specificity, inspectable work, process clarity, and obje
 
 This is the clearest high-intent search phrase for Prime's strongest entry problem: connecting marketing activity to pipeline and revenue. Search results for the phrase are service and consultancy pages rather than general definitions, which indicates commercial intent. It is also more specific and defensible than the extremely broad "data analytics consulting."
 
-The keyword is an acquisition wedge, not the definition of the entire company. Prime also provides data infrastructure, revenue reporting, and lightweight decision systems. The homepage should therefore use the exact phrase naturally without turning every heading into repetitive SEO copy.
+The keyword is an acquisition wedge, not the definition of the entire company. Prime also provides data infrastructure, revenue reporting, and lightweight decision systems. The homepage therefore keeps broad revenue-data positioning, while `/marketing-attribution-consulting` is the focused search-intent page. This avoids making the whole company look like a single-service attribution shop and gives the exact keyword a page with enough depth to deserve ranking.
 
 Implemented placements:
 
-- [x] Homepage title
-- [x] Main service-section heading
-- [x] Attribution service heading
-- [x] About description
-- [x] Meta description
+- [x] Dedicated page title, canonical URL, description, H1, section headings, and FAQs
+- [x] Homepage attribution service heading and contextual internal link
+- [x] Homepage About description and broader revenue-data metadata
+- [x] Sitemap entry for the focused page
 
 Supporting topics used naturally across the page:
 
@@ -226,7 +230,40 @@ Supporting topics used naturally across the page:
 
 The visible H1 remains **Revenue reporting your team can finally trust.** This is intentional. The smaller line above it ("Revenue attribution · Data infrastructure") is an eyebrow, not the H1. The conversion headline explains the outcome more clearly than an exact-match keyword headline; the title, headings, service copy, About copy, and future focused pages can carry the search language.
 
-Do not judge the keyword from intuition or estimated search volume alone. Monitor Search Console impressions, queries, qualified traffic, and booked calls. If attribution traffic is too narrow or low quality, test a dedicated attribution page before replacing the homepage's broader positioning.
+Do not judge the keyword from intuition or estimated search volume alone. Monitor Search Console impressions, queries, qualified traffic, and booked calls. If attribution traffic is too narrow or low quality, improve or reposition the dedicated page before replacing the homepage's broader positioning.
+
+## July 2026 conversion and operating-system pass
+
+This pass was implemented after the initial launch audit. Its goal was to remove conversion friction, create one defensible SEO entry page, make the fictional examples more useful, and ensure the public promises can be delivered consistently.
+
+### Site and copy decisions
+
+- [x] Consolidated the overlapping “Sound familiar?” and buyer-question sections into one shorter “Which problem sounds familiar?” section. This reduces repetition and moves visitors to the service and offer faster.
+- [x] Kept the examples explicitly fictional and made the choice visible before the click: B2B SaaS attribution or professional-services reporting. This adds useful range without implying client history.
+- [x] Added “Save as PDF” to both examples so a buyer can retain or share the artifact without requiring a form.
+- [x] Changed “complete assessment” to “focused assessment of the agreed business question and relevant systems.” The former could imply an unlimited review for $2,000; the latter matches a fixed-price, five-day engagement.
+- [x] Changed the final button from “Schedule Your Blueprint Call” to **“See If the Blueprint Fits.”** The body already says the call determines fit, so the new label accurately lowers commitment. This was adopted because it is more congruent with the actual call—not merely because it was suggested.
+- [x] Kept the reassuring final-CTA body and founder/no-preparation/no-obligation line because they answer the three most likely scheduling anxieties without making an outcome claim.
+- [x] Restored broad homepage metadata and created a substantive marketing-attribution consulting page. The page explains appropriate inputs, outputs, limitations, and process rather than existing only to repeat a keyword.
+- [x] Added Open Graph metadata to the fictional examples so shared links have a deliberate title, description, and image.
+- [x] Updated the privacy policy for the new first-party conversion measurement.
+- [x] Self-hosted Bitter and IBM Plex as WOFF2 files. This removes Google font requests and the associated third-party dependency without changing the visual system.
+
+### Measurement
+
+Cloudflare Web Analytics remains the source for aggregate page traffic and performance. It does not provide custom conversion events, so the Worker now accepts a strict allowlist of click events at `POST /__events` and writes them to the `prime_analytics_events` Analytics Engine dataset.
+
+Only the approved event name and page path are written. The implementation does not add form contents, email addresses, IP addresses, user-agent strings, or query parameters to this dataset. The endpoint rejects unapproved event names and cross-origin browser posts. See [`operations/analytics.md`](operations/analytics.md) for the event dictionary, sample query, and funnel-review procedure.
+
+### Delivery credibility
+
+The public site now has matching internal controls:
+
+- [`operations/blueprint-delivery-checklist.md`](operations/blueprint-delivery-checklist.md) defines a recommended scope boundary, start-clock criteria, deliverables, review, and handoff.
+- [`operations/access-security-checklist.md`](operations/access-security-checklist.md) defines least privilege, MFA, credential handling, client-owned work locations, revocation, and deletion.
+- [`operations/legal-readiness.md`](operations/legal-readiness.md) lists the NDA, DPA, MSA, SOW, cross-border billing, and counsel decisions still required. It is a readiness list, not a substitute for legal advice.
+
+The recommended scope limits in the internal checklist are operating defaults, not new public promises. Both founders must approve them and put the final boundaries in the signed statement of work.
 
 ## Accounts & infrastructure
 
@@ -271,8 +308,13 @@ Don't push straight to `main`. Suggested workflow:
 - [ ] **Re-price the Revenue Data Blueprint after the first 1–2 real engagements.** The published $2,000 price is benchmark-derived, not costed — nobody has actually timed a real Blueprint yet. Track real hours on the first couple of clients and revisit the number and scope once there's real data.
 - [ ] **Certification/partner badges** — if either founder holds a Snowflake, dbt, or GA4 certification, add it as a trust signal. Costs nothing, needs no client, not yet done.
 - [x] **Make compliance/data-handling visible.** The homepage now states minimum-access, client-owned-infrastructure, NDA/DPA, and access-removal practices; the privacy page uses matching language.
-- [ ] **Case studies** — even one anonymized project (the anchor client, once wrapped) would do more for conversion than any copy polish. This is the single biggest gap versus competitor sites, which all lead with quantified case results.
-- [ ] **Legal/invoicing structure** for cross-border USD billing.
+- [ ] **Real proof, when it exists** — do not invent case studies or push for them before the first client. Once a client grants permission, add the smallest truthful proof available: a quote, anonymized artifact, or measured outcome.
+- [ ] **Legal/invoicing structure** for cross-border USD billing. Complete the counsel-reviewed items in `operations/legal-readiness.md` before handling client data.
+- [ ] **Approve the Blueprint operating boundary.** Both founders must accept or revise the proposed source, report, interview, revision, and start-clock limits before the first SOW.
+- [ ] **Verify conversion reporting after launch.** Confirm real events reach `prime_analytics_events`, run the 30-day query in `operations/analytics.md`, and reconcile Calendly clicks against completed bookings.
+- [ ] **Submit the focused page for indexing.** Request indexing for `/marketing-attribution-consulting` in Google Search Console and monitor query quality.
+- [ ] **Real-device QA.** Test navigation, scheduling, example selection, printing to PDF, and keyboard use on current iOS Safari, Android Chrome, and desktop browsers.
+- [x] **Font privacy/performance.** Fonts are self-hosted as WOFF2 assets, the Google disclosure was removed, and the CSP now permits fonts only from the site itself.
 - [ ] **Testimonials / client logos** — deliberately not faked. Add once there are real clients willing to be named or quoted.
 
 ## Pricing anchor
