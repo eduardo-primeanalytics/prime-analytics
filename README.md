@@ -73,6 +73,38 @@ This is the permanent record of the pre-launch UX review. It deliberately does n
 - [x] Added a skip link, primary-nav label, anchor offset, Escape-to-close behavior, mobile scroll lock, and a visible mobile version of the hero diagram.
 - [x] Aligned the privacy page with the site's client-data and NDA/DPA language.
 
+### Hero headline rationale
+
+The previous hero headline was:
+
+> **Know which dollar actually drove the sale.**
+
+Its supporting copy was:
+
+> We build the pipelines, models, and dashboards that turn your marketing and product data into decisions — from raw events to a warehouse your whole team trusts.
+
+That version was sharper and more memorable, but it positioned Prime Analytics primarily as a marketing-attribution firm. It also implied a level of causal certainty — identifying exactly which dollar produced a sale — that attribution data often cannot support.
+
+The launch revision changed the headline to:
+
+> **Revenue reporting your team can finally trust.**
+
+Its supporting copy is:
+
+> We help growing US companies connect marketing, sales, product, and revenue data — then build the attribution models and reporting their teams need to make confident decisions.
+
+The current version is broader, more defensible, and better aligned with the complete offer: attribution, pipelines, warehouses, models, and decision-facing reporting. It can speak to marketing, revenue operations, finance, product, and data leaders rather than only performance marketers. Its tradeoff is that it is less distinctive and less memorable than the previous headline.
+
+If the current headline underperforms or feels too conventional, the preferred hybrid to test is:
+
+> **Know what actually drives revenue.**
+
+With:
+
+> We connect your marketing, sales, product, and revenue data — then build the attribution models and reporting your team can trust.
+
+The hybrid preserves the original headline's punch while avoiding the claim that every individual dollar can be attributed with certainty. Do not change the live headline based on preference alone; compare qualified-call conversion, CTA engagement, or structured prospect feedback once the site has enough traffic.
+
 ### Required owner checks before or immediately after launch
 
 - [ ] **Verify every founder claim.** Both founders must confirm the combined 10+ years figure, individual role descriptions, named technology experience, and "fluent English" statement.
