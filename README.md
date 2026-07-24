@@ -42,6 +42,7 @@ The three bolded sections (Challenges, Guarantees, FAQ) were added after benchma
 | DNS / SSL | Same Cloudflare account | `primeanalytics.ai` and `www.primeanalytics.ai` are attached as Custom Domains directly on the Worker (see `wrangler.toml` routes) — SSL is auto-provisioned by Cloudflare, no manual cert management. |
 | Business email | Google Workspace | `eduardo@primeanalytics.ai` is a paid Workspace seat; `hello@primeanalytics.ai` is a **free alias** on that same seat (Workspace allows multiple aliases per seat at no extra cost — don't create it as a separate user, that costs another license). MX record for the domain points to `smtp.google.com`; do **not** set up Cloudflare Email Routing for this zone, it would conflict with the existing Workspace MX. |
 | Scheduling | Calendly (free tier) | https://calendly.com/eduardo-primeanalytics/20min — all three "Book a call" buttons on the site link here. Shortened from 30 to 20 minutes to lower the commitment for cold traffic with no case studies yet. |
+| SEO / indexing | Google Search Console | Domain verified, `sitemap.xml` submitted, and indexing requested for the homepage. As of setup, `site:primeanalytics.ai` returned zero results — brand-new domain with no backlinks, so this was expected. Give it a few days before re-checking. |
 
 ## Deploy
 
