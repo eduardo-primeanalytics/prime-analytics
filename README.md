@@ -36,9 +36,64 @@ python3 -m http.server 8000 --directory website
 
 ## Site sections (in order)
 
-Nav → Hero → **Challenges** ("Sound familiar?") → Services → **Guarantees** → How We Work → Tool stack → About → **FAQ** → Contact → Footer.
+Nav → Hero → proof strip → **Challenges** ("Sound familiar?") → Services → **Revenue Data Blueprint** → How We Work → risk reduction → Tool stack → About/founders → **FAQ** → Contact → Footer.
 
-The three bolded sections (Challenges, Guarantees, FAQ) were added after benchmarking four competitor agency sites (datasolutions.com, datasolutionsagency.com, value10x.ai, proiq.com) — all four lead with a pain-point section before pitching services, and all four have an FAQ and/or an explicit trust/guarantee section addressing "why hire an unknown small shop." See git log around the "Add Challenges, Guarantees, and FAQ sections" commit for the full reasoning.
+Challenges and FAQ were added after benchmarking four competitor agency sites (datasolutions.com, datasolutionsagency.com, value10x.ai, proiq.com). The July 2026 launch audit then replaced the vague "guarantees" framing with explicit project-risk controls and turned the audit into a named, deliverable-based offer. See "Launch UX audit record" below.
+
+## Launch UX audit record
+
+This is the permanent record of the pre-launch UX review. It deliberately does not depend on case studies or testimonials, because the company does not have a first public client result yet.
+
+### Implemented in the launch revision
+
+- [x] Repositioned the hero around one buyer problem: disconnected marketing, sales, product, and revenue data.
+- [x] Changed the primary outcome from generic "data services" to revenue reporting and attribution that decision-makers can trust.
+- [x] Kept the target broad enough for the current go-to-market ("growing US companies") without claiming specialization the company has not yet earned.
+- [x] Replaced generic "Book a call" language with the intent-based "Discuss your data."
+- [x] Added call expectations beside the CTA: 20 minutes, no preparation, direct founder access.
+- [x] Replaced the weak "See what we do" secondary CTA with a link to the concrete paid starting offer.
+- [x] Named the entry offer **Revenue Data Blueprint**.
+- [x] Reframed the $2,000 price around buyer deliverables instead of "about 20 hours of our time."
+- [x] Defined eight Blueprint deliverables: stakeholder/question map, source and metric inventory, quality/risk assessment, attribution gap analysis, target architecture, 30/60/90-day roadmap, recorded findings, and fixed build proposal.
+- [x] Defined the delivery clock precisely: five business days after kickoff and required access are complete.
+- [x] Kept the full $2,000 build credit and made clear that the buyer retains every Blueprint deliverable.
+- [x] Removed the illustrative "CAC down 18%" result, which could be mistaken for an unsupported client outcome.
+- [x] Replaced it with a neutral system-output diagram that makes no performance claim.
+- [x] Added an above-the-fold trust strip using only substantiated facts: combined experience, founder access, CST overlap, and client ownership.
+- [x] Replaced the "guarantees" concept with **How we reduce project risk**.
+- [x] Added explicit minimum-access, client-owned-infrastructure, NDA/DPA, and access-removal language.
+- [x] Removed the unsupported "plenty of clients come back" statement.
+- [x] Clarified that ongoing support is optional rather than implying an existing client history.
+- [x] Rewrote About into a short company explanation plus distinct founder roles and profiles.
+- [x] Removed vague "market-leading platform" language.
+- [x] Changed "tools we work with daily" to the more defensible "core technologies we work with."
+- [x] Changed "Questions we get asked" to "Common questions" so the copy does not imply a prospect history that may not exist.
+- [x] Aligned homepage FAQ structured data with visible FAQ copy.
+- [x] Added Open Graph and Twitter image alt text and tightened the search/social description around the named offer.
+- [x] Added a skip link, primary-nav label, anchor offset, Escape-to-close behavior, mobile scroll lock, and a visible mobile version of the hero diagram.
+- [x] Aligned the privacy page with the site's client-data and NDA/DPA language.
+
+### Required owner checks before or immediately after launch
+
+- [ ] **Verify every founder claim.** Both founders must confirm the combined 10+ years figure, individual role descriptions, named technology experience, and "fluent English" statement.
+- [ ] **Operationalize the Blueprint.** Create the actual reusable templates for all eight promised deliverables before accepting payment.
+- [ ] **Prepare the legal documents.** Have a reviewed NDA, DPA, master services agreement, statement of work, and USD invoicing process ready; do not rely on website copy alone.
+- [ ] **Define access handling.** Document how credentials are received, where secrets are stored, whether MFA is required, who receives access, and the handoff/revocation checklist.
+- [ ] **Confirm Calendly routing.** Test the complete booking journey on desktop and mobile, including confirmation email, timezone handling, reminders, and the meeting link.
+- [ ] **Confirm shared-lead behavior.** Decide whether both founders join every first call; the site promises direct founder access but currently books through Eduardo's calendar.
+- [ ] **Check the $2,000 economics after 1–2 engagements.** Record real hours, meetings, and revisions; change price or scope if the Blueprint cannot be delivered profitably in five business days.
+- [ ] **Complete brand/legal due diligence.** Search results contain unrelated companies called Prime Analytics, including a `prime-analytics.ai` business. Check US trademark risk and decide whether a consistent descriptor such as "Prime Analytics — Revenue Data Systems" is needed.
+- [ ] **Claim consistent social profiles.** Use the same company name, descriptor, domain, logo, founder links, and summary on LinkedIn and any other public profile.
+- [ ] **Create one proof artifact that is not a case study.** A redacted sample Blueprint, sample architecture, metric dictionary, or reporting-spec excerpt will let prospects inspect the quality of the work without inventing client results.
+- [ ] **Verify analytics.** Confirm Cloudflare Web Analytics records page views and Calendly outbound clicks without introducing cookies inconsistent with the privacy policy.
+- [ ] **Run real-device QA.** Test current iPhone Safari, Android Chrome, desktop Chrome, Edge, Firefox, keyboard-only navigation, 200% zoom, reduced motion, and slow/mobile connections.
+- [ ] **Request reindexing after deployment.** Resubmit the sitemap and request homepage indexing in Google Search Console after the new title and description are live.
+- [ ] **Monitor brand search monthly.** Track `Prime Analytics`, `Prime Analytics revenue data`, and `primeanalytics.ai`; branded discoverability is currently weak because established namesakes dominate.
+- [ ] **Self-host fonts when practical.** This removes a third-party request, improves resilience, and simplifies the privacy story.
+- [ ] **Tighten the CSP when CSS/JS are externalized.** Inline CSS/JS currently requires `'unsafe-inline'`; do this only when the maintenance benefit justifies splitting the single file.
+- [ ] **Add professional founder photos only when both are ready.** Use consistent, real portraits; do not use stock imagery or AI-generated people.
+- [ ] **Add certifications only if current and verifiable.** Link badges to the issuer where possible.
+- [ ] **Do not add testimonials, logos, client counts, outcome percentages, or "clients come back" language until each is real and permissioned.**
 
 ## Accounts & infrastructure
 
@@ -48,7 +103,7 @@ The three bolded sections (Challenges, Guarantees, FAQ) were added after benchma
 | Hosting | Cloudflare Workers (static assets, not classic Pages) | Cloudflare account **`Educhac23@gmail.com's Account`** (id `334696cbcfac3868e5a054bb7771257d`) — this is the account that already owned the `primeanalytics.ai` DNS zone before this project started, so it was used instead of creating a new one. Worker name: `prime-analytics`. |
 | DNS / SSL | Same Cloudflare account | `primeanalytics.ai` and `www.primeanalytics.ai` are attached as Custom Domains directly on the Worker (see `wrangler.toml` routes) — SSL is auto-provisioned by Cloudflare, no manual cert management. |
 | Business email | Google Workspace | `eduardo@primeanalytics.ai` is a paid Workspace seat; `hello@primeanalytics.ai` is a **free alias** on that same seat (Workspace allows multiple aliases per seat at no extra cost — don't create it as a separate user, that costs another license). MX record for the domain points to `smtp.google.com`; do **not** set up Cloudflare Email Routing for this zone, it would conflict with the existing Workspace MX. |
-| Scheduling | Calendly (free tier) | https://calendly.com/eduardo-primeanalytics/20min — all three "Book a call" buttons on the site link here. Shortened from 30 to 20 minutes to lower the commitment for cold traffic with no case studies yet. |
+| Scheduling | Calendly (free tier) | https://calendly.com/eduardo-primeanalytics/20min — all scheduling CTAs on the site link here. The 20-minute length lowers the commitment for cold traffic. |
 | SEO / indexing | Google Search Console | Domain verified, `sitemap.xml` submitted, and indexing requested for the homepage. As of setup, `site:primeanalytics.ai` returned zero results — brand-new domain with no backlinks, so this was expected. Give it a few days before re-checking. |
 | Email authentication | DNS TXT records | DKIM, SPF, and DMARC all confirmed live via direct DNS lookup: SPF is `v=spf1 include:_spf.google.com ~all`, DMARC is `v=DMARC1; p=none; rua=mailto:hello@primeanalytics.ai` (monitor-only — tighten to `p=quarantine`/`p=reject` later once reports look clean). |
 
@@ -80,26 +135,26 @@ Don't push straight to `main`. Suggested workflow:
 
 ## Open items
 
-- [ ] **Re-price the audit after the first 1–2 real engagements.** The published $2,000 / ~20-hour cap (see "Pricing anchor" below) is benchmark-derived, not costed — nobody has actually timed a real audit yet. Track real hours on the first couple of clients and revisit the number once there's real data, rather than leaving a guessed number live indefinitely. This is the follow-up that matters most, more than the exact figure.
+- [ ] **Re-price the Revenue Data Blueprint after the first 1–2 real engagements.** The published $2,000 price is benchmark-derived, not costed — nobody has actually timed a real Blueprint yet. Track real hours on the first couple of clients and revisit the number and scope once there's real data.
 - [ ] **Certification/partner badges** — if either founder holds a Snowflake, dbt, or GA4 certification, add it as a trust signal. Costs nothing, needs no client, not yet done.
-- [ ] **Compliance/data-handling as a visible guarantee, not just a `/privacy` mention.** Given the shop is Honduras-based pitching to US companies, being explicit about NDA/DPA practice somewhere more prominent than the privacy page could preempt an objection before it's asked.
+- [x] **Make compliance/data-handling visible.** The homepage now states minimum-access, client-owned-infrastructure, NDA/DPA, and access-removal practices; the privacy page uses matching language.
 - [ ] **Case studies** — even one anonymized project (the anchor client, once wrapped) would do more for conversion than any copy polish. This is the single biggest gap versus competitor sites, which all lead with quantified case results.
 - [ ] **Legal/invoicing structure** for cross-border USD billing.
 - [ ] **Testimonials / client logos** — deliberately not faked. Add once there are real clients willing to be named or quoted.
 
 ## Pricing anchor
 
-**Published and live:** the audit is **$2,000 fixed, time-boxed to ~20 hours across one week** — stated in Process, Guarantees, and FAQ. Credited in full toward the build if the client moves forward. The build itself deliberately has no published number ("you'll have a fixed one in hand before committing to it") — see reasoning below for why that's staying unpublished for now, and why there's no monthly/retainer tier.
+**Published offer:** the **Revenue Data Blueprint is $2,000 fixed and delivered in five business days** after kickoff and required access are complete. It is credited in full toward the build if the client moves forward. The website sells defined deliverables, not a block of consultant hours. Internally, continue tracking whether roughly 20 hours is a viable delivery target. The build itself deliberately has no published number; the Blueprint produces a fixed build proposal.
 
-**Why $2,000 and time-boxed, not the originally-researched $2,500 flat fee:**
-- The audit is inherently the least predictable phase of the engagement — a messy, undocumented client stack can make "map everything" open-ended regardless of price. A **flat scope commitment** ("a complete audit") is what creates 100+ hour blowout risk; a **time-boxed** one ("~20 hours across one week, here's what we found") caps it structurally. Get the scope framing right before worrying about the exact number.
-- $2,000 at ~20 realistic hours lands at roughly $100/hr — consistent with the nearshore/boutique blended rate researched below, for a *disciplined, capped* audit rather than an unbounded one.
+**Why $2,000 and tightly defined, not the originally-researched $2,500 flat fee:**
+- The Blueprint can become open-ended if "map everything" is promised. The public deliverable list defines the expected output; the eventual statement of work must define access assumptions, number of stakeholder sessions, source-system limits, and exclusions.
+- $2,000 at ~20 realistic internal hours lands at roughly $100/hr — consistent with the nearshore/boutique blended rate researched below, for a disciplined Blueprint rather than an unbounded assessment.
 - The closest direct comp (Data Solutions Agency) publishes deliverables from ~$900. With zero case studies or testimonials live yet, pricing much above that gap is a harder sell than the original research fully weighed — $2,000 narrows that gap versus $2,500.
 
 **Not yet published, deliberately:**
-- **Build price range.** No real client has been billed yet, so any range is still benchmark-derived, not costed. Leaving it as "quoted after the audit" is already standard, credible practice and doesn't need a public range to work.
-- **Monthly/retainer tier.** Site copy was just cleaned up specifically to remove "fixed price vs. monthly" contradictions (see git log). Reintroducing a retainer product is a real decision that deserves its own pass later, not a rider on the audit-pricing change.
-- **Important:** the $2,000 figure is a benchmark-derived guess, not a costed one — nobody has timed a real audit yet. Revisit after the first 1–2 real engagements (see Open Items).
+- **Build price range.** No real client has been billed yet, so any range is still benchmark-derived, not costed. Leaving it as "quoted after the Blueprint" is already standard, credible practice and doesn't need a public range to work.
+- **Monthly/retainer tier.** Site copy was cleaned up specifically to remove "fixed price vs. monthly" contradictions (see git log). Reintroducing a retainer product is a real decision that deserves its own pass later, not a rider on the Blueprint-pricing change.
+- **Important:** the $2,000 figure is a benchmark-derived guess, not a costed one — nobody has timed a real Blueprint yet. Revisit after the first 1–2 real engagements (see Open Items).
 
 **Market benchmarks used:**
 - US onshore senior data engineers: $150–185/hr; analytics engineers $140–170/hr; dbt specialists $140–160/hr baseline, up to $200–300/hr when dbt is the centerpiece. ([source](https://dataconsultingfirms.com/insights/data-engineering-hourly-rates), [source](https://www.webfx.com/martech/pricing/big-data-consulting/))
@@ -108,4 +163,4 @@ Don't push straight to `main`. Suggested workflow:
 - General project-based agency work: $5,000–$50,000+ per project. ([source](https://www.darkroomagency.com/observatory/marketing-agency-cost-2026-pricing-by-service))
 - Nearshore LatAm senior data/dev talent: $80–$115/hr at full timezone overlap, vs. $150–250/hr for US mid-market firms and $400+/hr for top-tier US specialists — a 40–65% discount for equivalent seniority. ([source](https://www.hireinsouth.com/post/nearshore-development-rates), [source](https://distantjob.com/blog/offshore-developer-rates/))
 - Direct competitor reality check: Data Solutions Agency publishes *"deliverables start at 800 EUR, missions at 1,500 EUR"* (~$900/$1,600) — "small deliverables" pricing (one dashboard, one dbt model), not full warehouse builds. Not a comparable benchmark for our Build phase, but a real signal on audit-tier pricing from the closest direct comp.
-- The tension to hold in mind: the site's own guarantee is *"both founders, no hand-offs — no account managers, no rotating junior staff."* That's a premium-access claim — pricing shouldn't read as "cheap because junior/offshore," it should read as "same senior access, less overhead."
+- The tension to hold in mind: the site's own commitment is *"both founders, no hand-offs — no account managers, no rotating junior staff."* That's a premium-access claim — pricing shouldn't read as "cheap because junior/offshore," it should read as "same senior access, less overhead."

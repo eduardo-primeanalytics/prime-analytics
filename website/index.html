@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marketing Attribution & Data Infrastructure — Prime Analytics</title>
-<meta name="description" content="We build the data infrastructure behind confident marketing decisions. Attribution modeling, Snowflake + dbt pipelines, dashboards your team uses.">
+<title>Revenue Attribution & Data Infrastructure | Prime Analytics</title>
+<meta name="description" content="Prime Analytics connects marketing, sales, product, and revenue data for growing US companies. Fixed-price Revenue Data Blueprint in five business days.">
 
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png">
@@ -14,15 +14,17 @@
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://primeanalytics.ai/">
-<meta property="og:title" content="Marketing Attribution & Data Infrastructure — Prime Analytics">
-<meta property="og:description" content="We build the data infrastructure behind confident marketing decisions. Attribution modeling, Snowflake + dbt pipelines, dashboards your team uses.">
+<meta property="og:title" content="Revenue Attribution & Data Infrastructure | Prime Analytics">
+<meta property="og:description" content="Connect marketing, sales, product, and revenue data. Start with a fixed-price Revenue Data Blueprint delivered in five business days.">
 <meta property="og:image" content="https://primeanalytics.ai/og-image.png">
+<meta property="og:image:alt" content="Prime Analytics — revenue attribution and data infrastructure">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Marketing Attribution & Data Infrastructure — Prime Analytics">
-<meta name="twitter:description" content="We build the data infrastructure behind confident marketing decisions. Attribution modeling, Snowflake + dbt pipelines, dashboards your team uses.">
+<meta name="twitter:title" content="Revenue Attribution & Data Infrastructure | Prime Analytics">
+<meta name="twitter:description" content="Connect marketing, sales, product, and revenue data. Start with a fixed-price Revenue Data Blueprint delivered in five business days.">
 <meta name="twitter:image" content="https://primeanalytics.ai/og-image.png">
+<meta name="twitter:image:alt" content="Prime Analytics — revenue attribution and data infrastructure">
 
 <script type="application/ld+json">
 {
@@ -30,7 +32,7 @@
   "@type": "ProfessionalService",
   "name": "Prime Analytics",
   "url": "https://primeanalytics.ai",
-  "description": "Marketing attribution modeling, data warehouse and pipeline builds, and decision-support dashboards for US SaaS, e-commerce, and services companies.",
+  "description": "Revenue attribution, data infrastructure, and decision-support reporting for growing US companies.",
   "email": "hello@primeanalytics.ai",
   "image": "https://primeanalytics.ai/og-image.png",
   "priceRange": "$2,000+",
@@ -50,12 +52,12 @@
     {
       "@type": "Question",
       "name": "What does a project actually cost?",
-      "acceptedAnswer": { "@type": "Answer", "text": "The audit is $2,000 fixed and credited toward the build if you move forward. The build itself depends on scope — a full warehouse-and-dashboard build is a different investment than a lightweight attribution model — so we don't post a blanket number, but you'll have a fixed one in hand before committing to it." }
+      "acceptedAnswer": { "@type": "Answer", "text": "The Revenue Data Blueprint is $2,000 fixed and credited toward the build if you move forward. It includes a source inventory, reporting and data-quality assessment, recommended architecture, prioritized roadmap, findings call, and fixed build proposal. You keep every deliverable whether or not we work together afterward." }
     },
     {
       "@type": "Question",
       "name": "How long does an engagement take?",
-      "acceptedAnswer": { "@type": "Answer", "text": "The audit is one week. The build after that ships in weekly increments you review as it goes — total timeline depends on scope, but you're never waiting months for a single reveal." }
+      "acceptedAnswer": { "@type": "Answer", "text": "The Revenue Data Blueprint is delivered in five business days after the kickoff and required access are complete. A build then ships in weekly increments you review as it goes. Total build timeline depends on the agreed scope." }
     },
     {
       "@type": "Question",
@@ -65,7 +67,7 @@
     {
       "@type": "Question",
       "name": "Do you sign NDAs and handle our data securely?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Yes — NDAs and data processing agreements are standard practice for us, not a special request." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. We can put an NDA and data processing agreement in place before receiving access. We request the minimum access needed, work in client-owned infrastructure, and remove our access at handoff." }
     },
     {
       "@type": "Question",
@@ -75,7 +77,7 @@
     {
       "@type": "Question",
       "name": "What happens after the project ends — are we locked in?",
-      "acceptedAnswer": { "@type": "Answer", "text": "No. You get full documentation and recorded walkthroughs, and you own the warehouse, models, and pipelines outright. Plenty of clients come back for new work, but nothing here requires it." }
+      "acceptedAnswer": { "@type": "Answer", "text": "No. You get full documentation and recorded walkthroughs, and you own the warehouse, models, dashboards, and pipelines outright. Ongoing support is optional." }
     }
   ]
 }
@@ -97,6 +99,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
+section,[id]{scroll-margin-top:84px}
 body{
   font-family:'IBM Plex Sans',sans-serif;
   background:var(--paper);
@@ -107,6 +110,8 @@ body{
 }
 a{color:var(--cobalt)}
 a:focus-visible,button:focus-visible,[role="button"]:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.skip-link{position:absolute;left:16px;top:-60px;z-index:100;background:var(--ink);color:#fff;padding:10px 16px;border-radius:0 0 8px 8px}
+.skip-link:focus{top:0}
 .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
 
 /* ---------- Nav ---------- */
@@ -149,6 +154,17 @@ h1{
 h1 em{font-style:normal;color:var(--cobalt)}
 .hero p.lede{font-size:1.13rem;color:var(--muted);max-width:34em;margin-bottom:32px}
 .hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
+.cta-note{font-size:.82rem;color:var(--muted);margin-top:14px}
+
+/* ---------- Proof strip ---------- */
+.proof-strip{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  background:var(--ink);border-radius:14px;overflow:hidden;
+}
+.proof-item{padding:22px 24px;border-right:1px solid rgba(255,255,255,.14)}
+.proof-item:last-child{border-right:0}
+.proof-item strong{display:block;color:#fff;font-size:.98rem;margin-bottom:3px}
+.proof-item span{display:block;color:#B9C6D6;font-size:.82rem}
 
 /* ---------- Pipeline schematic (signature) ---------- */
 .schematic{
@@ -185,6 +201,20 @@ h2{font-family:'Bitter',serif;font-weight:800;font-size:clamp(1.5rem,3vw,2.1rem)
 }
 .card h3{font-size:1.08rem;font-weight:600;margin-bottom:10px}
 .card p{font-size:.94rem;color:var(--muted)}
+.cards.two{grid-template-columns:repeat(2,1fr)}
+
+/* ---------- Blueprint ---------- */
+.blueprint{
+  display:grid;grid-template-columns:.85fr 1.15fr;gap:44px;
+  background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:40px;box-shadow:0 12px 32px rgba(22,40,60,.07);
+}
+.blueprint-price{font-family:'Bitter',serif;font-size:2rem;font-weight:800;color:var(--cobalt);line-height:1.15;margin:14px 0 4px}
+.blueprint-time{font-family:'IBM Plex Mono',monospace;color:var(--muted);font-size:.82rem;margin-bottom:20px}
+.blueprint-copy p{color:var(--muted);margin-bottom:18px}
+.deliverables{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:12px 22px}
+.deliverables li{position:relative;padding-left:24px;font-size:.92rem}
+.deliverables li::before{content:'✓';position:absolute;left:0;color:var(--cobalt);font-weight:600}
 
 /* ---------- Challenges ---------- */
 .pains{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
@@ -244,6 +274,11 @@ h2{font-family:'Bitter',serif;font-weight:800;font-size:clamp(1.5rem,3vw,2.1rem)
 /* ---------- About ---------- */
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
 .about p{color:var(--muted);margin-bottom:16px}
+.founders{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+.founder{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px}
+.founder h3{font-size:1.02rem;margin-bottom:2px}
+.founder .role{font-family:'IBM Plex Mono',monospace;color:var(--cobalt);font-size:.75rem;margin-bottom:12px}
+.founder p{font-size:.9rem;margin-bottom:12px}
 .fact{
   display:flex;gap:14px;align-items:baseline;border-bottom:1px solid var(--line);padding:14px 0;
 }
@@ -263,8 +298,13 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
 
 /* ---------- Responsive ---------- */
 @media (max-width:860px){
+  body.menu-open{overflow:hidden}
   .hero-grid{grid-template-columns:1fr;gap:40px}
-  .cards,.steps,.pains{grid-template-columns:1fr}
+  .cards,.cards.two,.steps,.pains{grid-template-columns:1fr}
+  .proof-strip{grid-template-columns:1fr 1fr}
+  .proof-item:nth-child(2){border-right:0}
+  .proof-item:nth-child(-n+2){border-bottom:1px solid rgba(255,255,255,.14)}
+  .blueprint{grid-template-columns:1fr;padding:30px 24px;gap:24px}
   .about-grid{grid-template-columns:1fr;gap:28px}
   .nav-toggle-btn{display:flex}
   .nav-links{
@@ -281,13 +321,17 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
   .contact{padding:40px 24px}
 }
 @media (max-width:480px){
-  .schematic{display:none}
+  .schematic{padding:18px 14px}
+  .proof-strip,.founders,.deliverables{grid-template-columns:1fr}
+  .proof-item{border-right:0;border-bottom:1px solid rgba(255,255,255,.14)}
+  .proof-item:last-child{border-bottom:0}
 }
 </style>
 </head>
 <body>
 
-<nav>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<nav aria-label="Primary navigation">
   <div class="nav-inner">
     <a class="logo" href="#top">Prime<span>&nbsp;Analytics</span></a>
     <input type="checkbox" id="nav-toggle" class="nav-toggle-input">
@@ -296,29 +340,30 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
     </button>
     <div class="nav-links" id="nav-links">
       <a href="#services">What we do</a>
+      <a href="#blueprint">Blueprint</a>
       <a href="#process">How we work</a>
       <a href="#about">About</a>
-      <a href="#faq">FAQ</a>
-      <a class="btn" href="https://calendly.com/eduardo-primeanalytics/20min" target="_blank" rel="noopener">Book a call</a>
+      <a class="btn" href="https://calendly.com/eduardo-primeanalytics/20min" target="_blank" rel="noopener">Discuss your data</a>
     </div>
   </div>
 </nav>
 
-<main>
+<main id="main-content">
 
 <header class="hero" id="top">
   <div class="wrap hero-grid">
     <div>
-      <div class="eyebrow">Marketing attribution · Data infrastructure</div>
-      <h1>Know which dollar <em>actually</em> drove the sale.</h1>
-      <p class="lede">We build the pipelines, models, and dashboards that turn your marketing and product data into decisions — from raw events to a warehouse your whole team trusts.</p>
+      <div class="eyebrow">Revenue attribution · Data infrastructure</div>
+      <h1>Revenue reporting your team can <em>finally trust.</em></h1>
+      <p class="lede">We help growing US companies connect marketing, sales, product, and revenue data — then build the attribution models and reporting their teams need to make confident decisions.</p>
       <div class="hero-ctas">
-        <a class="btn" href="https://calendly.com/eduardo-primeanalytics/20min" target="_blank" rel="noopener">Book a call</a>
-        <a class="btn ghost" href="#services">See what we do</a>
+        <a class="btn" href="https://calendly.com/eduardo-primeanalytics/20min" target="_blank" rel="noopener">Discuss your data</a>
+        <a class="btn ghost" href="#blueprint">See the $2,000 blueprint</a>
       </div>
+      <p class="cta-note">20 minutes · No preparation required · Speak directly with a founder</p>
     </div>
 
-    <div class="schematic" role="img" aria-label="Diagram: data sources flow into a warehouse, then into models, then into decisions. Output metrics shown are an illustrative example, not results from a specific client.">
+    <div class="schematic" role="img" aria-label="Diagram: advertising, website, and CRM data flow into a warehouse and attribution models, producing traceable channel-to-revenue reporting.">
       <svg viewBox="0 0 440 308" role="img" aria-hidden="true">
         <!-- Sources -->
         <text x="16" y="24" class="sc-label">SOURCES</text>
@@ -348,17 +393,17 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
         <text x="348" y="125" class="sc-node-title">dbt · MTA</text>
 
         <!-- Output metrics -->
-        <text x="16" y="208" class="sc-label">OUTPUT — WHAT YOUR TEAM SEES · ILLUSTRATIVE EXAMPLE</text>
+        <text x="16" y="208" class="sc-label">OUTPUT — WHAT YOUR TEAM CAN RELY ON</text>
         <rect x="16" y="220" width="408" height="72" rx="8" class="sc-node"/>
-        <text x="34" y="240" class="sc-metric">blended CAC ↓ 18%</text>
+        <text x="34" y="240" class="sc-metric">channel → revenue</text>
         <text x="34" y="256" class="sc-label">
-          <tspan x="34" dy="0">illustrative — spend moved</tspan>
-          <tspan x="34" dy="14">to the true top channel</tspan>
+          <tspan x="34" dy="0">traceable definitions,</tspan>
+          <tspan x="34" dy="14">not a black box</tspan>
         </text>
-        <text x="240" y="240" class="sc-metric">ROAS by channel</text>
+        <text x="240" y="240" class="sc-metric">one reporting layer</text>
         <text x="240" y="256" class="sc-label">
-          <tspan x="240" dy="0">refreshed daily,</tspan>
-          <tspan x="240" dy="14">one source of truth</tspan>
+          <tspan x="240" dy="0">tested, documented,</tspan>
+          <tspan x="240" dy="14">and ready to own</tspan>
         </text>
 
         <path class="sc-flow" d="M379 142 C 379 186, 220 186, 220 220"/>
@@ -366,6 +411,15 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
     </div>
   </div>
 </header>
+
+<div class="wrap" aria-label="Prime Analytics at a glance">
+  <div class="proof-strip">
+    <div class="proof-item"><strong>10+ years</strong><span>Combined hands-on analytics experience</span></div>
+    <div class="proof-item"><strong>Founder-led</strong><span>No sales-to-junior handoff</span></div>
+    <div class="proof-item"><strong>US-aligned</strong><span>CST with fluent English communication</span></div>
+    <div class="proof-item"><strong>Client-owned</strong><span>Your infrastructure, code, and documentation</span></div>
+  </div>
+</div>
 
 <section id="challenges">
   <div class="wrap">
@@ -398,7 +452,7 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
   <div class="wrap">
     <div class="sec-head">
       <h2>What we do</h2>
-      <p>Three outcomes an engagement can produce — the audit determines which one, or which combination, fits where your data is today.</p>
+      <p>We start with the decision your team cannot answer, then build only the infrastructure needed to answer it reliably.</p>
     </div>
     <div class="cards">
       <div class="card">
@@ -420,16 +474,44 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
   </div>
 </section>
 
+<section id="blueprint">
+  <div class="wrap">
+    <div class="blueprint">
+      <div class="blueprint-copy">
+        <div class="eyebrow">The starting point</div>
+        <h2>Your Revenue Data Blueprint</h2>
+        <p>A focused assessment that shows what is broken, what should change, and what it will take to build. You keep the complete blueprint whether or not you hire us for the implementation.</p>
+        <div class="blueprint-price">$2,000 fixed</div>
+        <div class="blueprint-time">DELIVERED IN FIVE BUSINESS DAYS</div>
+        <a class="btn" href="https://calendly.com/eduardo-primeanalytics/20min" target="_blank" rel="noopener">See if it fits</a>
+      </div>
+      <div>
+        <h3>What you receive</h3>
+        <ul class="deliverables">
+          <li>Business-question and stakeholder map</li>
+          <li>Source, metric, and reporting inventory</li>
+          <li>Data-quality and pipeline risk assessment</li>
+          <li>Attribution and reporting gap analysis</li>
+          <li>Recommended target architecture</li>
+          <li>Prioritized 30/60/90-day roadmap</li>
+          <li>Recorded findings presentation</li>
+          <li>Fixed-price build proposal, if there is a fit</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="process">
   <div class="wrap">
     <div class="sec-head">
       <h2>How we work</h2>
-      <p>One clear path from audit to handoff — no surprises in scope, price, or timeline.</p>
+      <p>One clear path from diagnosis to handoff — with an agreed scope, visible progress, and no dependency on us afterward.</p>
     </div>
     <div class="steps">
       <div class="step">
-        <h3>Audit</h3>
-        <p>One week, capped at about 20 hours of our time, mapping your current stack and the decisions you can't answer today. $2,000 fixed, credited in full toward the build if you move forward — you keep the findings doc either way.</p>
+        <h3>Blueprint</h3>
+        <p>In five business days, we map your sources, definitions, reporting gaps, and technical risks. You receive a prioritized roadmap and a fixed build proposal. The $2,000 fee is credited in full if you move forward.</p>
       </div>
       <div class="step">
         <h3>Build</h3>
@@ -437,28 +519,33 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
       </div>
       <div class="step">
         <h3>Handoff</h3>
-        <p>Full documentation, recorded walkthroughs, and a transition plan. Our goal is that you don't need us — which is usually why clients come back.</p>
+        <p>Full documentation, recorded walkthroughs, access removal, and a transition plan. Your team owns and can operate what we build. Ongoing support is available, never required.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section id="guarantees">
+<section id="risk">
   <div class="wrap">
     <div class="sec-head">
-      <h2>What we commit to</h2>
-      <p>The usual risks of hiring a small, unfamiliar shop — addressed upfront.</p>
+      <h2>How we reduce project risk</h2>
+      <p>Clear commercial terms, direct senior access, secure working practices, and no lock-in.</p>
     </div>
-    <div class="cards">
+    <div class="cards two">
       <div class="card">
         <span class="tag">Pricing</span>
         <h3>Fixed price, credited forward</h3>
-        <p>A one-week audit is $2,000, capped at about 20 hours of our time — credited in full toward the build if you move forward. The build price is quoted upfront too, before you commit to anything.</p>
+        <p>The five-day Revenue Data Blueprint is $2,000 and credited in full toward the build if you move forward. You receive a fixed build price before committing to implementation.</p>
       </div>
       <div class="card">
         <span class="tag">Access</span>
         <h3>Both founders, no hand-offs</h3>
         <p>No account managers, no rotating junior staff. You work directly with the two people who scoped the project.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Security</span>
+        <h3>Minimum access, client-owned systems</h3>
+        <p>We can sign an NDA and DPA before access begins. We request only the access needed, work in infrastructure you control, and remove our access at handoff.</p>
       </div>
       <div class="card">
         <span class="tag">Ownership</span>
@@ -472,7 +559,7 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
 <section>
   <div class="wrap">
     <div class="stack">
-      <span class="lead">Tools we work with daily</span>
+      <span class="lead">Core technologies we work with</span>
       <span class="tool">Snowflake</span><span class="tool">dbt</span><span class="tool">BigQuery</span><span class="tool">Sigma</span>
       <span class="tool">Hex</span><span class="tool">Fivetran</span><span class="tool">Python</span><span class="tool">SQL</span>
       <span class="tool">Mixpanel</span><span class="tool">GA4</span><span class="tool">Looker</span><span class="tool">Tableau</span>
@@ -484,8 +571,22 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
   <div class="wrap about-grid">
     <div class="about">
       <h2>About</h2>
-      <p>Prime Analytics is co-founded by Eduardo Chacón and Jose Bardales, who bring a combined 10+ years of hands-on analytics experience to every engagement. Jose is a senior data and product analyst who has built data infrastructure from scratch for US SaaS companies — most recently the full Snowflake + dbt + Sigma stack for a market-leading analytics platform. Eduardo has built marketing attribution and churn-prediction models, sales and e-commerce dashboards, and the web-scraping pipelines that feed them — turning scattered raw data into decisions teams actually act on.</p>
-      <p>We work with US and international clients remotely, in your time zone's core hours, with fully fluent English communication and documentation.</p>
+      <p>Prime Analytics is a founder-led revenue data consultancy. We combine data engineering, attribution, and decision-facing analytics so clients do not have to coordinate separate specialists for the warehouse, models, and reporting layer.</p>
+      <p>Both founders remain hands-on from the first conversation through handoff. We work remotely from Honduras in US core hours, with fluent English communication and documentation.</p>
+      <div class="founders">
+        <article class="founder">
+          <h3>Eduardo Chacón</h3>
+          <div class="role">ATTRIBUTION &amp; ANALYTICS</div>
+          <p>Builds marketing attribution and predictive models, sales and e-commerce reporting, and the data-collection pipelines behind them.</p>
+          <a href="https://www.linkedin.com/in/eduardo-chacon/" target="_blank" rel="noopener">View LinkedIn</a>
+        </article>
+        <article class="founder">
+          <h3>Jose Bardales</h3>
+          <div class="role">DATA &amp; PRODUCT</div>
+          <p>Builds data infrastructure and product analytics for US SaaS teams, including Snowflake, dbt, and Sigma implementations.</p>
+          <a href="https://josefbardales.github.io" target="_blank" rel="noopener">View profile</a>
+        </article>
+      </div>
     </div>
     <div>
       <div class="fact"><span class="k">BASED_IN</span><span class="v">Honduras (CST — overlaps all US time zones)</span></div>
@@ -500,17 +601,17 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
 <section id="faq">
   <div class="wrap">
     <div class="sec-head">
-      <h2>Questions we get asked</h2>
-      <p>If yours isn't here, that's what the call is for.</p>
+      <h2>Common questions</h2>
+      <p>Clear answers before you give us access to anything.</p>
     </div>
     <div class="faq">
       <details>
         <summary>What does a project actually cost?</summary>
-        <p>The audit is $2,000 fixed (see Guarantees above) and credited toward the build if you move forward. The build itself depends on scope — a full warehouse-and-dashboard build is a different investment than a lightweight attribution model — so we don't post a blanket number, but you'll have a fixed one in hand before committing to it.</p>
+        <p>The Revenue Data Blueprint is $2,000 fixed and credited toward the build if you move forward. It includes the source inventory, data-quality and reporting assessment, recommended architecture, prioritized roadmap, findings call, and fixed build proposal. You keep everything whether or not we work together afterward.</p>
       </details>
       <details>
         <summary>How long does an engagement take?</summary>
-        <p>The audit is one week. The build after that ships in weekly increments you review as it goes — total timeline depends on scope, but you're never waiting months for a single reveal.</p>
+        <p>The Revenue Data Blueprint is delivered in five business days after kickoff and required access are complete. A build then ships in weekly increments you review as it goes. Total build timeline depends on the agreed scope.</p>
       </details>
       <details>
         <summary>What tools do you use?</summary>
@@ -518,7 +619,7 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
       </details>
       <details>
         <summary>Do you sign NDAs and handle our data securely?</summary>
-        <p>Yes — NDAs and data processing agreements are standard practice for us, not a special request. See our <a href="/privacy">privacy policy</a> for how we handle data on this site itself.</p>
+        <p>Yes. We can put an NDA and data processing agreement in place before receiving access. We request the minimum access needed, work in infrastructure you control, and remove our access at handoff. See our <a href="/privacy">privacy policy</a> for how we handle data on this site.</p>
       </details>
       <details>
         <summary>Do you work with companies outside the US?</summary>
@@ -526,7 +627,7 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
       </details>
       <details>
         <summary>What happens after the project ends — are we locked in?</summary>
-        <p>No. You get full documentation and recorded walkthroughs, and you own the warehouse, models, and pipelines outright. Plenty of clients come back for new work, but nothing here requires it.</p>
+        <p>No. You get full documentation and recorded walkthroughs, and you own the warehouse, models, dashboards, and pipelines outright. Ongoing support is optional.</p>
       </details>
     </div>
   </div>
@@ -535,9 +636,9 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
 <section id="contact">
   <div class="wrap">
     <div class="contact">
-      <h2>Let's look at your data together</h2>
-      <p>A 20-minute call is enough to tell you honestly whether we can help — and roughly what it would cost. No deck, no pressure.</p>
-      <a class="btn" href="https://calendly.com/eduardo-primeanalytics/20min" target="_blank" rel="noopener">Book a call</a>
+      <h2>Bring us the reporting question nobody trusts</h2>
+      <p>In 20 minutes, we'll determine whether the Revenue Data Blueprint fits your situation and explain the next step. No preparation, deck, or commitment required.</p>
+      <a class="btn" href="https://calendly.com/eduardo-primeanalytics/20min" target="_blank" rel="noopener">Discuss your data</a>
       <div class="mono">or email <a href="mailto:hello@primeanalytics.ai">hello@primeanalytics.ai</a></div>
     </div>
   </div>
@@ -558,6 +659,7 @@ var navToggleBtn = document.querySelector('.nav-toggle-btn');
 
 function syncNavExpanded(){
   navToggleBtn.setAttribute('aria-expanded', navToggle.checked ? 'true' : 'false');
+  document.body.classList.toggle('menu-open', navToggle.checked);
 }
 
 navToggleBtn.addEventListener('click', function(){
@@ -570,6 +672,14 @@ document.querySelectorAll('.nav-links a').forEach(function(a){
     navToggle.checked = false;
     syncNavExpanded();
   });
+});
+
+document.addEventListener('keydown', function(event){
+  if(event.key === 'Escape' && navToggle.checked){
+    navToggle.checked = false;
+    syncNavExpanded();
+    navToggleBtn.focus();
+  }
 });
 </script>
 
