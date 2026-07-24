@@ -35,6 +35,13 @@ h1{font-size:clamp(2.2rem,5vw,3.6rem);line-height:1.08;max-width:760px;margin-bo
 h2{font-size:1.65rem;margin-bottom:16px}
 h3{font-size:1.05rem;margin-bottom:8px}
 .lede{font-size:1.12rem;color:var(--muted);max-width:700px}
+.case-label{font-family:'IBM Plex Mono',monospace;font-size:.74rem;letter-spacing:.08em;color:var(--muted);margin:34px 0 10px}
+.case-switcher{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.case-option{display:block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;text-decoration:none;color:var(--ink)}
+.case-option:hover{border-color:var(--cobalt)}
+.case-option.active{border:2px solid var(--cobalt);padding:15px 17px;background:rgba(36,86,199,.04)}
+.case-option strong{display:block;font-size:.93rem}
+.case-option span{display:block;color:var(--muted);font-size:.8rem;margin-top:3px}
 .meta{display:grid;grid-template-columns:repeat(4,1fr);margin-top:40px;background:var(--ink);border-radius:12px;overflow:hidden}
 .meta div{padding:18px 20px;border-right:1px solid rgba(255,255,255,.14)}
 .meta div:last-child{border:0}
@@ -78,7 +85,7 @@ tr:last-child td{border-bottom:0}
 .btn{display:inline-block;background:var(--cobalt);color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;font-weight:600}
 footer{padding:34px 0;color:var(--muted);font-size:.82rem}
 @media(max-width:760px){
-  .meta,.grid,.grid.three,.roadmap{grid-template-columns:1fr}
+  .meta,.grid,.grid.three,.roadmap,.case-switcher{grid-template-columns:1fr}
   .meta div{border-right:0;border-bottom:1px solid rgba(255,255,255,.14)}
   .architecture{grid-template-columns:1fr}
   .arrow{transform:rotate(90deg);justify-self:center}
@@ -107,7 +114,18 @@ footer{padding:34px 0;color:var(--muted);font-size:.82rem}
     <div class="wrap">
       <div class="eyebrow">Representative deliverable</div>
       <h1>Revenue Data Blueprint</h1>
-      <p class="lede">A fictional example showing the level of clarity, prioritization, and technical detail included in a real engagement.</p>
+      <p class="lede">Choose between two fictional examples showing how the same Blueprint process adapts to very different business problems.</p>
+      <div class="case-label">SELECT AN EXAMPLE · 1 OF 2</div>
+      <div class="case-switcher" aria-label="Choose a fictional Blueprint example">
+        <a class="case-option active" href="/sample-blueprint" aria-current="page">
+          <strong>B2B SaaS attribution</strong>
+          <span>Conflicting CAC and channel-to-revenue reporting</span>
+        </a>
+        <a class="case-option" href="/sample-blueprint-services">
+          <strong>Professional services reporting</strong>
+          <span>Referrals, signed contracts, and manual monthly reporting</span>
+        </a>
+      </div>
       <div class="meta">
         <div><strong>Company</strong><span>Northstar Software (fictional)</span></div>
         <div><strong>Business model</strong><span>B2B SaaS</span></div>
@@ -274,7 +292,7 @@ footer{padding:34px 0;color:var(--muted);font-size:.82rem}
       <div class="cta">
         <h2>Your Blueprint will reflect your systems and decisions</h2>
         <p>This fictional sample is intentionally abbreviated. A real engagement includes the complete inventory, evidence behind each finding, implementation assumptions, and a fixed-price build proposal.</p>
-        <a class="btn" href="https://calendly.com/eduardo-primeanalytics/20min" target="_blank" rel="noopener">Discuss your data</a>
+        <a class="btn" href="https://calendly.com/eduardo-primeanalytics/20min" target="_blank" rel="noopener">Schedule Your Blueprint Call</a>
       </div>
     </div>
   </section>

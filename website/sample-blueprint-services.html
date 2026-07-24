@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Professional Services Blueprint Example | Prime Analytics</title>
+<meta name="description" content="A fictional Revenue Data Blueprint for a professional services firm that needs to connect referrals to signed contracts and simplify monthly reporting.">
+<link rel="canonical" href="https://primeanalytics.ai/sample-blueprint-services">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F5F7FA;--ink:#16283C;--cobalt:#2456C7;--amber:#E8A13C;--muted:#5B6B7D;--line:#D7DEE7;--card:#fff;--good:#287A58;--risk:#B84C3D}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--paper);color:var(--ink);line-height:1.6}
+a{color:var(--cobalt)}a:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.wrap{max-width:980px;margin:0 auto;padding:0 24px}
+.sample-banner{background:var(--amber);color:#4A2C06;text-align:center;padding:9px 20px;font-family:'IBM Plex Mono',monospace;font-size:.78rem;font-weight:500;letter-spacing:.04em}
+nav{background:rgba(245,247,250,.96);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
+.nav-inner{max-width:980px;margin:auto;padding:15px 24px;display:flex;justify-content:space-between;gap:20px}
+.logo{font-family:'Bitter',serif;font-weight:800;text-decoration:none;color:var(--ink)}.logo span{color:var(--cobalt)}
+.back{text-decoration:none;font-size:.9rem;font-weight:600}
+.cover{padding:72px 0 48px}.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cobalt);margin-bottom:16px}
+h1,h2{font-family:'Bitter',serif;font-weight:800;letter-spacing:-.015em}h1{font-size:clamp(2.2rem,5vw,3.6rem);line-height:1.08;margin-bottom:20px}h2{font-size:1.65rem;margin-bottom:16px}h3{font-size:1.05rem;margin-bottom:8px}
+.lede{font-size:1.12rem;color:var(--muted);max-width:720px}
+.case-label{font-family:'IBM Plex Mono',monospace;font-size:.74rem;letter-spacing:.08em;color:var(--muted);margin:34px 0 10px}
+.case-switcher{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.case-option{display:block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;text-decoration:none;color:var(--ink)}
+.case-option:hover{border-color:var(--cobalt)}.case-option.active{border:2px solid var(--cobalt);padding:15px 17px;background:rgba(36,86,199,.04)}
+.case-option strong{display:block;font-size:.93rem}.case-option span{display:block;color:var(--muted);font-size:.8rem;margin-top:3px}
+.meta{display:grid;grid-template-columns:repeat(4,1fr);margin-top:24px;background:var(--ink);border-radius:12px;overflow:hidden}
+.meta div{padding:18px 20px;border-right:1px solid rgba(255,255,255,.14)}.meta div:last-child{border:0}
+.meta strong{display:block;color:#fff;font-size:.87rem}.meta span{display:block;color:#B9C6D6;font-size:.78rem;margin-top:2px}
+section{padding:48px 0;border-top:1px solid var(--line)}
+.intro{color:var(--muted);max-width:720px;margin-bottom:24px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.grid.three{grid-template-columns:repeat(3,1fr)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px}.panel p{font-size:.92rem;color:var(--muted)}
+.finding{border-left:3px solid var(--cobalt)}.finding.risk{border-left-color:var(--risk)}.finding.good{border-left-color:var(--good)}
+.tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--cobalt);margin-bottom:10px}
+.decision{font-family:'Bitter',serif;font-weight:700;font-size:1.25rem;line-height:1.35;margin-bottom:12px}
+.table-wrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:700px}th,td{text-align:left;padding:14px 16px;border-bottom:1px solid var(--line);font-size:.86rem;vertical-align:top}
+th{font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.06em;color:var(--muted);background:#EDF1F6}tr:last-child td{border-bottom:0}
+.architecture{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:12px;align-items:stretch}
+.arch-node{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px}.arch-node strong{display:block;margin-bottom:8px}.arch-node span{display:block;color:var(--muted);font-size:.82rem;margin-top:3px}
+.arrow{align-self:center;color:var(--cobalt);font-size:1.4rem;font-weight:600}
+.principle{margin-top:18px;background:rgba(232,161,60,.1);border-left:3px solid var(--amber);padding:18px 20px}
+.roadmap{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.phase{border-top:3px solid var(--cobalt);padding-top:16px}.phase .days{font-family:'IBM Plex Mono',monospace;font-size:.74rem;color:var(--cobalt);margin-bottom:7px}
+ul{padding-left:20px}.phase ul{margin-top:12px}li{margin-bottom:8px;color:var(--muted);font-size:.93rem}
+.scope{background:var(--ink);color:#fff;border-radius:14px;padding:30px}.scope h2{color:#fff}.scope p,.scope li{color:#B9C6D6}
+.cta{text-align:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:42px 28px}.cta p{color:var(--muted);max-width:570px;margin:0 auto 22px}
+.btn{display:inline-block;background:var(--cobalt);color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;font-weight:600}
+footer{padding:34px 0;color:var(--muted);font-size:.82rem}
+@media(max-width:760px){.case-switcher,.meta,.grid,.grid.three,.roadmap{grid-template-columns:1fr}.meta div{border-right:0;border-bottom:1px solid rgba(255,255,255,.14)}.architecture{grid-template-columns:1fr}.arrow{transform:rotate(90deg);justify-self:center}}
+@media print{nav,.sample-banner,.cta,footer{display:none}body{background:#fff}.cover{padding-top:20px}section{break-inside:avoid}}
+</style>
+</head>
+<body>
+
+<div class="sample-banner">FICTIONAL EXAMPLE · NOT CLIENT WORK · ALL COMPANIES, SYSTEMS, AND FINDINGS ARE INVENTED</div>
+<nav aria-label="Sample navigation">
+  <div class="nav-inner">
+    <a class="logo" href="/">Prime<span>&nbsp;Analytics</span></a>
+    <a class="back" href="/">← Back to the main site</a>
+  </div>
+</nav>
+
+<main>
+  <header class="cover">
+    <div class="wrap">
+      <div class="eyebrow">Representative deliverable</div>
+      <h1>Revenue Data Blueprint</h1>
+      <p class="lede">Choose between two fictional examples showing how the same Blueprint process adapts to very different business problems.</p>
+      <div class="case-label">SELECT AN EXAMPLE · 2 OF 2</div>
+      <div class="case-switcher" aria-label="Choose a fictional Blueprint example">
+        <a class="case-option" href="/sample-blueprint">
+          <strong>B2B SaaS attribution</strong>
+          <span>Conflicting CAC and channel-to-revenue reporting</span>
+        </a>
+        <a class="case-option active" href="/sample-blueprint-services" aria-current="page">
+          <strong>Professional services reporting</strong>
+          <span>Referrals, signed contracts, and manual monthly reporting</span>
+        </a>
+      </div>
+      <div class="meta">
+        <div><strong>Company</strong><span>Harbor &amp; Field Advisory (fictional)</span></div>
+        <div><strong>Business model</strong><span>Professional services</span></div>
+        <div><strong>Primary question</strong><span>Which sources create signed work?</span></div>
+        <div><strong>Recommended stack</strong><span>HubSpot + Google Sheets</span></div>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">01 · Executive summary</div>
+      <h2>The decision Harbor &amp; Field cannot make</h2>
+      <div class="panel finding">
+        <div class="decision">“Which referral partners and marketing sources produce the most valuable signed engagements?”</div>
+        <p>The partners remember where some clients came from, HubSpot records a source for others, and finance keeps signed contract values in a monthly spreadsheet. No report connects all three consistently, so the firm cannot decide where to invest its relationship-building time.</p>
+      </div>
+      <div class="grid three" style="margin-top:18px">
+        <div class="panel finding risk"><span class="tag">Primary gap</span><h3>Source lives in memory</h3><p>Referral source is missing or entered as free text for 42% of signed engagements.</p></div>
+        <div class="panel finding risk"><span class="tag">Manual burden</span><h3>Two days every month</h3><p>An operations manager combines CRM exports, invoices, and a partner-maintained contract sheet by hand.</p></div>
+        <div class="panel finding good"><span class="tag">Recommendation</span><h3>Keep the current tools</h3><p>The firm does not need a warehouse. A governed Sheet and cleaner HubSpot process can answer the question.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">02 · Current workflow</div>
+      <h2>Where the answer breaks down</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>STEP</th><th>CURRENT PROCESS</th><th>PROBLEM</th><th>SIMPLE FIX</th></tr></thead>
+          <tbody>
+            <tr><td>Inquiry arrives</td><td>HubSpot form, direct email, or partner introduction</td><td>Direct introductions bypass source capture</td><td>Required source field during contact creation</td></tr>
+            <tr><td>Proposal sent</td><td>Tracked in HubSpot notes</td><td>No consistent proposal status or value</td><td>Four defined deal stages and expected value</td></tr>
+            <tr><td>Contract signed</td><td>Added to a partner-owned Sheet</td><td>Company names do not always match HubSpot</td><td>Store the HubSpot company ID in the Sheet</td></tr>
+            <tr><td>Invoice issued</td><td>QuickBooks</td><td>Invoice customer is not linked to the CRM deal</td><td>Monthly export matched through company ID</td></tr>
+            <tr><td>Monthly report</td><td>Manual combination of three exports</td><td>Slow, fragile, and difficult to verify</td><td>Protected formulas and one refresh checklist</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">03 · Recommended system</div>
+      <h2>A governed spreadsheet—not a data platform</h2>
+      <p class="intro">The business question is important, but the data volume and reporting frequency do not justify a warehouse. The recommendation improves collection and creates one controlled reporting workbook.</p>
+      <div class="architecture" aria-label="Recommended lightweight reporting flow">
+        <div class="arch-node"><strong>Capture consistently</strong><span>HubSpot source category</span><span>Named referral partner</span><span>Deal stage and value</span></div>
+        <div class="arrow">→</div>
+        <div class="arch-node"><strong>Combine simply</strong><span>Protected Google Sheet</span><span>HubSpot monthly export</span><span>QuickBooks monthly export</span><span>Stable company ID</span></div>
+        <div class="arrow">→</div>
+        <div class="arch-node"><strong>Answer clearly</strong><span>Signed value by source</span><span>Conversion by referral partner</span><span>Time from inquiry to signature</span><span>Missing-data checklist</span></div>
+      </div>
+      <div class="principle"><strong>Why this is enough:</strong> the report is needed monthly, the source list is small, and one operations owner maintains it. The firm should revisit a warehouse only if system count, reporting frequency, or team access grows materially.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">04 · 30-day roadmap</div>
+      <h2>Fix collection first, then automate the report</h2>
+      <div class="roadmap">
+        <div class="phase"><div class="days">WEEK 01 · DEFINE</div><h3>Agree on the language</h3><ul><li>Approve six source categories</li><li>Define a signed engagement</li><li>Assign one reporting owner</li></ul></div>
+        <div class="phase"><div class="days">WEEK 02 · CAPTURE</div><h3>Repair the workflow</h3><ul><li>Add required HubSpot fields</li><li>Standardize deal stages</li><li>Backfill active opportunities</li></ul></div>
+        <div class="phase"><div class="days">WEEKS 03–04 · REPORT</div><h3>Build and hand off</h3><ul><li>Create the governed Sheet</li><li>Validate against signed contracts</li><li>Record the refresh walkthrough</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="scope">
+        <div class="eyebrow" style="color:#E8A13C">05 · Implementation boundary</div>
+        <h2>What the proposed lightweight build includes</h2>
+        <div class="grid">
+          <div><h3>Included</h3><ul><li>HubSpot field and deal-stage design</li><li>Governed Google Sheets reporting model</li><li>Source, partner, contract value, and conversion reporting</li><li>Missing-data and reconciliation checks</li><li>Documentation and recorded handoff</li></ul></div>
+          <div><h3>Not included</h3><ul><li>A warehouse or new BI platform</li><li>Full CRM migration or cleanup</li><li>Bookkeeping or QuickBooks administration</li><li>Marketing or referral-program management</li><li>Ongoing monthly report operation</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="cta">
+        <h2>The right answer does not have to be the biggest system</h2>
+        <p>This fictional example shows how a Blueprint can lead to a simple, dependable solution. The recommendation follows the business question—not a predetermined technology stack.</p>
+        <a class="btn" href="https://calendly.com/eduardo-primeanalytics/20min" target="_blank" rel="noopener">Schedule Your Blueprint Call</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">© 2026 Prime Analytics · <a href="/privacy">Privacy Policy</a> · <a href="/">Main site</a></div></footer>
+</body>
+</html>

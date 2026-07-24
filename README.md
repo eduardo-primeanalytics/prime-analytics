@@ -15,6 +15,7 @@ prime-analytics/
     ├── index.html    # the main page — HTML, CSS, and JS inline
     ├── privacy.html
     ├── sample-blueprint.html
+    ├── sample-blueprint-services.html
     ├── 404.html
     ├── sitemap.xml
     └── (favicon/OG image assets)
@@ -117,7 +118,7 @@ The hybrid preserves the original headline's punch while avoiding the claim that
 - [ ] **Check the $2,000 economics after 1–2 engagements.** Record real hours, meetings, and revisions; change price or scope if the Blueprint cannot be delivered profitably in five business days.
 - [ ] **Complete brand/legal due diligence.** Search results contain unrelated companies called Prime Analytics, including a `prime-analytics.ai` business. Check US trademark risk and decide whether a consistent descriptor such as "Prime Analytics — Revenue Data Systems" is needed.
 - [ ] **Claim consistent social profiles.** Use the same company name, descriptor, domain, logo, founder links, and summary on LinkedIn and any other public profile.
-- [x] **Create one proof artifact that is not a case study.** `/sample-blueprint` is a clearly labeled fictional deliverable showing representative findings, architecture, metric conflicts, roadmap, and build boundaries without implying client work.
+- [x] **Create proof artifacts that are not case studies.** `/sample-blueprint` and `/sample-blueprint-services` are clearly labeled fictional deliverables. Visitors can switch between a B2B SaaS attribution problem that uses BigQuery/dbt and a professional-services reporting problem whose recommended solution is HubSpot plus Google Sheets.
 - [ ] **Verify analytics.** Confirm Cloudflare Web Analytics records page views and Calendly outbound clicks without introducing cookies inconsistent with the privacy policy.
 - [ ] **Run real-device QA.** Test current iPhone Safari, Android Chrome, desktop Chrome, Edge, Firefox, keyboard-only navigation, 200% zoom, reduced motion, and slow/mobile connections.
 - [ ] **Request reindexing after deployment.** Resubmit the sitemap and request homepage indexing in Google Search Console after the new title and description are live.
@@ -148,6 +149,9 @@ This checklist records the July 2026 review of ProIQ, DataSolutions, Data Soluti
 - [x] State that outside specialists are never introduced without prior disclosure of identity, purpose, and access.
 - [x] Add a one-business-day email response expectation.
 - [x] Add the sample Blueprint to the sitemap.
+- [x] Simplify the four "Sound familiar?" statements so each communicates one problem in a single sentence.
+- [x] Turn the sample Blueprint into a two-example chooser rather than presenting one fictional case as the only possible engagement.
+- [x] Use the second sample to demonstrate that an important problem can justify a paid engagement without requiring a warehouse or complex stack.
 
 ### High impact — requires owner preparation
 
@@ -178,6 +182,51 @@ This checklist records the July 2026 review of ProIQ, DataSolutions, Data Soluti
 - [ ] Do not manufacture industry specialization, project counts, return-client rates, awards, or performance percentages.
 - [ ] Do not create thin SEO landing pages, a generic high-volume blog, live chat, or phone support that the two founders cannot maintain.
 - [ ] Do not expand the service list unless the new service supports the core revenue-data positioning.
+
+## BuzzCube benchmark notes
+
+BuzzCube was reviewed separately after the broader competitor benchmark. Its strongest patterns are operational specificity and visual proof:
+
+- It puts concrete operating promises directly under the hero rather than relying on adjectives.
+- It makes the output visible through many work examples.
+- It explains the customer journey as a short visual sequence.
+- Its FAQ answers the operational questions buyers ask immediately: timing, team continuity, workflow, limits, and cancellation.
+- It clearly contrasts its model with hiring, agencies, freelancers, and AI.
+
+Prime should borrow the specificity, inspectable work, process clarity, and objection handling. The two fictional Blueprint examples, five-step journey, risk controls, and expanded FAQ apply those lessons without copying BuzzCube's subscription model, comparison table, testimonials, or scale claims. Do not add a competitor-comparison table until Prime has enough delivery evidence to support every comparison fairly.
+
+## SEO keyword strategy
+
+### Primary acquisition keyword
+
+**Marketing attribution consulting**
+
+This is the clearest high-intent search phrase for Prime's strongest entry problem: connecting marketing activity to pipeline and revenue. Search results for the phrase are service and consultancy pages rather than general definitions, which indicates commercial intent. It is also more specific and defensible than the extremely broad "data analytics consulting."
+
+The keyword is an acquisition wedge, not the definition of the entire company. Prime also provides data infrastructure, revenue reporting, and lightweight decision systems. The homepage should therefore use the exact phrase naturally without turning every heading into repetitive SEO copy.
+
+Implemented placements:
+
+- [x] Homepage title
+- [x] Main service-section heading
+- [x] Attribution service heading
+- [x] About description
+- [x] Meta description
+
+Supporting topics used naturally across the page:
+
+- Revenue attribution
+- Marketing attribution services
+- Attribution modeling
+- Revenue reporting
+- Revenue analytics
+- Data infrastructure
+- Data warehouse consulting
+- Analytics consulting
+
+The visible H1 remains **Revenue reporting your team can finally trust.** This is intentional. The smaller line above it ("Revenue attribution · Data infrastructure") is an eyebrow, not the H1. The conversion headline explains the outcome more clearly than an exact-match keyword headline; the title, headings, service copy, About copy, and future focused pages can carry the search language.
+
+Do not judge the keyword from intuition or estimated search volume alone. Monitor Search Console impressions, queries, qualified traffic, and booked calls. If attribution traffic is too narrow or low quality, test a dedicated attribution page before replacing the homepage's broader positioning.
 
 ## Accounts & infrastructure
 
