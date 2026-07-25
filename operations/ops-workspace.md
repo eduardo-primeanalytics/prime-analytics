@@ -18,6 +18,8 @@ A discussion is a durable topic that can reappear across meetings. Each occurren
 
 A task is a durable commitment with a permanent `PA-###` identifier. A task can be manually created or created from an approved meeting proposal.
 
+Deleting a task is a recoverable soft deletion. It disappears from task lists and AI reconciliation context, while its database record, manual notes, and append-only history remain intact for recovery. Legitimate task identifiers are never reused; the production sequence was normalized once after removing IDs consumed by the manual-entry bug.
+
 Manual task notes are stored separately from structured task fields. AI processing never receives those notes in its reconciliation context and has no update or delete operation for them.
 
 ## Attribution and history guarantees

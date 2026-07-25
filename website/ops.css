@@ -542,6 +542,8 @@ input:focus, select:focus, textarea:focus { outline: 2px solid #a8c8f6; border-c
   margin-top: 5px;
 }
 
+.task-detail-actions { justify-content: space-between; }
+
 .detail-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

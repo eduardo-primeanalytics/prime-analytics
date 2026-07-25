@@ -179,6 +179,7 @@ async function getBootstrap(env, identity) {
     env.OPS_DB.prepare(`
       SELECT t.*, u.display_name AS owner_name
       FROM tasks t LEFT JOIN workspace_users u ON u.email = t.owner_email
+      WHERE t.deleted_at IS NULL
       ORDER BY
         CASE t.status
           WHEN 'open' THEN 1 WHEN 'in_progress' THEN 2 WHEN 'waiting' THEN 3
@@ -193,7 +194,11 @@ async function getBootstrap(env, identity) {
       FROM meetings ORDER BY happened_at DESC, created_at DESC LIMIT 100
     `).all(),
     env.OPS_DB.prepare(`
-      SELECT COUNT(*) AS count FROM proposals WHERE status = 'pending'
+      SELECT COUNT(*) AS count
+      FROM proposals p
+      LEFT JOIN tasks t ON t.id = p.target_task_id
+      WHERE p.status = 'pending'
+        AND (p.proposal_type = 'create_task' OR t.deleted_at IS NULL)
     `).first(),
     env.OPS_DB.prepare(`
       SELECT email, display_name, role FROM workspace_users WHERE active = 1 ORDER BY display_name
@@ -216,6 +221,7 @@ async function getBootstrap(env, identity) {
         FROM proposals p
         LEFT JOIN tasks t ON t.id = p.target_task_id
         WHERE p.meeting_id = ? AND p.status = 'pending'
+          AND (p.proposal_type = 'create_task' OR t.deleted_at IS NULL)
         ORDER BY p.created_at, p.id
       `).bind(latestMeeting.id).all(),
     ]);
@@ -249,7 +255,7 @@ async function getTask(env, taskId) {
     FROM tasks t
     LEFT JOIN workspace_users u ON u.email = t.owner_email
     LEFT JOIN discussions d ON d.id = t.discussion_id
-    WHERE t.id = ?
+    WHERE t.id = ? AND t.deleted_at IS NULL
   `).bind(taskId).first();
   if (!task) return null;
 
@@ -321,7 +327,9 @@ async function createTask(request, env, identity) {
 }
 
 async function updateTask(request, env, identity, taskId) {
-  const existing = await env.OPS_DB.prepare('SELECT * FROM tasks WHERE id = ?').bind(taskId).first();
+  const existing = await env.OPS_DB.prepare(`
+    SELECT * FROM tasks WHERE id = ? AND deleted_at IS NULL
+  `).bind(taskId).first();
   if (!existing) return json({ error: 'Task not found.' }, 404);
 
   const body = await request.json();
@@ -373,8 +381,39 @@ async function updateTask(request, env, identity, taskId) {
   return json({ task: await getTask(env, taskId) });
 }
 
+async function deleteTask(env, identity, taskId) {
+  const existing = await env.OPS_DB.prepare(`
+    SELECT * FROM tasks WHERE id = ? AND deleted_at IS NULL
+  `).bind(taskId).first();
+  if (!existing) return json({ error: 'Task not found.' }, 404);
+
+  await env.OPS_DB.batch([
+    taskEventStatement(env, {
+      taskId,
+      actorId: identity.email,
+      actorType: 'human',
+      eventType: 'task_deleted',
+      oldValue: {
+        title: existing.title,
+        status: existing.status,
+        owner_email: existing.owner_email,
+      },
+      metadata: { recoverable: true },
+    }),
+    env.OPS_DB.prepare(`
+      UPDATE tasks
+      SET deleted_at = CURRENT_TIMESTAMP, deleted_by_email = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ? AND deleted_at IS NULL
+    `).bind(identity.email, taskId),
+  ]);
+
+  return json({ ok: true, task: { id: taskId, code: taskCode(taskId), title: existing.title } });
+}
+
 async function addTaskNote(request, env, identity, taskId) {
-  const task = await env.OPS_DB.prepare('SELECT id FROM tasks WHERE id = ?').bind(taskId).first();
+  const task = await env.OPS_DB.prepare(`
+    SELECT id FROM tasks WHERE id = ? AND deleted_at IS NULL
+  `).bind(taskId).first();
   if (!task) return json({ error: 'Task not found.' }, 404);
   const body = await request.json();
   const note = cleanText(body.body, 10000);
@@ -554,7 +593,9 @@ async function processMeeting(env, meetingId) {
       `).all(),
       env.OPS_DB.prepare(`
         SELECT id, title, description, status, owner_email, due_at, review_at, discussion_id
-        FROM tasks WHERE status NOT IN ('completed', 'archived') ORDER BY updated_at DESC LIMIT 150
+        FROM tasks
+        WHERE deleted_at IS NULL AND status NOT IN ('completed', 'archived')
+        ORDER BY updated_at DESC LIMIT 150
       `).all(),
     ]);
 
@@ -835,7 +876,9 @@ async function reviewProposal(request, env, identity, proposalId) {
       metadata: { proposalId, proposedBy: AI_ACTOR },
     });
   } else {
-    const existing = await env.OPS_DB.prepare('SELECT * FROM tasks WHERE id = ?').bind(taskId).first();
+    const existing = await env.OPS_DB.prepare(`
+      SELECT * FROM tasks WHERE id = ? AND deleted_at IS NULL
+    `).bind(taskId).first();
     if (!existing) return json({ error: 'The target task no longer exists.' }, 409);
     const assignments = [];
     const values = [];
@@ -927,6 +970,9 @@ export async function handleOpsRequest(request, env, executionContext) {
     }
     if (taskMatch && request.method === 'PATCH') {
       return updateTask(request, env, identity, Number(taskMatch[1]));
+    }
+    if (taskMatch && request.method === 'DELETE') {
+      return deleteTask(env, identity, Number(taskMatch[1]));
     }
     const noteMatch = url.pathname.match(/^\/ops\/api\/tasks\/(\d+)\/notes$/);
     if (noteMatch && request.method === 'POST') {

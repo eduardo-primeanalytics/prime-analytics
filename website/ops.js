@@ -286,6 +286,7 @@ function eventDescription(event) {
     task_proposed: `Prime Ops AI proposed this task`,
     task_created_from_proposal: `${actor} approved and created this task`,
     ai_change_approved: `${actor} approved the proposed ${field} change`,
+    task_deleted: `${actor} deleted this task`,
   };
   return descriptions[event.event_type] || `${actor}: ${event.event_type.replace(/_/g, ' ')}`;
 }
@@ -318,7 +319,10 @@ async function openTask(taskId) {
         <span>Description</span>
         <textarea name="description" rows="3">${escapeHtml(task.description || '')}</textarea>
       </label>
-      <div class="dialog-actions"><button class="secondary-button" type="submit">Save changes</button></div>
+      <div class="dialog-actions task-detail-actions">
+        <button class="danger-button" id="delete-task" type="button">Delete task</button>
+        <button class="secondary-button" type="submit">Save changes</button>
+      </div>
     </form>
 
     <section class="detail-section">
@@ -366,6 +370,26 @@ async function openTask(taskId) {
     await refresh();
     await openTask(task.id);
     showNotice('Task updated and recorded in its history.', 'success');
+  });
+
+  $('#delete-task').addEventListener('click', async (event) => {
+    const confirmed = window.confirm(
+      `Delete ${task.code} — ${task.title}?\n\nIt will disappear from Prime Ops, but its audit record remains recoverable.`,
+    );
+    if (!confirmed) return;
+    const button = event.currentTarget;
+    button.disabled = true;
+    button.textContent = 'Deleting…';
+    try {
+      await api(`/ops/api/tasks/${task.id}`, { method: 'DELETE' });
+      $('#task-dialog').close();
+      await refresh();
+      showNotice(`${task.code} deleted.`, 'success');
+    } catch (error) {
+      button.disabled = false;
+      button.textContent = 'Delete task';
+      showNotice(error.message, 'error');
+    }
   });
 
   $('#note-form').addEventListener('submit', async (event) => {
