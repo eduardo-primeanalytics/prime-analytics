@@ -69,8 +69,9 @@ function processMeetingNotesSince_(createdAfter) {
   const sharedNotesFrom = new Date(
     Math.min(createdAfter.getTime(), sharedNotesFloor.getTime())
   );
-  collectSharedGeminiDocs_(sharedNotesFrom)
-    .forEach((file) => { filesById[file.getId()] = file; });
+  const sharedNotes = collectSharedGeminiDocs_(sharedNotesFrom);
+  console.log(`Found ${sharedNotes.length} recently shared Gemini meeting note(s).`);
+  sharedNotes.forEach((file) => { filesById[file.getId()] = file; });
 
   Object.keys(filesById).forEach((fileId) => {
     const file = filesById[fileId];
@@ -139,18 +140,23 @@ function collectRecentGoogleDocs_(folder, createdAfter, depth) {
  * missed. Prime Ops deduplicates the canonical Google Drive file ID.
  */
 function collectSharedGeminiDocs_(createdAfter) {
-  const query = [
-    'sharedWithMe = true',
-    'trashed = false',
-    `mimeType = "${GOOGLE_DOC_MIME_TYPE}"`,
-    `createdDate > "${createdAfter.toISOString()}"`,
-  ].join(' and ');
-  const files = DriveApp.searchFiles(query);
+  // DriveApp uses the older Drive API v2 query parser. Its reliable syntax for
+  // this special collection is the bare `sharedWithMe` term; apply the other
+  // filters in code so differences between the v2 and v3 parsers cannot stop
+  // the complete scan.
+  const files = DriveApp.searchFiles('sharedWithMe');
   const results = [];
 
   while (files.hasNext()) {
     const file = files.next();
-    if (isGeminiMeetingNote_(file.getName())) results.push(file);
+    if (
+      !file.isTrashed()
+      && file.getMimeType() === GOOGLE_DOC_MIME_TYPE
+      && file.getDateCreated() >= createdAfter
+      && isGeminiMeetingNote_(file.getName())
+    ) {
+      results.push(file);
+    }
   }
   return results;
 }
