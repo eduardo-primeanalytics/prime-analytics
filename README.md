@@ -286,6 +286,8 @@ Each founder signs in separately through Cloudflare Access. Every task change re
 
 Gemini meeting notes can be collected from a shared Google Drive folder every five minutes. The AI adds discussion occurrences and proposes task changes but does not apply them automatically. Manual task notes are stored separately, excluded from AI reconciliation context, and never overwritten by meeting processing.
 
+Cloudflare Access is configured with Google sign-in for the `/ops` app. The Worker still validates every request with `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD`, so the app remains fail-closed unless those runtime values are present and the Access JWT is valid.
+
 See [`operations/ops-workspace.md`](operations/ops-workspace.md) for the architecture, security model, Cloudflare Access setup, OpenAI secret, Google Apps Script intake, and failure behavior.
 
 ### Delivery credibility
@@ -319,6 +321,8 @@ npx wrangler deploy
 ```
 
 `wrangler.toml` pins `account_id` — don't remove it. Whoever runs `wrangler deploy` locally may be authenticated to more than one Cloudflare account (Cloudflare account membership isn't tied 1:1 to the login email), and without a pinned `account_id` wrangler will guess wrong and deploy to/create a Worker in the wrong account.
+
+`ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` are required runtime values for `/ops`. Set them in Cloudflare before relying on the private workspace, and keep the values aligned with the Access application you created in Zero Trust.
 
 To verify a deploy actually went live (bypassing CDN cache):
 

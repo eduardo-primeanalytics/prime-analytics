@@ -69,7 +69,7 @@ primeanalytics.ai/ops*
 
 Use an Allow policy containing the two exact founder email addresses. Do not use an email-domain wildcard.
 
-The simplest login method is Cloudflare One-Time PIN, which emails a short-lived code to each approved Gmail or Google Workspace account. A Google identity provider can replace it later without changing Ops identities.
+Use Google as the Access identity provider for the app. The Google Workspace domain is already managed, so this gives us a cleaner login path than Cloudflare One-Time PIN and ties sign-in to the same domain identity we use everywhere else.
 
 Configure these non-secret Worker variables after creating the Access application:
 
