@@ -195,6 +195,9 @@ h1 em{font-style:normal;color:var(--cobalt)}
 @media (prefers-reduced-motion: reduce){
   .sc-flow{animation:none}
   html{scroll-behavior:auto}
+  .marquee{overflow-x:auto}
+  .marquee-track{animation:none}
+  .marquee-track[aria-hidden="true"]{display:none}
 }
 
 /* ---------- Sections ---------- */
@@ -288,19 +291,38 @@ h2{font-family:'Bitter',serif;font-weight:800;font-size:clamp(1.5rem,3vw,2.1rem)
 }
 .step p{font-size:.93rem;color:var(--muted)}
 
-/* ---------- Stack strip ---------- */
-.stack{
-  background:var(--ink);border-radius:14px;padding:36px 40px;
-  display:flex;flex-wrap:wrap;gap:14px 34px;align-items:center;justify-content:center;
+/* ---------- Tech stack marquee ---------- */
+.ti-defs{position:absolute;width:0;height:0;overflow:hidden}
+.tech-section{padding:26px 0 0}
+.techbar{background:var(--ink);border-radius:14px;padding:26px 0 30px;overflow:hidden}
+.techbar .lead{
+  color:#fff;font-family:'IBM Plex Sans',sans-serif;font-weight:600;
+  text-align:center;margin-bottom:20px;padding:0 24px;
 }
-.stack .lead{color:#fff;font-family:'IBM Plex Sans',sans-serif;font-weight:600;width:100%;text-align:center;margin-bottom:6px}
-.stack .tool{
-  display:inline-flex;align-items:center;gap:8px;
+.techbar .lead small{
+  display:block;margin-top:3px;color:#8FA3B8;font-weight:400;font-size:.78rem;
+  font-family:'IBM Plex Mono',monospace;letter-spacing:.02em;
+}
+.marquee{
+  display:flex;overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+}
+.marquee-track{
+  display:flex;align-items:center;gap:14px;padding-right:14px;flex-shrink:0;
+  animation:ti-scroll 46s linear infinite;
+}
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track{animation-play-state:paused}
+@keyframes ti-scroll{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+.techbar .tool{
+  display:inline-flex;align-items:center;gap:10px;white-space:nowrap;
   font-family:'IBM Plex Mono',monospace;color:#B9C6D6;font-size:.88rem;letter-spacing:.02em;
   background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);
-  padding:8px 16px;border-radius:20px;
+  padding:9px 18px;border-radius:24px;
 }
-.stack .tool::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0}
+.techbar .tool svg{width:20px;height:20px;fill:currentColor;color:var(--amber);flex-shrink:0}
+.techbar .tool svg.wide{width:30px}
 
 /* ---------- About ---------- */
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
@@ -351,6 +373,11 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
   .nav-toggle-input:checked ~ .nav-links{max-height:400px}
   header.hero{padding:56px 0 48px}
   section{padding:52px 0}
+  .tech-section{padding:20px 0 0}
+  .techbar .tool{font-size:.82rem;padding:8px 15px;gap:9px}
+  .techbar .tool svg{width:18px;height:18px}
+  .techbar .tool svg.wide{width:27px}
+  .marquee-track{animation-duration:34s}
   .contact{padding:40px 24px}
 }
 @media (max-width:480px){
@@ -453,6 +480,63 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
     <div class="proof-item"><strong>Client-owned</strong><span>Your infrastructure, code, and documentation</span></div>
   </div>
 </div>
+
+<!-- Brand marks are official vendor SVGs, self-hosted inline as a sprite: no external
+     requests, and `fill:currentColor` lets one CSS rule colour the whole set. -->
+<svg class="ti-defs" aria-hidden="true" focusable="false"><defs>
+  <symbol id="ti-snowflake" viewBox="0 0 24 24"><path d="M24 3.459c0 .646-.418 1.18-1.141 1.18-.723 0-1.142-.534-1.142-1.18 0-.647.419-1.18 1.142-1.18.723 0 1.141.533 1.141 1.18zm-.228 0c0-.533-.38-.951-.913-.951s-.913.38-.913.95c0 .533.38.952.913.952.57 0 .913-.419.913-.951zm-1.37-.533h.495c.266 0 .456.152.456.38 0 .153-.076.229-.19.305l.19.266v.038h-.266l-.19-.266h-.229v.266h-.266zm.495.228h-.229v.267h.229c.114 0 .152-.038.152-.114.038-.077-.038-.153-.152-.153zM7.602 12.4c.038-.151.076-.304.076-.456 0-.114-.038-.228-.038-.342-.114-.343-.304-.647-.646-.838l-4.87-2.777c-.685-.38-1.56-.152-1.94.533-.381.685-.153 1.56.532 1.94l2.701 1.56-2.701 1.56c-.685.38-.913 1.256-.533 1.94.38.685 1.256.914 1.94.533l4.832-2.777c.343-.267.571-.533.647-.876zm1.332 2.626c-.266-.038-.57.038-.837.19l-4.832 2.777c-.685.38-.913 1.256-.532 1.94.38.686 1.255.914 1.94.533l2.701-1.56v3.12c0 .8.647 1.408 1.446 1.408.799 0 1.407-.647 1.407-1.408v-5.592c0-.761-.57-1.37-1.293-1.408zm4.946-6.088c.266.038.57-.038.837-.19l4.832-2.777c.685-.38.913-1.256.532-1.94-.38-.686-1.255-.914-1.94-.533l-2.701 1.56V1.975c0-.799-.647-1.408-1.446-1.408-.799 0-1.446.609-1.446 1.408V7.53c0 .76.609 1.37 1.332 1.407zM3.265 5.97l4.832 2.777c.266.152.533.19.837.19.723-.038 1.331-.684 1.331-1.407V1.975c0-.799-.646-1.408-1.407-1.408-.799 0-1.446.647-1.446 1.408v3.12l-2.701-1.56c-.685-.38-1.56-.152-1.94.533-.419.646-.19 1.521.494 1.902zm9.093 6.011a.412.412 0 00-.114-.266l-.57-.571a.346.346 0 00-.267-.114.412.412 0 00-.266.114l-.571.57a.411.411 0 00-.114.267c0 .076.038.19.114.267l.57.57a.345.345 0 00.267.114c.076 0 .19-.038.266-.114l.571-.57a.412.412 0 00.114-.267zm1.598.533L11.94 14.53c-.039.038-.153.114-.229.114h-.608a.411.411 0 01-.267-.114L8.82 12.514a.408.408 0 01-.076-.229v-.608c0-.076.038-.19.114-.267l2.016-2.016a.41.41 0 01.267-.114h.608a.41.41 0 01.267.114l2.016 2.016a.347.347 0 01.114.267v.608c-.076.077-.114.19-.19.229zm5.593 5.44l-4.832-2.777c-.266-.152-.57-.19-.837-.152-.723.038-1.332.684-1.332 1.408v5.554c0 .8.647 1.408 1.408 1.408.799 0 1.446-.647 1.446-1.408v-3.12l2.7 1.56c.686.38 1.561.152 1.941-.533.419-.646.19-1.521-.494-1.94zm2.549-7.533l-2.701 1.56 2.7 1.56c.686.38.914 1.256.533 1.94-.38.685-1.255.913-1.94.533l-4.832-2.778a1.644 1.644 0 01-.647-.798c-.037-.153-.076-.305-.076-.457 0-.114.039-.228.039-.342.114-.343.342-.647.646-.837l4.832-2.778c.685-.38 1.56-.152 1.94.533.457.609.19 1.484-.494 1.864"/></symbol>
+  <symbol id="ti-dbt" viewBox="0 0 24 24"><path d="M17.9004 9.3763a8.1488 8.1488 0 0 0-3.0421-3.1206l1.7708.8385a10.2874 10.2874 0 0 1 3.74 3.0007l3.234-5.9295a2.8546 2.8546 0 0 0-.0611-2.9604C22.7566.0371 21.2112-.3409 19.9754.3327l-5.8749 3.2101a4.3612 4.3612 0 0 1-4.1761 0L4.1769.408a2.8545 2.8545 0 0 0-2.9592.0632c-1.1673.7853-1.5452 2.33-.8723 3.5655L3.55 9.9106a4.3612 4.3612 0 0 1 0 4.1772l-3.1272 5.743a2.86 2.86 0 0 0 .085 2.9974c.794 1.1438 2.3225 1.5054 3.5448.8385l6.0581-3.3049a10.2877 10.2877 0 0 1-3.0051-3.7454l-.8374-1.7708a8.148 8.148 0 0 0 3.1206 3.0421l10.5832 5.779c1.2213.666 2.7481.3055 3.5426-.8363a2.8699 2.8699 0 0 0 .0796-3.0018L17.9004 9.3763zm3.3801-7.7351c.6022 0 1.0904.4882 1.0904 1.0904s-.4882 1.0904-1.0904 1.0904-1.0904-.4882-1.0904-1.0904.4882-1.0904 1.0904-1.0904zM2.7442 3.822c-.6022 0-1.0904-.4882-1.0904-1.0904s.4882-1.0904 1.0904-1.0904 1.0904.4882 1.0904 1.0904S3.3464 3.822 2.7442 3.822zm0 18.5363c-.6022 0-1.0904-.4882-1.0904-1.0904 0-.6022.4882-1.0904 1.0904-1.0904s1.0904.4882 1.0904 1.0904c0 .6022-.4882 1.0904-1.0904 1.0904zm10.3585-11.4489c-1.2008-.0035-2.177.9672-2.1805 2.1679a2.1738 2.1738 0 0 0 .7052 1.6091c-1.4872-.2091-2.5234-1.5843-2.3142-3.0716.2091-1.4872 1.5843-2.5234 3.0716-2.3142a2.7194 2.7194 0 0 1 2.3142 2.3142 2.1623 2.1623 0 0 0-1.5963-.7054zm8.1778 11.4489c-.6022 0-1.0904-.4882-1.0904-1.0904 0-.6022.4882-1.0904 1.0904-1.0904s1.0904.4882 1.0904 1.0904c0 .6022-.4882 1.0904-1.0904 1.0904z"/></symbol>
+  <symbol id="ti-bigquery" viewBox="0 0 24 24"><path d="M5.676 10.595h2.052v5.244a5.892 5.892 0 0 1-2.052-2.088v-3.156zm18.179 10.836a.504.504 0 0 1 0 .708l-1.716 1.716a.504.504 0 0 1-.708 0l-4.248-4.248a.206.206 0 0 1-.007-.007c-.02-.02-.028-.045-.043-.066a10.736 10.736 0 0 1-6.334 2.065C4.835 21.599 0 16.764 0 10.799S4.835 0 10.8 0s10.799 4.835 10.799 10.8c0 2.369-.772 4.553-2.066 6.333.025.017.052.028.074.05l4.248 4.248zm-5.028-10.632a8.015 8.015 0 1 0-8.028 8.028h.024a8.016 8.016 0 0 0 8.004-8.028zm-4.86 4.98a6.002 6.002 0 0 0 2.04-2.184v-1.764h-2.04v3.948zm-4.5.948c.442.057.887.08 1.332.072.4.025.8.025 1.2 0V7.692H9.468v9.035z"/></symbol>
+  <symbol id="ti-python" viewBox="0 0 24 24"><path d="M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.17l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05-.05-1.23.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.18l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05zm-6.3 1.98l-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09zm13.09 3.95l.28.06.32.12.35.18.36.27.36.35.35.47.32.59.28.73.21.88.14 1.04.05 1.23-.06 1.23-.16 1.04-.24.86-.32.71-.36.57-.4.45-.42.33-.42.24-.4.16-.36.09-.32.05-.24.02-.16-.01h-8.22v.82h5.84l.01 2.76.02.36-.05.34-.11.31-.17.29-.25.25-.31.24-.38.2-.44.17-.51.15-.58.13-.64.09-.71.07-.77.04-.84.01-1.27-.04-1.07-.14-.9-.2-.73-.25-.59-.3-.45-.33-.34-.34-.25-.34-.16-.33-.1-.3-.04-.25-.02-.2.01-.13v-5.34l.05-.64.13-.54.21-.46.26-.38.3-.32.33-.24.35-.2.35-.14.33-.1.3-.06.26-.04.21-.02.13-.01h5.84l.69-.05.59-.14.5-.21.41-.28.33-.32.27-.35.2-.36.15-.36.1-.35.07-.32.04-.28.02-.21V6.07h2.09l.14.01zm-6.47 14.25l-.23.33-.08.41.08.41.23.33.33.23.41.08.41-.08.33-.23.23-.33.08-.41-.08-.41-.23-.33-.33-.23-.41-.08-.41.08z"/></symbol>
+  <symbol id="ti-mixpanel" viewBox="0 0 24 24"><path d="M6.967 9.996h3.053c-.763-.477-1.048-1.145-1.431-2.384L7.443 3.366C6.919 1.458 6.49.551 4.39.551H.004v1.145h.621c1.286 0 1.431.477 1.814 1.908L3.44 7.326c.524 1.814 1.337 2.67 3.53 2.67h-.003Zm7.06 0h3.053c2.194 0 2.956-.86 3.484-2.67l1.001-3.722c.382-1.431.57-1.908 1.814-1.908H24V.551h-4.34c-2.146 0-2.576.86-3.053 2.815l-1.145 4.246c-.384 1.286-.673 1.907-1.435 2.384Zm-4.007 4.008h4.007V9.996H10.02v4.008ZM0 23.449h4.39c2.1 0 2.529-.907 3.053-2.815l1.146-4.246c.383-1.239.668-1.907 1.431-2.384H6.967c-2.194 0-3.007.86-3.531 2.67l-1.001 3.722c-.383 1.431-.524 1.907-1.814 1.907H0v1.146Zm19.65 0h4.343v-1.146h-.622c-1.239 0-1.431-.476-1.814-1.907l-1.001-3.722c-.524-1.814-1.286-2.67-3.483-2.67h-3.046c.762.477 1.041 1.098 1.424 2.384l1.145 4.246c.477 1.955.907 2.815 3.054 2.815Z"/></symbol>
+  <symbol id="ti-ga4" viewBox="0 0 24 24"><path d="M22.84 2.9982v17.9987c.0086 1.6473-1.3197 2.9897-2.967 2.9984a2.9808 2.9808 0 01-.3677-.0208c-1.528-.226-2.6477-1.5558-2.6105-3.1V3.1204c-.0369-1.5458 1.0856-2.8762 2.6157-3.1 1.6361-.1915 3.1178.9796 3.3093 2.6158.014.1201.0208.241.0202.3619zM4.1326 18.0548c-1.6417 0-2.9726 1.331-2.9726 2.9726C1.16 22.6691 2.4909 24 4.1326 24s2.9726-1.3309 2.9726-2.9726-1.331-2.9726-2.9726-2.9726zm7.8728-9.0098c-.0171 0-.0342 0-.0513.0003-1.6495.0904-2.9293 1.474-2.891 3.1256v7.9846c0 2.167.9535 3.4825 2.3505 3.763 1.6118.3266 3.1832-.7152 3.5098-2.327.04-.1974.06-.3983.0593-.5998v-8.9585c.003-1.6474-1.33-2.9852-2.9773-2.9882z"/></symbol>
+  <symbol id="ti-looker" viewBox="0 0 24 24"><path d="M11.9475 0c-1.1598.0021-2.0982.944-2.096 2.1038a2.1 2.1 0 00.356 1.166l.895-.8959a.884.884 0 11.565.564l-.895.895c.9593.6478 2.2621.3953 2.91-.564.6478-.9593.3953-2.262-.564-2.91A2.096 2.096 0 0011.9475 0zm-.835 6.1128a3.2629 3.2629 0 00-.653-1.965l-1.164 1.162a1.667 1.667 0 01-.318 2.012l.632 1.5449a3.2819 3.2819 0 001.503-2.754zm-3.2499 1.666h-.03c-.9217.0009-1.6697-.7455-1.6707-1.6673-.001-.9217.7454-1.6697 1.6672-1.6707a1.669 1.669 0 01.9195.275l1.152-1.152c-1.4069-1.141-3.4724-.9257-4.6135.4811s-.9257 3.4723.481 4.6135a3.2799 3.2799 0 002.7275.6652l-.633-1.5439v-.001zm4.1279 1.3359c-.728 0-1.452.106-2.15.315l.922 2.2519c2.6872-.6819 5.4184.9438 6.1002 3.631.6818 2.6873-.9439 5.4184-3.6311 6.1002s-5.4184-.9439-6.1002-3.631c-.5682-2.2394.4655-4.5774 2.5041-5.6643l-.91-2.2449c-3.6908 1.808-5.2173 6.2657-3.4093 9.9567l.0005.001c1.808 3.6909 6.2657 5.2173 9.9567 3.4093l.001-.0005c3.6913-1.8071 5.2187-6.2645 3.4116-9.9558a7.4417 7.4417 0 00-6.6865-4.1696h-.008l-.001.001z"/></symbol>
+  <symbol id="ti-tableau" viewBox="0 0 24 24"><path d="M11.654.174V2.377H9.682v.58h1.972V5.16h.696V2.957h1.97v-.58h-1.97V.174h-.348zm6.03 2.262l-.002 1.623v1.623h-2.957v.927h2.957v3.188H18.725l.011-1.582.02-1.576 1.465-.02 1.46-.01v-.927H18.728V2.436h-.522zm-12.407.06V5.686H2.291v.925H5.277V9.801h.985V6.61h3.013v-.925H6.262V2.496H5.77zm6.086 5.27v3.593H8.06v1.188h3.304v3.596h1.28v-3.596H15.953v-1.188H12.643V7.766h-.637zm9.721 1.55v2.221h-2.012v.811h2.012v2.261h.887v-2.261H24v-.811h-2.029V9.317h-.422zm-19.111.131V11.621H0v.621H1.973v2.194H2.64v-2.194h2v-.62H2.609V9.446h-.318zm15.709 4.516v3.254h-3.016v.927h3.016v3.217h1.072v-3.216H21.74v-.928H18.754v-3.254h-.533zm-12.463.008v3.246H2.262v.928h2.957v3.189H6.32v-3.189h2.955v-.928H6.32V13.97h-.55zm6.316 4.578l.002 1.103v1.1H9.566v.812h1.971v2.262h.928l.012-1.119.017-1.143H14.463v-.812h-2V18.549h-.465z"/></symbol>
+  <symbol id="ti-sigma" viewBox="0 0 34.29 31.6"><path d="M14.4523 15.3524L0 0.833252L21.4587 7.77987L14.4523 15.3524Z"/><path d="M15.2997 16.1905L26.9131 30.6246L22.2956 8.60604L15.2997 16.1905Z"/><path d="M25.4971 30.751L9.08954 23.5399L19.6969 23.5435L25.4971 30.751Z"/><path d="M27.84 0.988769L22.4184 6.85587L17.1924 5.16107L27.84 0.988769Z"/><path d="M25.9213 4.64943L28.9927 1.49197L34.2844 4.80138L25.9213 4.64943Z"/></symbol>
+  <symbol id="ti-fivetran" viewBox="0 0 22.83 31.76"><path d="M15.7849 15.8802H18.974C19.228 15.8855 19.4397 15.6831 19.445 15.429C19.4464 15.3642 19.4344 15.2993 19.4093 15.2398L13.9218 0.304356C13.8557 0.121749 13.6823 -0.00131267 13.4878 1.05676e-05H10.2869C10.0328 -0.00131267 9.82504 0.20379 9.82373 0.459175C9.82373 0.514751 9.83299 0.569005 9.85287 0.620611L15.339 15.5759C15.4065 15.7625 15.5865 15.8855 15.7849 15.8802Z"/><path d="M15.2091 31.7578H18.3981C18.6522 31.7591 18.8599 31.554 18.8613 31.2986C18.8613 31.243 18.852 31.1888 18.8321 31.1372L7.51712 0.304352C7.45095 0.121745 7.27763 6.36688e-06 7.08175 6.36688e-06H3.89673C3.64267 -0.00131687 3.43492 0.203786 3.43359 0.459171C3.43359 0.514747 3.44286 0.569 3.46271 0.620606L14.7751 31.4561C14.8426 31.6374 15.0159 31.7578 15.2091 31.7578Z"/><path d="M8.93076 31.7577H12.1198C12.3738 31.7696 12.5895 31.5724 12.6014 31.3183C12.6041 31.2561 12.5948 31.1953 12.5736 31.137L7.06761 16.1818C7.00144 15.9992 6.82813 15.8761 6.63361 15.8775H3.42872C3.17466 15.8841 2.97352 16.0958 2.98014 16.3499C2.98146 16.4015 2.99205 16.4531 3.01057 16.502L8.49676 31.4573C8.56424 31.6372 8.73756 31.7577 8.93076 31.7577Z"/><path d="M16.17 0.624583L18.7424 7.62057C18.8086 7.80314 18.9819 7.92623 19.1765 7.92491H22.3655C22.6195 7.92623 22.8273 7.72114 22.8286 7.46571C22.8286 7.41017 22.8194 7.35589 22.7995 7.30429L20.2271 0.304356C20.161 0.121749 19.9876 -0.00131267 19.7931 1.05676e-05H16.6041C16.35 -0.00131267 16.141 0.202466 16.1396 0.457852C16.1396 0.514751 16.1489 0.571651 16.17 0.624583Z"/><path d="M3.04742 31.7588H6.23646C6.49051 31.7601 6.69823 31.555 6.6996 31.2996C6.6996 31.244 6.69029 31.1898 6.67046 31.1382L4.08353 24.1237C4.01736 23.9411 3.84402 23.818 3.6495 23.8193H0.464458C0.210395 23.818 0.00132324 24.0218 0 24.2772C0 24.3341 0.00926269 24.391 0.0304346 24.4439L2.60282 31.4584C2.6703 31.6424 2.85026 31.7641 3.04742 31.7588Z"/></symbol>
+  <symbol id="ti-hex" viewBox="20 86 240 92.31"><path fill-rule="evenodd" clip-rule="evenodd" d="M61.5382 86V118.184H52.3075V86H20V112.092V112.184V142.892V178.307H52.3075V132.154H61.5382V178.307H93.8456V86H61.5382ZM103.075 178.307H176.921V141.384H144.613V164.461H135.383V132.154H176.921V86H103.075V178.307ZM135.383 118.307V99.8461H144.613V118.307H135.383ZM227.693 118.307V86H260V109.077L246.154 125.23L260 141.384V178.307H227.693V132.03H218.462V178.307H186.154V141.384L200 125.23L186.154 109.077V86H218.462V118.307H227.693Z"/></symbol>
+  <symbol id="ti-sql" viewBox="0 0 24 24"><path d="M12 1C7.03 1 3 2.57 3 4.5v15C3 21.43 7.03 23 12 23s9-1.57 9-3.5v-15C21 2.57 16.97 1 12 1zm0 2c4.42 0 7 1.27 7 1.5S16.42 6 12 6 5 4.73 5 4.5 7.58 3 12 3zM5 7.63c1.7.87 4.2 1.37 7 1.37s5.3-.5 7-1.37v3.87C19 11.73 16.42 13 12 13s-7-1.27-7-1.5V7.63zm0 6.5c1.7.87 4.2 1.37 7 1.37s5.3-.5 7-1.37v5.37c0 .23-2.58 1.5-7 1.5s-7-1.27-7-1.5v-5.37z"/></symbol>
+</defs></svg>
+
+<section class="tech-section" aria-labelledby="tech-heading">
+  <div class="wrap">
+    <div class="techbar">
+      <p class="lead" id="tech-heading">Core technologies we work with<small>warehouse · transformation · ingestion · reporting</small></p>
+      <div class="marquee">
+        <!-- The second track is an exact copy of the first; that is what makes the loop
+             seamless. Edit both, or the row will jump when it wraps. -->
+        <div class="marquee-track">
+          <span class="tool"><svg aria-hidden="true"><use href="#ti-snowflake"/></svg>Snowflake</span>
+          <span class="tool"><svg aria-hidden="true"><use href="#ti-dbt"/></svg>dbt</span>
+          <span class="tool"><svg aria-hidden="true"><use href="#ti-bigquery"/></svg>BigQuery</span>
+          <span class="tool"><svg aria-hidden="true"><use href="#ti-sigma"/></svg>Sigma</span>
+          <span class="tool"><svg class="wide" aria-hidden="true"><use href="#ti-hex"/></svg>Hex</span>
+          <span class="tool"><svg aria-hidden="true"><use href="#ti-fivetran"/></svg>Fivetran</span>
+          <span class="tool"><svg aria-hidden="true"><use href="#ti-python"/></svg>Python</span>
+          <span class="tool"><svg aria-hidden="true"><use href="#ti-sql"/></svg>SQL</span>
+          <span class="tool"><svg aria-hidden="true"><use href="#ti-mixpanel"/></svg>Mixpanel</span>
+          <span class="tool"><svg aria-hidden="true"><use href="#ti-ga4"/></svg>GA4</span>
+          <span class="tool"><svg aria-hidden="true"><use href="#ti-looker"/></svg>Looker</span>
+          <span class="tool"><svg aria-hidden="true"><use href="#ti-tableau"/></svg>Tableau</span>
+        </div>
+        <div class="marquee-track" aria-hidden="true">
+          <span class="tool"><svg aria-hidden="true"><use href="#ti-snowflake"/></svg>Snowflake</span>
+          <span class="tool"><svg aria-hidden="true"><use href="#ti-dbt"/></svg>dbt</span>
+          <span class="tool"><svg aria-hidden="true"><use href="#ti-bigquery"/></svg>BigQuery</span>
+          <span class="tool"><svg aria-hidden="true"><use href="#ti-sigma"/></svg>Sigma</span>
+          <span class="tool"><svg class="wide" aria-hidden="true"><use href="#ti-hex"/></svg>Hex</span>
+          <span class="tool"><svg aria-hidden="true"><use href="#ti-fivetran"/></svg>Fivetran</span>
+          <span class="tool"><svg aria-hidden="true"><use href="#ti-python"/></svg>Python</span>
+          <span class="tool"><svg aria-hidden="true"><use href="#ti-sql"/></svg>SQL</span>
+          <span class="tool"><svg aria-hidden="true"><use href="#ti-mixpanel"/></svg>Mixpanel</span>
+          <span class="tool"><svg aria-hidden="true"><use href="#ti-ga4"/></svg>GA4</span>
+          <span class="tool"><svg aria-hidden="true"><use href="#ti-looker"/></svg>Looker</span>
+          <span class="tool"><svg aria-hidden="true"><use href="#ti-tableau"/></svg>Tableau</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section id="challenges">
   <div class="wrap">
@@ -630,17 +714,6 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
         <h3>You own everything, no lock-in</h3>
         <p>The warehouse, the models, the documentation — all yours. If you want to walk away after handoff, you can.</p>
       </div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <div class="stack">
-      <span class="lead">Core technologies we work with</span>
-      <span class="tool">Snowflake</span><span class="tool">dbt</span><span class="tool">BigQuery</span><span class="tool">Sigma</span>
-      <span class="tool">Hex</span><span class="tool">Fivetran</span><span class="tool">Python</span><span class="tool">SQL</span>
-      <span class="tool">Mixpanel</span><span class="tool">GA4</span><span class="tool">Looker</span><span class="tool">Tableau</span>
     </div>
   </div>
 </section>
