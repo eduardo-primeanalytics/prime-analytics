@@ -10,8 +10,11 @@ Marketing attribution, data infrastructure, and dashboards for US SaaS, e-commer
 prime-analytics/
 ├── README.md        # permanent product, UX, and infrastructure decision log
 ├── operations/      # internal delivery, security, legal-readiness, and analytics checklists
+├── automation/      # Google Apps Script meeting-note intake
+├── migrations/      # Prime Ops D1 schema migrations
 ├── wrangler.toml    # Cloudflare config, static assets, and Analytics Engine binding
 ├── worker.js        # redirects, security headers, and first-party event endpoint
+├── ops-api.js       # authenticated Prime Ops API and meeting reconciliation
 └── website/
     ├── index.html    # broad revenue-data homepage
     ├── analytics.js # shared, first-party click measurement
@@ -21,6 +24,9 @@ prime-analytics/
     ├── privacy.html
     ├── sample-blueprint.html
     ├── sample-blueprint-services.html
+    ├── ops/          # private Ops interface document
+    ├── ops.js        # private Ops interactions
+    ├── ops.css       # private Ops visual system and motion
     ├── 404.html
     ├── sitemap.xml
     └── (favicon/OG image assets)

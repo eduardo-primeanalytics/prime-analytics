@@ -1,5 +1,39 @@
 # Prime Analytics Ops workspace
 
+## Fresh-session starting point
+
+This file is the canonical handoff for reviewing or changing Prime Analytics Ops. A new coding session should be told:
+
+> Read `README.md` and `operations/ops-workspace.md` completely, then inspect the current Git status and recent history before reviewing or changing `/ops`. Treat the repository and production behavior as authoritative; do not rely on prior chat history.
+
+The implementation is concentrated in:
+
+| Concern | Source |
+|---|---|
+| Worker routing, Access validation, API, AI reconciliation | `worker.js`, `ops-api.js` |
+| Ops interface structure | `website/ops/index.html` |
+| Ops interaction logic | `website/ops.js` |
+| Ops visual system and motion | `website/ops.css` |
+| D1 schema | `migrations/` |
+| Google Drive intake | `automation/google-drive-meeting-ingest.gs` |
+| Runtime bindings and non-secret identifiers | `wrangler.toml` |
+
+Before making a change, run `git status --short` and preserve unrelated work. After a change, at minimum run:
+
+```powershell
+node --check ops-api.js
+node --check website/ops.js
+git diff --check
+```
+
+Deployments are manual:
+
+```powershell
+npx wrangler deploy
+```
+
+Pushing to GitHub does not guarantee that production was deployed. Confirm both the deployed Worker version and pushed commit. Never put credentials, API keys, intake tokens, or downloaded OAuth JSON files in the repository or documentation.
+
 Prime Analytics Ops is the private operating workspace at `/ops`. It is deliberately smaller than a general project-management product:
 
 - **Latest** shows the discussions and proposed task changes from the newest processed meeting.
@@ -9,6 +43,46 @@ Prime Analytics Ops is the private operating workspace at `/ops`. It is delibera
 The public website and `/metrics` do not depend on Ops. If Ops processing fails, the marketing site continues to work normally.
 
 Database timestamps are stored in UTC. The Ops interface displays audit history, notes, and meeting times in `America/Chicago`, including the correct `CST` or `CDT` abbreviation for the date.
+
+## Current interface behavior
+
+### Latest
+
+- Shows the most recently processed meeting.
+- Displays new and resurfaced discussions. A discussion mentioned again after several weeks resurfaces without losing its original first-discussed date.
+- Shows active tasks needing attention.
+- Opens the review inbox when the meeting produced pending task proposals.
+
+### Tasks
+
+- Filters are **Active**, **Mine**, **Completed**, **Archived**, and **All**.
+- Columns are task, owner, created date, and due/review date.
+- Tasks are ordered by conventional action priority: active work first, waiting work second, completed work third, and archived work last. Within each group, the nearest due/review date comes first; ties and undated tasks use newest-created first.
+- Clicking the square completion control marks an active task completed. Clicking a checked control reopens the task as `Open`. Both actions use the audited task-update API.
+- Clicking elsewhere on a task row opens its details.
+- Archived tasks cannot be toggled from the completion control. They must be deliberately restored by changing their status in task details.
+- Creating a task closes the form smoothly and shows a confirmation toast with **View** and **Create another** actions.
+- Task identifiers are permanent and sequential. A task ID is not renumbered or reused after legitimate creation.
+
+### Task details and history
+
+- Editable structured fields are status, owner, due date, review date, title, and description.
+- Manual notes are append-only from the user interface and remain isolated from AI reconciliation.
+- Every structured mutation records the verified actor, old value, new value, source, and timestamp.
+- Archiving replaces deletion. There is no task-deletion control or API route.
+
+### Meetings and review
+
+- Opening a task or meeting immediately shows a loading skeleton while its details are fetched.
+- Approving or rejecting a proposal removes its review card only after the server accepts the decision.
+- Approval supports field-level selection; unchecked fields and manual notes are preserved.
+- Original meeting notes remain immutable.
+
+### Motion and accessibility
+
+- Dialogs, tab changes, task filters, confirmation toasts, and review-card removal use short functional transitions.
+- Buttons show saving, archiving, approving, rejecting, or processing states during network work.
+- `prefers-reduced-motion` is honored. Motion must remain brief and should clarify state change rather than decorate the interface.
 
 ## Record model
 
