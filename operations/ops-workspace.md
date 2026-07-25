@@ -8,6 +8,8 @@ Prime Analytics Ops is the private operating workspace at `/ops`. It is delibera
 
 The public website and `/metrics` do not depend on Ops. If Ops processing fails, the marketing site continues to work normally.
 
+Database timestamps are stored in UTC. The Ops interface displays audit history, notes, and meeting times in `America/Chicago`, including the correct `CST` or `CDT` abbreviation for the date.
+
 ## Record model
 
 A meeting is an immutable source record. AI processing appends discussion occurrences and task proposals; it does not rewrite the source notes.

@@ -5,6 +5,8 @@ const state = {
   search: '',
 };
 
+const OPS_TIME_ZONE = 'America/Chicago';
+
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
@@ -21,6 +23,9 @@ function parseDate(value) {
   if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
     return new Date(`${value}T12:00:00`);
   }
+  if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(?:\.\d+)?$/.test(value)) {
+    return new Date(`${value.replace(' ', 'T')}Z`);
+  }
   return new Date(value);
 }
 
@@ -28,12 +33,20 @@ function formatDate(value, options = {}) {
   if (!value) return 'No date';
   const date = parseDate(value);
   if (Number.isNaN(date.getTime())) return value;
-  return new Intl.DateTimeFormat('en-US', {
+  const displayOptions = {
     month: 'short',
     day: 'numeric',
     year: options.year ? 'numeric' : undefined,
+    timeZone: OPS_TIME_ZONE,
     ...options,
-  }).format(date);
+  };
+  if (options.hour && !options.timeZoneName) displayOptions.timeZoneName = 'short';
+  return new Intl.DateTimeFormat('en-US', displayOptions).format(date);
+}
+
+function meetingLanguage(title) {
+  const match = String(title || '').match(/\(([^)]+)\)\s*$/);
+  return match ? match[1] : '';
 }
 
 function relativeTaskDate(task) {
@@ -120,11 +133,13 @@ function renderLatest() {
 
   empty.classList.add('hidden');
   content.classList.remove('hidden');
-  $('#latest-title').textContent = latestMeeting.title;
-  $('#latest-date').textContent = formatDate(latestMeeting.happened_at, {
+  $('#latest-title').textContent = 'Latest meeting';
+  const language = meetingLanguage(latestMeeting.title);
+  const meetingDate = formatDate(latestMeeting.happened_at, {
     year: 'numeric',
     weekday: 'long',
   });
+  $('#latest-date').textContent = language ? `${meetingDate} · ${language} notes` : meetingDate;
 
   const banner = $('#review-banner');
   if (latestProposals.length) {

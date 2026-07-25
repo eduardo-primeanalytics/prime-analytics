@@ -204,6 +204,14 @@ h1 {
   letter-spacing: -.035em;
 }
 
+#latest-title {
+  font-size: clamp(2.25rem, 3.2vw, 3.15rem);
+}
+
+#latest-view .page-heading {
+  margin-bottom: 32px;
+}
+
 .page-subtitle {
   max-width: 710px;
   margin: 12px 0 0;
