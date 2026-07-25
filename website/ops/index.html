@@ -98,6 +98,13 @@
           <input id="task-search" type="search" placeholder="Search tasks">
         </label>
       </div>
+      <div class="task-list-head" aria-hidden="true">
+        <span></span>
+        <span>Task</span>
+        <span>Owner</span>
+        <span>Created</span>
+        <span>Due / review</span>
+      </div>
       <div id="all-task-list" class="task-list task-register"></div>
     </section>
 
@@ -221,6 +228,7 @@
         <small></small>
       </span>
       <span class="task-owner"></span>
+      <time class="task-created"></time>
       <span class="task-date"></span>
     </button>
   </template>

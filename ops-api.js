@@ -182,11 +182,13 @@ async function getBootstrap(env, identity) {
       WHERE t.deleted_at IS NULL
       ORDER BY
         CASE t.status
-          WHEN 'open' THEN 1 WHEN 'in_progress' THEN 2 WHEN 'waiting' THEN 3
-          WHEN 'completed' THEN 4 ELSE 5
+          WHEN 'in_progress' THEN 1 WHEN 'open' THEN 1 WHEN 'waiting' THEN 2
+          WHEN 'completed' THEN 3 WHEN 'archived' THEN 4 ELSE 5
         END,
+        CASE WHEN COALESCE(t.due_at, t.review_at) IS NULL THEN 1 ELSE 0 END,
         COALESCE(t.due_at, t.review_at, '9999-12-31'),
-        t.updated_at DESC
+        t.created_at DESC,
+        t.id DESC
       LIMIT 250
     `).all(),
     env.OPS_DB.prepare(`

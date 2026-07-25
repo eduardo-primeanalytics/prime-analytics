@@ -103,6 +103,17 @@ function hideTaskCreatedToast() {
   window.clearTimeout(showTaskCreatedToast.timer);
 }
 
+function closeDialog(dialog) {
+  if (!dialog?.open || dialog.classList.contains('is-closing')) return;
+  dialog.classList.add('is-closing');
+  const finish = () => {
+    dialog.classList.remove('is-closing');
+    if (dialog.open) dialog.close();
+  };
+  dialog.addEventListener('animationend', finish, { once: true });
+  window.setTimeout(finish, 220);
+}
+
 function showTaskCreatedToast(task) {
   const toast = $('#task-created-toast');
   toast.dataset.taskId = task.id;
@@ -127,6 +138,8 @@ function taskRow(task) {
   $('.task-main strong', row).textContent = task.title;
   $('.task-main small', row).textContent = `${task.code} · ${statusLabel(task.status)}`;
   $('.task-owner', row).textContent = ownerLabel(task);
+  $('.task-created', row).textContent = formatDate(task.created_at, { year: 'numeric' });
+  $('.task-created', row).dateTime = task.created_at;
   const date = relativeTaskDate(task);
   $('.task-date', row).textContent = date.text;
   $('.task-date', row).classList.toggle('overdue', date.overdue);
@@ -388,7 +401,7 @@ async function openTask(taskId) {
         method: 'PATCH',
         body: JSON.stringify({ status: 'archived' }),
       });
-      $('#task-dialog').close();
+      closeDialog($('#task-dialog'));
       await refresh();
       showNotice(`${task.code} archived.`, 'success');
     } catch (error) {
@@ -542,7 +555,7 @@ document.addEventListener('click', async (event) => {
     try { await openMeeting(meeting.dataset.meetingId); } catch (error) { showNotice(error.message, 'error'); }
   }
   const close = target.closest('[data-close-dialog]');
-  if (close) close.closest('dialog').close();
+  if (close) closeDialog(close.closest('dialog'));
 
   const toastAction = target.closest('[data-toast-action]');
   if (toastAction) {
@@ -558,7 +571,12 @@ document.addEventListener('click', async (event) => {
 });
 
 $$('dialog').forEach((dialog) => dialog.addEventListener('click', (event) => {
-  if (event.target === dialog) dialog.close();
+  if (event.target === dialog) closeDialog(dialog);
+}));
+
+$$('dialog').forEach((dialog) => dialog.addEventListener('cancel', (event) => {
+  event.preventDefault();
+  closeDialog(dialog);
 }));
 
 $$('[data-task-filter]').forEach((button) => button.addEventListener('click', () => {
@@ -595,7 +613,7 @@ $('#task-form').addEventListener('submit', async (event) => {
         review_at: form.get('review_at') || null,
       }),
     });
-    dialog.close();
+    closeDialog(dialog);
     showTaskCreatedToast(task);
     await refresh();
   } catch (error) {
@@ -628,7 +646,7 @@ $('#meeting-form').addEventListener('submit', async (event) => {
         notes: form.get('notes'),
       }),
     });
-    dialog.close();
+    closeDialog(dialog);
     await refresh();
     setView('latest');
     showNotice('Meeting processed and ready for review.', 'success');
