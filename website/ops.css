@@ -173,6 +173,7 @@ main {
 
 .notice.error { border-color: #e2b1ac; background: #fff1ef; color: #852f29; }
 .notice.success { border-color: #add5c1; background: #effaf4; color: #216343; }
+.dialog-notice { margin: 16px 28px 0; }
 
 .page-heading {
   display: flex;

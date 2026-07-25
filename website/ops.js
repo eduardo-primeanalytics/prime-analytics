@@ -82,9 +82,18 @@ async function api(path, options = {}) {
 }
 
 function showNotice(message, type = '') {
-  const notice = $('#notice');
+  $$('.notice').forEach((item) => item.classList.add('hidden'));
+  const dialog = $('dialog[open]');
+  let notice = dialog ? $('.dialog-notice', dialog) : $('#notice');
+  if (!notice && dialog) {
+    notice = document.createElement('div');
+    notice.className = 'notice dialog-notice hidden';
+    notice.setAttribute('role', 'status');
+    const header = $('.dialog-header', dialog);
+    header.insertAdjacentElement('afterend', notice);
+  }
   notice.textContent = message;
-  notice.className = `notice ${type}`.trim();
+  notice.className = `notice ${dialog ? 'dialog-notice ' : ''}${type}`.trim();
   window.clearTimeout(showNotice.timer);
   showNotice.timer = window.setTimeout(() => notice.classList.add('hidden'), 6000);
 }
@@ -467,25 +476,27 @@ function openImportForm() {
 }
 
 document.addEventListener('click', async (event) => {
-  const viewLink = event.target.closest('[data-view-link], [data-view-target]');
+  const target = event.target instanceof Element ? event.target : event.target?.parentElement;
+  if (!target) return;
+  const viewLink = target.closest('[data-view-link], [data-view-target]');
   if (viewLink) setView(viewLink.dataset.viewLink || viewLink.dataset.viewTarget);
 
-  if (event.target.closest('[data-action="add-task"]')) openTaskForm();
-  if (event.target.closest('[data-action="import-meeting"]')) openImportForm();
-  if (event.target.closest('[data-action="open-review"]')) openReview();
-  if (event.target.closest('[data-action="open-latest-meeting"]') && state.data.latestMeeting) {
+  if (target.closest('[data-action="add-task"]')) openTaskForm();
+  if (target.closest('[data-action="import-meeting"]')) openImportForm();
+  if (target.closest('[data-action="open-review"]')) openReview();
+  if (target.closest('[data-action="open-latest-meeting"]') && state.data.latestMeeting) {
     await openMeeting(state.data.latestMeeting.id);
   }
 
-  const task = event.target.closest('[data-task-id]');
+  const task = target.closest('[data-task-id]');
   if (task) {
     try { await openTask(Number(task.dataset.taskId)); } catch (error) { showNotice(error.message, 'error'); }
   }
-  const meeting = event.target.closest('[data-meeting-id]');
+  const meeting = target.closest('[data-meeting-id]');
   if (meeting) {
     try { await openMeeting(meeting.dataset.meetingId); } catch (error) { showNotice(error.message, 'error'); }
   }
-  const close = event.target.closest('[data-close-dialog]');
+  const close = target.closest('[data-close-dialog]');
   if (close) close.closest('dialog').close();
 });
 
@@ -506,7 +517,15 @@ $('#task-search').addEventListener('input', (event) => {
 
 $('#task-form').addEventListener('submit', async (event) => {
   event.preventDefault();
-  const form = new FormData(event.currentTarget);
+  const formElement = event.currentTarget;
+  if (formElement.dataset.submitting === 'true') return;
+  formElement.dataset.submitting = 'true';
+  const dialog = formElement.closest('dialog');
+  const submit = $('button[type="submit"]', formElement);
+  const originalLabel = submit.textContent;
+  submit.disabled = true;
+  submit.textContent = 'Adding…';
+  const form = new FormData(formElement);
   try {
     await api('/ops/api/tasks', {
       method: 'POST',
@@ -519,18 +538,26 @@ $('#task-form').addEventListener('submit', async (event) => {
         review_at: form.get('review_at') || null,
       }),
     });
-    event.currentTarget.closest('dialog').close();
+    dialog.close();
     await refresh();
     showNotice('Task added and attributed to you.', 'success');
   } catch (error) {
     showNotice(error.message, 'error');
+  } finally {
+    formElement.dataset.submitting = 'false';
+    submit.disabled = false;
+    submit.textContent = originalLabel;
   }
 });
 
 $('#meeting-form').addEventListener('submit', async (event) => {
   event.preventDefault();
-  const form = new FormData(event.currentTarget);
-  const submit = $('button[type="submit"]', event.currentTarget);
+  const formElement = event.currentTarget;
+  if (formElement.dataset.submitting === 'true') return;
+  formElement.dataset.submitting = 'true';
+  const dialog = formElement.closest('dialog');
+  const form = new FormData(formElement);
+  const submit = $('button[type="submit"]', formElement);
   submit.disabled = true;
   submit.textContent = 'Processing…';
   try {
@@ -544,13 +571,14 @@ $('#meeting-form').addEventListener('submit', async (event) => {
         notes: form.get('notes'),
       }),
     });
-    event.currentTarget.closest('dialog').close();
+    dialog.close();
     await refresh();
     setView('latest');
     showNotice('Meeting processed and ready for review.', 'success');
   } catch (error) {
     showNotice(error.message, 'error');
   } finally {
+    formElement.dataset.submitting = 'false';
     submit.disabled = false;
     submit.textContent = 'Process notes';
   }
