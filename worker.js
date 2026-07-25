@@ -1,3 +1,5 @@
+import { getOpsPageIdentity, handleOpsRequest } from './ops-api.js';
+
 const CSP = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com",
@@ -294,11 +296,14 @@ ORDER BY events DESC</div>
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, executionContext) {
     const url = new URL(request.url);
     let redirect = false;
 
-    if (url.protocol === 'http:') {
+    const isLocalDevelopment = Boolean(env.OPS_DEV_EMAIL) ||
+      url.hostname === 'localhost' ||
+      url.hostname === '127.0.0.1';
+    if (url.protocol === 'http:' && !isLocalDevelopment) {
       url.protocol = 'https:';
       redirect = true;
     }
@@ -308,6 +313,40 @@ export default {
     }
     if (redirect) {
       return Response.redirect(url.toString(), 301);
+    }
+
+    if (url.pathname === '/ops' || url.pathname === '/ops/') {
+      const access = await getOpsPageIdentity(request, env);
+      if (!access.ok) {
+        return new Response(`<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Prime Analytics Ops</title>
+  <style>
+    body{margin:0;font-family:system-ui,sans-serif;background:#f9f7f3;color:#11284a}
+    main{max-width:680px;margin:0 auto;padding:72px 20px}
+    div{padding:28px;border:1px solid #dedbd4;border-radius:12px;background:#fffefa}
+    h1{margin:0 0 10px;font-family:Georgia,serif;font-weight:400}
+    p{margin:0;color:#6f7d8d;line-height:1.6}
+  </style>
+</head>
+<body><main><div><h1>Prime Analytics Ops</h1><p>${htmlEscape(access.message)}</p></div></main></body>
+</html>`, {
+          status: access.status,
+          headers: {
+            'content-type': 'text/html; charset=utf-8',
+            'cache-control': 'no-store',
+            'x-robots-tag': 'noindex, nofollow',
+          },
+        });
+      }
+    }
+
+    if (url.pathname.startsWith('/ops/api/') || url.pathname === '/__ops/ingest') {
+      return handleOpsRequest(request, env, executionContext);
     }
 
     if (url.pathname === '/metrics') {

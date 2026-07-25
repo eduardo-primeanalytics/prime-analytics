@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Prime Analytics Ops</title>
+  <link rel="stylesheet" href="/fonts.css">
+  <link rel="stylesheet" href="/ops.css">
+  <script src="/ops.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/ops" aria-label="Prime Analytics Ops">
+      <span>Prime</span><i>/</i><strong>Ops</strong>
+    </a>
+    <nav aria-label="Workspace">
+      <button class="nav-link active" type="button" data-view-link="latest">Latest</button>
+      <button class="nav-link" type="button" data-view-link="tasks">Tasks</button>
+      <button class="nav-link" type="button" data-view-link="meetings">Meetings</button>
+    </nav>
+    <div class="top-actions">
+      <button class="review-link" type="button" data-action="open-review">
+        Review <span id="review-count">0</span>
+      </button>
+      <button class="identity" type="button" data-action="identity" aria-label="Signed-in account">
+        <span class="avatar" id="user-avatar">E</span>
+        <span id="user-name">Loading</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <div id="notice" class="notice hidden" role="status"></div>
+
+    <section id="loading-view" class="loading-state">
+      <div class="loading-mark"></div>
+      <p>Loading your workspace…</p>
+    </section>
+
+    <section id="latest-view" class="view hidden" data-view="latest">
+      <div class="page-heading">
+        <div>
+          <p class="eyebrow">Latest</p>
+          <h1 id="latest-title">Your latest meeting</h1>
+          <p class="page-subtitle" id="latest-date"></p>
+        </div>
+        <button class="primary-button" type="button" data-action="add-task">+ Add task</button>
+      </div>
+
+      <section id="review-banner" class="review-banner hidden">
+        <div class="spark" aria-hidden="true">✦</div>
+        <div>
+          <strong id="review-banner-title">Meeting updates are ready</strong>
+          <p id="review-banner-detail"></p>
+        </div>
+        <button class="secondary-button" type="button" data-action="open-review">Review meeting</button>
+      </section>
+
+      <div id="empty-latest" class="empty-state hidden">
+        <h2>No meetings yet</h2>
+        <p>Meeting discussions will appear here automatically after Gemini notes reach the shared intake folder.</p>
+        <button class="secondary-button" type="button" data-action="import-meeting">Import meeting notes</button>
+      </div>
+
+      <section id="latest-content" class="hidden">
+        <div class="section-heading">
+          <h2>Latest discussions</h2>
+          <button class="text-button" type="button" data-action="open-latest-meeting">Open meeting notes</button>
+        </div>
+        <div id="discussion-list" class="discussion-list"></div>
+
+        <div class="section-heading attention-heading">
+          <h2>Needs attention</h2>
+          <button class="text-button" type="button" data-view-target="tasks">View all tasks</button>
+        </div>
+        <div id="attention-list" class="task-list"></div>
+      </section>
+    </section>
+
+    <section id="tasks-view" class="view hidden" data-view="tasks">
+      <div class="page-heading">
+        <div>
+          <p class="eyebrow">Tasks</p>
+          <h1>Every commitment, in one place.</h1>
+          <p class="page-subtitle">Active and historical tasks retain their full change history.</p>
+        </div>
+        <button class="primary-button" type="button" data-action="add-task">+ Add task</button>
+      </div>
+      <div class="filters" role="group" aria-label="Task filters">
+        <button class="filter active" type="button" data-task-filter="active">Active</button>
+        <button class="filter" type="button" data-task-filter="mine">Mine</button>
+        <button class="filter" type="button" data-task-filter="completed">Completed</button>
+        <button class="filter" type="button" data-task-filter="all">All</button>
+        <label class="search-field">
+          <span class="sr-only">Search tasks</span>
+          <input id="task-search" type="search" placeholder="Search tasks">
+        </label>
+      </div>
+      <div id="all-task-list" class="task-list task-register"></div>
+    </section>
+
+    <section id="meetings-view" class="view hidden" data-view="meetings">
+      <div class="page-heading">
+        <div>
+          <p class="eyebrow">Meetings</p>
+          <h1>The original record.</h1>
+          <p class="page-subtitle">Notes stay unchanged. Interpretations, discussions, and proposed actions are recorded separately.</p>
+        </div>
+        <button class="secondary-button" type="button" data-action="import-meeting">Import notes</button>
+      </div>
+      <div id="meeting-list" class="meeting-list"></div>
+    </section>
+  </main>
+
+  <dialog id="task-dialog" class="dialog task-dialog">
+    <div class="dialog-header">
+      <div>
+        <p class="eyebrow" id="task-dialog-code">Task</p>
+        <h2 id="task-dialog-title">Task details</h2>
+      </div>
+      <button class="icon-button" type="button" data-close-dialog aria-label="Close">×</button>
+    </div>
+    <div id="task-detail"></div>
+  </dialog>
+
+  <dialog id="form-dialog" class="dialog compact-dialog">
+    <div class="dialog-header">
+      <div>
+        <p class="eyebrow">Manual entry</p>
+        <h2>Add a task</h2>
+      </div>
+      <button class="icon-button" type="button" data-close-dialog aria-label="Close">×</button>
+    </div>
+    <form id="task-form" class="stacked-form">
+      <label>Task title<input name="title" maxlength="240" required></label>
+      <label>Description<textarea name="description" rows="3"></textarea></label>
+      <div class="form-grid">
+        <label>Owner<select name="owner_email" id="new-task-owner"></select></label>
+        <label>Status
+          <select name="status">
+            <option value="open">Open</option>
+            <option value="in_progress">In progress</option>
+            <option value="waiting">Waiting</option>
+            <option value="completed">Completed</option>
+          </select>
+        </label>
+        <label>Due date<input name="due_at" type="date"></label>
+        <label>Review date<input name="review_at" type="date"></label>
+      </div>
+      <div class="dialog-actions">
+        <button class="text-button" type="button" data-close-dialog>Cancel</button>
+        <button class="primary-button" type="submit">Add task</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="meeting-dialog" class="dialog meeting-dialog">
+    <div class="dialog-header">
+      <div>
+        <p class="eyebrow" id="meeting-dialog-date">Meeting</p>
+        <h2 id="meeting-dialog-title">Meeting notes</h2>
+      </div>
+      <button class="icon-button" type="button" data-close-dialog aria-label="Close">×</button>
+    </div>
+    <div id="meeting-detail"></div>
+  </dialog>
+
+  <dialog id="import-dialog" class="dialog compact-dialog">
+    <div class="dialog-header">
+      <div>
+        <p class="eyebrow">Fallback intake</p>
+        <h2>Import meeting notes</h2>
+      </div>
+      <button class="icon-button" type="button" data-close-dialog aria-label="Close">×</button>
+    </div>
+    <form id="meeting-form" class="stacked-form">
+      <label>Meeting title<input name="title" maxlength="240" required placeholder="Eduardo & José weekly call"></label>
+      <label>Date and time<input name="happened_at" type="datetime-local" required></label>
+      <label>Participants<input name="participants" placeholder="Eduardo, José"></label>
+      <label>Google Drive link<input name="source_url" type="url" placeholder="https://docs.google.com/..."></label>
+      <label>Meeting notes<textarea name="notes" rows="12" required></textarea></label>
+      <div class="dialog-actions">
+        <button class="text-button" type="button" data-close-dialog>Cancel</button>
+        <button class="primary-button" type="submit">Process notes</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="review-dialog" class="dialog review-dialog">
+    <div class="dialog-header">
+      <div>
+        <p class="eyebrow">Review inbox</p>
+        <h2>Suggested task changes</h2>
+        <p class="dialog-subtitle">Approve only the fields supported by the meeting. Manual notes are never changed.</p>
+      </div>
+      <button class="icon-button" type="button" data-close-dialog aria-label="Close">×</button>
+    </div>
+    <div id="proposal-list" class="proposal-list"></div>
+  </dialog>
+
+  <template id="task-row-template">
+    <button class="task-row" type="button">
+      <span class="task-check" aria-hidden="true"></span>
+      <span class="task-main">
+        <strong></strong>
+        <small></small>
+      </span>
+      <span class="task-owner"></span>
+      <span class="task-date"></span>
+    </button>
+  </template>
+</body>
+</html>

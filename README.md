@@ -274,6 +274,20 @@ An internal dashboard is also available at `/metrics` once these runtime values 
 
 That page renders the same 30-day funnel data in one place so you do not need to run the SQL query by hand every time you want a status check.
 
+## Private founder workspace
+
+Prime Analytics Ops lives at `/ops` and uses three primary views:
+
+- **Latest** shows discussions from the newest processed meeting, including older subjects that resurfaced.
+- **Tasks** is the complete current and historical task register.
+- **Meetings** links to each imported meeting and preserves its original notes.
+
+Each founder signs in separately through Cloudflare Access. Every task change records the verified actor, previous value, new value, source, and timestamp. Prime Ops AI has its own actor identity: an AI suggestion and the founder who approves it appear as separate history events.
+
+Gemini meeting notes can be collected from a shared Google Drive folder every five minutes. The AI adds discussion occurrences and proposes task changes but does not apply them automatically. Manual task notes are stored separately, excluded from AI reconciliation context, and never overwritten by meeting processing.
+
+See [`operations/ops-workspace.md`](operations/ops-workspace.md) for the architecture, security model, Cloudflare Access setup, OpenAI secret, Google Apps Script intake, and failure behavior.
+
 ### Delivery credibility
 
 The public site now has matching internal controls:
