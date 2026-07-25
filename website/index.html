@@ -324,6 +324,26 @@ h2{font-family:'Bitter',serif;font-weight:800;font-size:clamp(1.5rem,3vw,2.1rem)
 .techbar .tool svg{width:20px;height:20px;fill:currentColor;color:var(--amber);flex-shrink:0}
 .techbar .tool svg.wide{width:30px}
 
+/* Variant B: each mark in its own brand colour. Several of those colours are very
+   dark (Sigma #070707, Hex #01011B, Python #3776AB), so they need a light chip to
+   stay legible — full-colour marks directly on the navy panel disappear. */
+.marquee-track.rev{animation-name:ti-scroll-rev}
+@keyframes ti-scroll-rev{from{transform:translateX(-100%)}to{transform:translateX(0)}}
+.techbar--color .tool{background:#fff;border-color:rgba(255,255,255,.9);color:var(--ink);font-weight:500}
+.techbar--color .tool svg{color:inherit}
+.techbar--color .tool[data-brand="snowflake"] svg{color:#29B5E8}
+.techbar--color .tool[data-brand="dbt"]       svg{color:#FF694B}
+.techbar--color .tool[data-brand="bigquery"]  svg{color:#669DF6}
+.techbar--color .tool[data-brand="sigma"]     svg{color:#070707}
+.techbar--color .tool[data-brand="hex"]       svg{color:#01011B}
+.techbar--color .tool[data-brand="fivetran"]  svg{color:#306BEA}
+.techbar--color .tool[data-brand="python"]    svg{color:#3776AB}
+.techbar--color .tool[data-brand="sql"]       svg{color:#16283C}
+.techbar--color .tool[data-brand="mixpanel"]  svg{color:#7856FF}
+.techbar--color .tool[data-brand="ga4"]       svg{color:#E37400}
+.techbar--color .tool[data-brand="looker"]    svg{color:#4285F4}
+.techbar--color .tool[data-brand="tableau"]   svg{color:#E97627}
+
 /* ---------- About ---------- */
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
 .about p{color:var(--muted);margin-bottom:16px}
@@ -501,7 +521,7 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
 <section class="tech-section" aria-labelledby="tech-heading">
   <div class="wrap">
     <div class="techbar">
-      <p class="lead" id="tech-heading">Core technologies we work with<small>warehouse · transformation · ingestion · reporting</small></p>
+      <p class="lead" id="tech-heading">Core technologies we work with<small>variant A · single amber (current, live)</small></p>
       <div class="marquee">
         <!-- The second track is an exact copy of the first; that is what makes the loop
              seamless. Edit both, or the row will jump when it wraps. -->
@@ -532,6 +552,51 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
           <span class="tool"><svg aria-hidden="true"><use href="#ti-ga4"/></svg>GA4</span>
           <span class="tool"><svg aria-hidden="true"><use href="#ti-looker"/></svg>Looker</span>
           <span class="tool"><svg aria-hidden="true"><use href="#ti-tableau"/></svg>Tableau</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================================
+     SIDE-BY-SIDE COMPARISON — NOT FOR PRODUCTION. The bar above is variant A
+     (single amber, dark chips); the bar below is variant B (brand colours, light
+     chips). Both reference the same sprite, so choosing one is a matter of
+     deleting the other section plus its CSS. Do not deploy with both.
+     ============================================================================ -->
+<section class="tech-section" aria-labelledby="tech-heading-color">
+  <div class="wrap">
+    <div class="techbar techbar--color">
+      <p class="lead" id="tech-heading-color">Core technologies we work with<small>variant B · original brand colours</small></p>
+      <div class="marquee">
+        <!-- Second track is an exact copy; that is what makes the loop seamless. -->
+        <div class="marquee-track rev">
+          <span class="tool" data-brand="snowflake"><svg aria-hidden="true"><use href="#ti-snowflake"/></svg>Snowflake</span>
+          <span class="tool" data-brand="dbt"><svg aria-hidden="true"><use href="#ti-dbt"/></svg>dbt</span>
+          <span class="tool" data-brand="bigquery"><svg aria-hidden="true"><use href="#ti-bigquery"/></svg>BigQuery</span>
+          <span class="tool" data-brand="sigma"><svg aria-hidden="true"><use href="#ti-sigma"/></svg>Sigma</span>
+          <span class="tool" data-brand="hex"><svg class="wide" aria-hidden="true"><use href="#ti-hex"/></svg>Hex</span>
+          <span class="tool" data-brand="fivetran"><svg aria-hidden="true"><use href="#ti-fivetran"/></svg>Fivetran</span>
+          <span class="tool" data-brand="python"><svg aria-hidden="true"><use href="#ti-python"/></svg>Python</span>
+          <span class="tool" data-brand="sql"><svg aria-hidden="true"><use href="#ti-sql"/></svg>SQL</span>
+          <span class="tool" data-brand="mixpanel"><svg aria-hidden="true"><use href="#ti-mixpanel"/></svg>Mixpanel</span>
+          <span class="tool" data-brand="ga4"><svg aria-hidden="true"><use href="#ti-ga4"/></svg>GA4</span>
+          <span class="tool" data-brand="looker"><svg aria-hidden="true"><use href="#ti-looker"/></svg>Looker</span>
+          <span class="tool" data-brand="tableau"><svg aria-hidden="true"><use href="#ti-tableau"/></svg>Tableau</span>
+        </div>
+        <div class="marquee-track rev" aria-hidden="true">
+          <span class="tool" data-brand="snowflake"><svg aria-hidden="true"><use href="#ti-snowflake"/></svg>Snowflake</span>
+          <span class="tool" data-brand="dbt"><svg aria-hidden="true"><use href="#ti-dbt"/></svg>dbt</span>
+          <span class="tool" data-brand="bigquery"><svg aria-hidden="true"><use href="#ti-bigquery"/></svg>BigQuery</span>
+          <span class="tool" data-brand="sigma"><svg aria-hidden="true"><use href="#ti-sigma"/></svg>Sigma</span>
+          <span class="tool" data-brand="hex"><svg class="wide" aria-hidden="true"><use href="#ti-hex"/></svg>Hex</span>
+          <span class="tool" data-brand="fivetran"><svg aria-hidden="true"><use href="#ti-fivetran"/></svg>Fivetran</span>
+          <span class="tool" data-brand="python"><svg aria-hidden="true"><use href="#ti-python"/></svg>Python</span>
+          <span class="tool" data-brand="sql"><svg aria-hidden="true"><use href="#ti-sql"/></svg>SQL</span>
+          <span class="tool" data-brand="mixpanel"><svg aria-hidden="true"><use href="#ti-mixpanel"/></svg>Mixpanel</span>
+          <span class="tool" data-brand="ga4"><svg aria-hidden="true"><use href="#ti-ga4"/></svg>GA4</span>
+          <span class="tool" data-brand="looker"><svg aria-hidden="true"><use href="#ti-looker"/></svg>Looker</span>
+          <span class="tool" data-brand="tableau"><svg aria-hidden="true"><use href="#ti-tableau"/></svg>Tableau</span>
         </div>
       </div>
     </div>
