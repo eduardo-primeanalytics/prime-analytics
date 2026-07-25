@@ -49,7 +49,17 @@ python3 -m http.server 8000 --directory website
 
 ## Site sections (in order)
 
-Nav → Hero → proof strip → **Challenges/business questions** → Services → fit guidance → **Revenue Data Blueprint** → How We Work → risk reduction → Tool stack → About/founders → **FAQ** → Contact → Footer.
+Nav → Hero → proof strip → **Tool stack marquee** → **Challenges/business questions** → Services → fit guidance → **Revenue Data Blueprint** → How We Work → risk reduction → About/founders → **FAQ** → Contact → Footer.
+
+The tool stack used to be a static list of names sitting low on the page, between risk reduction and About. It is now an auto-scrolling marquee of official vendor logos directly under the proof strip, so the technical credibility lands above the fold on most screens.
+
+Three things about it are easy to break:
+
+- **The brand marks are an inline SVG sprite** (`<svg class="ti-defs">`) near the top of `<main>`, referenced by `<use href="#ti-…">`. They are inline rather than files in `website/` so that `fill:currentColor` works — a `<img src="…svg">` cannot inherit the page's colour, and these marks are monochrome amber on the dark panel. It also keeps the request count at zero, which matters because the CSP forbids external asset hosts.
+- **There are two identical `.marquee-track` divs and that is deliberate.** The seamless loop is a pure-CSS translate of −100%; the second copy is what fills the gap as the first scrolls out. Edit one track and you must edit the other, or the row visibly jumps every time it wraps. The copy carries `aria-hidden="true"` so screen readers announce the list once.
+- **Sigma, Hex, and Fivetran are not in any public icon set.** Their marks were lifted from the vendors' own assets (Sigma's inline nav logo, Fivetran's wordmark SVG, Hex's `favicon.svg`) and cropped to the glyph via `viewBox`. `SQL` is not a product and has no mark, so it uses a neutral database glyph drawn to match the weight of the real logos. The other eight come from Simple Icons. If a vendor rebrands, the source is the vendor's site, not a CDN we can bump.
+
+Motion is paused on hover and focus, and `prefers-reduced-motion: reduce` replaces the animation with a manually scrollable row.
 
 Challenges and FAQ were added after benchmarking four competitor agency sites (datasolutions.com, datasolutionsagency.com, value10x.ai, proiq.com). The July 2026 launch audit then replaced the vague "guarantees" framing with explicit project-risk controls and turned the audit into a named, deliverable-based offer. See "Launch UX audit record" below.
 
@@ -146,7 +156,7 @@ These came out of the Eduardo/Jose call and should stay in the working checklist
 
 - [ ] **Jose: create the Upwork agency account.** Investigate Agency Plus and confirm the best agency setup before spending money on it.
 - [ ] **Eduardo: revisit pricing.** Compare the $2,000 Blueprint against a free discovery call plus a paid follow-on structure, and decide which model is actually strongest for launch.
-- [ ] **Eduardo: bring the tech stack higher on the page.** Keep the stack visible near the top for credibility, not buried low on the page.
+- [x] **Eduardo: bring the tech stack higher on the page.** Done — the stack moved from between risk reduction and About to directly under the hero proof strip, and became a logo marquee instead of a list of names. See "Site sections" above.
 - [ ] **Eduardo: finish calendly availability blocking.** Make sure both founders can join when needed and that booking never conflicts with real availability.
 - [ ] **Eduardo/Jose: keep the site at MVP level.** Remove visual clutter, but do not add case-study-style claims or decorative sections that weaken the offer.
 - [ ] **Eduardo: keep the partnership idea warm.** Follow up on the Fanny introduction only if the partner actually has active lead-gen clients that fit the offer.
