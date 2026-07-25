@@ -12,6 +12,7 @@
  */
 
 const LOOKBACK_MINUTES = 20;
+const MAX_FOLDER_DEPTH = 2;
 
 function processNewMeetingNotes() {
   const properties = PropertiesService.getScriptProperties();
@@ -27,15 +28,13 @@ function processNewMeetingNotes() {
   const fallback = new Date(now.getTime() - LOOKBACK_MINUTES * 60 * 1000);
   const scanFrom = previousScan ? new Date(previousScan) : fallback;
   const overlapFrom = new Date(scanFrom.getTime() - LOOKBACK_MINUTES * 60 * 1000);
-  const files = DriveApp.getFolderById(folderId).getFiles();
+  const rootFolder = DriveApp.getFolderById(folderId);
+  const files = collectRecentGoogleDocs_(rootFolder, overlapFrom, 0);
 
-  while (files.hasNext()) {
-    const file = files.next();
-    if (file.getDateCreated() < overlapFrom || file.getMimeType() !== MimeType.GOOGLE_DOCS) continue;
-
+  files.forEach((file) => {
     const document = DocumentApp.openById(file.getId());
     const notes = document.getBody().getText().trim();
-    if (!notes) continue;
+    if (!notes) return;
 
     const response = UrlFetchApp.fetch(ingestUrl, {
       method: 'post',
@@ -56,9 +55,29 @@ function processNewMeetingNotes() {
     if (status < 200 || status >= 300) {
       throw new Error(`Prime Ops rejected ${file.getName()} (${status}): ${response.getContentText()}`);
     }
-  }
+  });
 
   properties.setProperty('PRIME_OPS_LAST_SCAN_AT', now.toISOString());
+}
+
+function collectRecentGoogleDocs_(folder, createdAfter, depth) {
+  const results = [];
+  const files = folder.getFiles();
+  while (files.hasNext()) {
+    const file = files.next();
+    if (file.getMimeType() === MimeType.GOOGLE_DOCS && file.getDateCreated() >= createdAfter) {
+      results.push(file);
+    }
+  }
+
+  if (depth >= MAX_FOLDER_DEPTH) return results;
+  const folders = folder.getFolders();
+  while (folders.hasNext()) {
+    const childFolder = folders.next();
+    collectRecentGoogleDocs_(childFolder, createdAfter, depth + 1)
+      .forEach((file) => results.push(file));
+  }
+  return results;
 }
 
 function inferParticipants_(title, notes) {
@@ -79,4 +98,3 @@ function installTrigger() {
     .everyMinutes(5)
     .create();
 }
-

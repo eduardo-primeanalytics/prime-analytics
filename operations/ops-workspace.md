@@ -107,7 +107,7 @@ It does **not** send manual task notes. The model returns structured discussion 
 
 ## Automatic Google Drive intake
 
-`automation/google-drive-meeting-ingest.gs` is a standalone Google Apps Script. It checks one shared Drive folder every five minutes and sends newly created Google Docs to:
+`automation/google-drive-meeting-ingest.gs` is a standalone Google Apps Script. It checks the meeting organizer's Google Meet folder and its meeting-specific subfolders every five minutes, then sends newly created Google Docs to:
 
 ```text
 POST https://primeanalytics.ai/__ops/ingest
@@ -123,11 +123,13 @@ In Apps Script, create these script properties:
 
 | Property | Value |
 |---|---|
-| `PRIME_OPS_FOLDER_ID` | ID of the shared meeting-notes folder |
+| `PRIME_OPS_FOLDER_ID` | ID of the organizer's automatically created `Google Meet` folder |
 | `PRIME_OPS_INGEST_URL` | `https://primeanalytics.ai/__ops/ingest` |
 | `PRIME_OPS_INGEST_TOKEN` | The same value stored in the Worker secret |
 
 Run `installTrigger()` once from Apps Script and approve Google Drive, Docs, external-request, and trigger permissions.
+
+Gemini places each meeting's notes inside a meeting-specific subfolder under the organizer's `Google Meet` folder. The intake therefore scans two folder levels. Pointing it at a separate custom folder will not work unless another automation copies or moves the Gemini documents there.
 
 The script deliberately scans with a time overlap. D1 enforces a unique Google Drive file ID, so retries are safe and the same meeting cannot create duplicate records.
 
@@ -153,4 +155,3 @@ npx wrangler dev --local --var OPS_DEV_EMAIL:founder-one@example.com --var OPS_D
 ```
 
 `OPS_DEV_EMAIL` must never be configured in the deployed Worker. Production identity must always come from a validated Cloudflare Access JWT.
-
