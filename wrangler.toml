@@ -6,8 +6,8 @@ account_id = "334696cbcfac3868e5a054bb7771257d"
 [vars]
 ACCOUNT_ID = "334696cbcfac3868e5a054bb7771257d"
 OPS_AI_MODEL = "gpt-5-mini"
-# ACCESS_TEAM_DOMAIN and ACCESS_AUD are configured in Cloudflare for the /ops private workspace.
-# They are intentionally not hard-coded here because they must match the Access application.
+ACCESS_TEAM_DOMAIN = "bold-lab-dae0.cloudflareaccess.com"
+ACCESS_AUD = "cd87d771faa1e0d253e38e2a851452c21b76f2a1830cce77cf1919cacdca8715"
 
 [assets]
 directory = "./website"

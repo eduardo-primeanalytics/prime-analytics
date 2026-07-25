@@ -71,11 +71,11 @@ Use an Allow policy containing the two exact founder email addresses. Do not use
 
 Use Google as the Access identity provider for the app. The Google Workspace domain is already managed, so this gives us a cleaner login path than Cloudflare One-Time PIN and ties sign-in to the same domain identity we use everywhere else.
 
-Configure these non-secret Worker variables after creating the Access application:
+Configure these non-secret Worker variables in `wrangler.toml` after creating the Access application:
 
 ```toml
-ACCESS_TEAM_DOMAIN = "your-team.cloudflareaccess.com"
-ACCESS_AUD = "the-access-application-audience-tag"
+ACCESS_TEAM_DOMAIN = "bold-lab-dae0.cloudflareaccess.com"
+ACCESS_AUD = "cd87d771faa1e0d253e38e2a851452c21b76f2a1830cce77cf1919cacdca8715"
 ```
 
 The Worker validates the Access JWT signature, issuer, audience, expiry, and email before serving `/ops` or its APIs.

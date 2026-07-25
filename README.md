@@ -322,7 +322,7 @@ npx wrangler deploy
 
 `wrangler.toml` pins `account_id` — don't remove it. Whoever runs `wrangler deploy` locally may be authenticated to more than one Cloudflare account (Cloudflare account membership isn't tied 1:1 to the login email), and without a pinned `account_id` wrangler will guess wrong and deploy to/create a Worker in the wrong account.
 
-`ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` are required runtime values for `/ops`. Set them in Cloudflare before relying on the private workspace, and keep the values aligned with the Access application you created in Zero Trust.
+`ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` are required runtime values for `/ops`. They live in `wrangler.toml` as non-secret application identifiers and must remain aligned with the Access application in Zero Trust.
 
 To verify a deploy actually went live (bypassing CDN cache):
 
