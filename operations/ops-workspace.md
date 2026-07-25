@@ -185,7 +185,12 @@ It does **not** send manual task notes. The model returns structured discussion 
 
 ## Automatic Google Drive intake
 
-`automation/google-drive-meeting-ingest.gs` is a standalone Google Apps Script. It checks every configured founder's Google Meet folder and its meeting-specific subfolders every five minutes, then sends newly created Google Docs to:
+`automation/google-drive-meeting-ingest.gs` is a standalone Google Apps Script. It runs as the Workspace user who receives the notes and checks two sources every five minutes:
+
+1. recently created `Notes by Gemini` Google Docs in that user's Drive **Shared with me** collection; and
+2. every optionally configured Google Meet folder and its meeting-specific subfolders.
+
+The two discovery paths are merged using the underlying Google Drive file ID, then sent to:
 
 ```text
 POST https://primeanalytics.ai/__ops/ingest
@@ -201,17 +206,21 @@ In Apps Script, create these script properties:
 
 | Property | Value |
 |---|---|
-| `PRIME_OPS_FOLDER_IDS` | The Apps Script owner's Google Meet folder ID; optionally add comma- or newline-separated founder folder IDs as fallbacks |
 | `PRIME_OPS_INGEST_URL` | `https://primeanalytics.ai/__ops/ingest` |
 | `PRIME_OPS_INGEST_TOKEN` | The same value stored in the Worker secret |
+| `PRIME_OPS_FOLDER_IDS` | Optional: the Apps Script owner's Google Meet folder ID and any comma- or newline-separated fallback folder IDs |
 
 Run `installTrigger()` once from Apps Script and approve Google Drive, Docs, external-request, and trigger permissions.
 
-Gemini places the source document in the organizer's Drive. For notes shared with an invited participant, Google can create a shortcut in that participant's own Google Meet folder. The intake follows both native Google Docs and these Google Drive shortcuts, using the target document ID for deduplication. This is preferred over scanning Gmail because the Drive document is the canonical record and requires narrower access.
+Gemini places the source document in the organizer's Drive. When that document is shared with the Apps Script owner, it belongs to the owner's Drive `Shared with me` collection even if Drive reports no physical folder location. The intake searches that collection directly and therefore does not depend on a participant shortcut being created.
+
+Google can also create a shortcut in an invited participant's own Google Meet folder. The optional folder intake follows both native Google Docs and these Google Drive shortcuts, using the target document ID for deduplication. Both approaches read the canonical Drive document and are preferred over scanning Gmail.
+
+This automation does not bypass Google Drive permissions. If the Apps Script owner was not granted access to a meeting note, the note cannot be discovered or ingested. Capturing every domain-owned meeting regardless of sharing would require a separate Google Meet API integration with administrator-approved domain-wide delegation.
 
 Configure the Apps Script owner's current `Google Meet` folder, not merely the legacy `Meet Recordings` folder. The intake scans two folder levels. If Google does not create participant shortcuts for a founder's meetings, share that founder's organizer folder with the Apps Script owner and add its ID to `PRIME_OPS_FOLDER_IDS` as a fallback.
 
-After adding a new founder folder, run `backfillMeetingNotes()` manually once. It scans the previous 30 days so already-created notes are not missed. Normal five-minute processing continues through `processNewMeetingNotes()`.
+After installing this version or adding a fallback folder, run `backfillMeetingNotes()` manually once. It scans the previous 30 days so already-created shared notes are not missed. Normal five-minute processing continues through `processNewMeetingNotes()` and revisits seven days of shared notes to tolerate delayed sharing.
 
 The script deliberately scans with a time overlap. D1 enforces a unique Google Drive file ID, so retries are safe and the same meeting cannot create duplicate records.
 

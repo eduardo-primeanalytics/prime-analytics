@@ -1,22 +1,30 @@
 /**
  * Prime Analytics Ops — Google Drive meeting intake
  *
- * Add this file to a standalone Google Apps Script project owned by the shared
- * operations account. Configure the script properties listed below, then run
- * installTrigger() once.
+ * Add this file to a standalone Google Apps Script project owned by the Google
+ * Workspace user who receives the meeting notes. Configure the script
+ * properties listed below, then run installTrigger() once.
  *
  * Required script properties:
- *   PRIME_OPS_FOLDER_IDS  (the Apps Script owner's Google Meet folder ID;
- *                          additional founder folder IDs are optional fallbacks)
  *   PRIME_OPS_INGEST_URL   (https://primeanalytics.ai/__ops/ingest)
  *   PRIME_OPS_INGEST_TOKEN (same value as the Worker secret)
  *
+ * Optional script property:
+ *   PRIME_OPS_FOLDER_IDS  (comma- or newline-separated Google Meet folder IDs)
+ *
  * PRIME_OPS_FOLDER_ID remains supported as a fallback for older installations.
+ *
+ * In addition to configured folders, the script searches recently created
+ * "Notes by Gemini" Google Docs in the owner's Drive "Shared with me"
+ * collection. It can only read documents that Google has actually shared with
+ * the script owner.
  */
 
 const LOOKBACK_MINUTES = 20;
 const BACKFILL_DAYS = 30;
 const MAX_FOLDER_DEPTH = 2;
+const SHARED_NOTES_LOOKBACK_DAYS = 7;
+const GOOGLE_DOC_MIME_TYPE = 'application/vnd.google-apps.document';
 
 function processNewMeetingNotes() {
   const properties = PropertiesService.getScriptProperties();
@@ -44,8 +52,8 @@ function processMeetingNotesSince_(createdAfter) {
   const ingestUrl = properties.getProperty('PRIME_OPS_INGEST_URL');
   const ingestToken = properties.getProperty('PRIME_OPS_INGEST_TOKEN');
   const folderIds = getFolderIds_(properties);
-  if (!folderIds.length || !ingestUrl || !ingestToken) {
-    throw new Error('Configure PRIME_OPS_FOLDER_IDS, PRIME_OPS_INGEST_URL, and PRIME_OPS_INGEST_TOKEN.');
+  if (!ingestUrl || !ingestToken) {
+    throw new Error('Configure PRIME_OPS_INGEST_URL and PRIME_OPS_INGEST_TOKEN.');
   }
 
   const filesById = {};
@@ -54,6 +62,15 @@ function processMeetingNotesSince_(createdAfter) {
     collectRecentGoogleDocs_(rootFolder, createdAfter, 0)
       .forEach((file) => { filesById[file.getId()] = file; });
   });
+
+  const sharedNotesFloor = new Date(
+    Date.now() - SHARED_NOTES_LOOKBACK_DAYS * 24 * 60 * 60 * 1000
+  );
+  const sharedNotesFrom = new Date(
+    Math.min(createdAfter.getTime(), sharedNotesFloor.getTime())
+  );
+  collectSharedGeminiDocs_(sharedNotesFrom)
+    .forEach((file) => { filesById[file.getId()] = file; });
 
   Object.keys(filesById).forEach((fileId) => {
     const file = filesById[fileId];
@@ -111,6 +128,35 @@ function collectRecentGoogleDocs_(folder, createdAfter, depth) {
       .forEach((file) => results.push(file));
   }
   return results;
+}
+
+/**
+ * "Shared with me" is a Drive collection, not a physical folder. Searching it
+ * catches organizer-owned notes that were shared with the script owner even
+ * when Google creates no participant shortcut and reports no file location.
+ *
+ * Normal scans revisit the previous seven days so delayed sharing is not
+ * missed. Prime Ops deduplicates the canonical Google Drive file ID.
+ */
+function collectSharedGeminiDocs_(createdAfter) {
+  const query = [
+    'sharedWithMe = true',
+    'trashed = false',
+    `mimeType = "${GOOGLE_DOC_MIME_TYPE}"`,
+    `createdDate > "${createdAfter.toISOString()}"`,
+  ].join(' and ');
+  const files = DriveApp.searchFiles(query);
+  const results = [];
+
+  while (files.hasNext()) {
+    const file = files.next();
+    if (isGeminiMeetingNote_(file.getName())) results.push(file);
+  }
+  return results;
+}
+
+function isGeminiMeetingNote_(title) {
+  return /notes by gemini|notas (?:de|por|do) gemini/i.test(title || '');
 }
 
 function resolveGoogleDoc_(file) {
