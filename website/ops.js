@@ -98,20 +98,45 @@ function showNotice(message, type = '') {
   showNotice.timer = window.setTimeout(() => notice.classList.add('hidden'), 6000);
 }
 
-function hideTaskCreatedToast() {
-  $('#task-created-toast').classList.add('hidden');
+function prefersReducedMotion() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function hideTaskCreatedToast({ immediate = false } = {}) {
+  const toast = $('#task-created-toast');
   window.clearTimeout(showTaskCreatedToast.timer);
+  window.clearTimeout(hideTaskCreatedToast.timer);
+  if (toast.classList.contains('hidden')) return;
+  if (immediate || prefersReducedMotion()) {
+    toast.classList.add('hidden');
+    toast.classList.remove('is-leaving');
+    return;
+  }
+  toast.classList.add('is-leaving');
+  hideTaskCreatedToast.timer = window.setTimeout(() => {
+    toast.classList.add('hidden');
+    toast.classList.remove('is-leaving');
+  }, 180);
 }
 
 function closeDialog(dialog) {
-  if (!dialog?.open || dialog.classList.contains('is-closing')) return;
+  if (!dialog?.open) return Promise.resolve();
+  if (dialog.classList.contains('is-closing')) return dialog.closePromise || Promise.resolve();
   dialog.classList.add('is-closing');
-  const finish = () => {
-    dialog.classList.remove('is-closing');
-    if (dialog.open) dialog.close();
-  };
-  dialog.addEventListener('animationend', finish, { once: true });
-  window.setTimeout(finish, 220);
+  dialog.closePromise = new Promise((resolve) => {
+    let finished = false;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      dialog.classList.remove('is-closing');
+      if (dialog.open) dialog.close();
+      dialog.closePromise = null;
+      resolve();
+    };
+    dialog.addEventListener('animationend', finish, { once: true });
+    window.setTimeout(finish, 220);
+  });
+  return dialog.closePromise;
 }
 
 function showTaskCreatedToast(task) {
@@ -119,9 +144,49 @@ function showTaskCreatedToast(task) {
   toast.dataset.taskId = task.id;
   $('#toast-task-code').textContent = task.code;
   $('#toast-task-title').textContent = task.title;
+  toast.classList.remove('is-leaving');
   toast.classList.remove('hidden');
   window.clearTimeout(showTaskCreatedToast.timer);
   showTaskCreatedToast.timer = window.setTimeout(hideTaskCreatedToast, 12000);
+}
+
+async function animateSwap(element, update) {
+  if (prefersReducedMotion()) {
+    update();
+    return;
+  }
+  element.getAnimations().forEach((animation) => animation.cancel());
+  await element.animate(
+    [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(3px)' }],
+    { duration: 80, easing: 'ease-in', fill: 'forwards' },
+  ).finished.catch(() => {});
+  update();
+  element.getAnimations().forEach((animation) => animation.cancel());
+  await element.animate(
+    [{ opacity: 0, transform: 'translateY(3px)' }, { opacity: 1, transform: 'translateY(0)' }],
+    { duration: 130, easing: 'ease-out' },
+  ).finished.catch(() => {});
+}
+
+async function animateRemoval(element) {
+  if (prefersReducedMotion()) return;
+  const height = element.getBoundingClientRect().height;
+  await element.animate(
+    [
+      { opacity: 1, transform: 'translateY(0)', maxHeight: `${height}px` },
+      { opacity: 0, transform: 'translateY(-4px)', maxHeight: `${height}px`, offset: .45 },
+      { opacity: 0, transform: 'translateY(-4px)', maxHeight: '0', marginBottom: '0', paddingTop: '0', paddingBottom: '0' },
+    ],
+    { duration: 220, easing: 'ease-in-out' },
+  ).finished;
+}
+
+function animateViewIn(view) {
+  if (prefersReducedMotion()) return;
+  view.animate(
+    [{ opacity: 0, transform: 'translateY(4px)' }, { opacity: 1, transform: 'translateY(0)' }],
+    { duration: 150, easing: 'ease-out' },
+  );
 }
 
 function ownerLabel(task) {
@@ -276,8 +341,10 @@ async function refresh() {
 }
 
 function setView(view) {
+  if (view === state.currentView) return;
   state.currentView = view;
   renderShell();
+  animateViewIn($(`.view[data-view="${view}"]`));
   history.replaceState(null, '', view === 'latest' ? '/ops' : `/ops#${view}`);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -308,10 +375,17 @@ function eventDescription(event) {
 }
 
 async function openTask(taskId) {
+  const dialog = $('#task-dialog');
+  const detail = $('#task-detail');
+  if (!dialog.open) {
+    $('#task-dialog-code').textContent = 'Task';
+    $('#task-dialog-title').textContent = 'Loading task…';
+    detail.innerHTML = '<div class="detail-loading" aria-label="Loading task"><span></span><span></span><span></span></div>';
+    dialog.showModal();
+  }
   const { task } = await api(`/ops/api/tasks/${taskId}`);
   $('#task-dialog-code').textContent = task.code;
   $('#task-dialog-title').textContent = task.title;
-  const detail = $('#task-detail');
   const dateInput = (value) => value ? String(value).slice(0, 10) : '';
   const ownerOptions = [
     '<option value="">Unassigned</option>',
@@ -371,21 +445,37 @@ async function openTask(taskId) {
 
   $('#task-edit-form').addEventListener('submit', async (event) => {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    await api(`/ops/api/tasks/${task.id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({
-        title: form.get('title'),
-        description: form.get('description'),
-        status: form.get('status'),
-        owner_email: form.get('owner_email') || null,
-        due_at: form.get('due_at') || null,
-        review_at: form.get('review_at') || null,
-      }),
-    });
-    await refresh();
-    await openTask(task.id);
-    showNotice('Task updated and recorded in its history.', 'success');
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
+    const nextStatus = form.get('status');
+    const submit = $('button[type="submit"]', formElement);
+    submit.disabled = true;
+    submit.textContent = 'Saving…';
+    try {
+      await api(`/ops/api/tasks/${task.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          title: form.get('title'),
+          description: form.get('description'),
+          status: nextStatus,
+          owner_email: form.get('owner_email') || null,
+          due_at: form.get('due_at') || null,
+          review_at: form.get('review_at') || null,
+        }),
+      });
+      await refresh();
+      await openTask(task.id);
+      showNotice(
+        nextStatus !== task.status
+          ? `Status changed to ${statusLabel(nextStatus)} and recorded in history.`
+          : 'Task updated and recorded in its history.',
+        'success',
+      );
+    } catch (error) {
+      submit.disabled = false;
+      submit.textContent = 'Save changes';
+      showNotice(error.message, 'error');
+    }
   });
 
   $('#archive-task').addEventListener('click', async (event) => {
@@ -401,7 +491,7 @@ async function openTask(taskId) {
         method: 'PATCH',
         body: JSON.stringify({ status: 'archived' }),
       });
-      closeDialog($('#task-dialog'));
+      await closeDialog($('#task-dialog'));
       await refresh();
       showNotice(`${task.code} archived.`, 'success');
     } catch (error) {
@@ -422,14 +512,22 @@ async function openTask(taskId) {
     await openTask(task.id);
     showNotice('Manual note added.', 'success');
   });
-  $('#task-dialog').showModal();
+  if (!dialog.open) dialog.showModal();
 }
 
 async function openMeeting(meetingId) {
+  const dialog = $('#meeting-dialog');
+  const detail = $('#meeting-detail');
+  if (!dialog.open) {
+    $('#meeting-dialog-date').textContent = 'Meeting';
+    $('#meeting-dialog-title').textContent = 'Loading meeting…';
+    detail.innerHTML = '<div class="detail-loading" aria-label="Loading meeting"><span></span><span></span><span></span></div>';
+    dialog.showModal();
+  }
   const { meeting } = await api(`/ops/api/meetings/${meetingId}`);
   $('#meeting-dialog-date').textContent = formatDate(meeting.happened_at, { year: 'numeric' });
   $('#meeting-dialog-title').textContent = meeting.title;
-  $('#meeting-detail').innerHTML = `
+  detail.innerHTML = `
     <section class="meeting-summary">
       <p>${escapeHtml(meeting.summary || `Processing status: ${meeting.processing_status}`)}</p>
       ${meeting.source_url ? `<p style="margin-top:10px"><a href="${escapeHtml(meeting.source_url)}" target="_blank" rel="noopener">Open original in Google Drive</a></p>` : ''}
@@ -449,7 +547,7 @@ async function openMeeting(meetingId) {
       <div class="raw-notes">${escapeHtml(meeting.raw_notes)}</div>
     </section>
   `;
-  $('#meeting-dialog').showModal();
+  if (!dialog.open) dialog.showModal();
 }
 
 function proposalTitle(proposal) {
@@ -497,24 +595,28 @@ function openReview() {
           showNotice('Select at least one field to approve.', 'error');
           return;
         }
-        button.disabled = true;
+        $$('[data-review]', card).forEach((action) => { action.disabled = true; });
+        const originalLabel = button.textContent;
+        button.textContent = decision === 'approve' ? 'Approving…' : 'Rejecting…';
         try {
           await api(`/ops/api/proposals/${proposal.id}/review`, {
             method: 'POST',
             body: JSON.stringify({ decision, fields: selectedFields }),
           });
+          await animateRemoval(card);
           await refresh();
           openReview();
           showNotice(decision === 'approve' ? 'Changes approved.' : 'Proposal rejected.', 'success');
         } catch (error) {
-          button.disabled = false;
+          $$('[data-review]', card).forEach((action) => { action.disabled = false; });
+          button.textContent = originalLabel;
           showNotice(error.message, 'error');
         }
       }));
       container.append(card);
     });
   }
-  $('#review-dialog').showModal();
+  if (!$('#review-dialog').open) $('#review-dialog').showModal();
 }
 
 function openTaskForm() {
@@ -579,10 +681,11 @@ $$('dialog').forEach((dialog) => dialog.addEventListener('cancel', (event) => {
   closeDialog(dialog);
 }));
 
-$$('[data-task-filter]').forEach((button) => button.addEventListener('click', () => {
+$$('[data-task-filter]').forEach((button) => button.addEventListener('click', async () => {
+  if (state.taskFilter === button.dataset.taskFilter) return;
   state.taskFilter = button.dataset.taskFilter;
   $$('[data-task-filter]').forEach((item) => item.classList.toggle('active', item === button));
-  renderTasks();
+  await animateSwap($('#all-task-list'), renderTasks);
 }));
 
 $('#task-search').addEventListener('input', (event) => {
@@ -613,7 +716,7 @@ $('#task-form').addEventListener('submit', async (event) => {
         review_at: form.get('review_at') || null,
       }),
     });
-    closeDialog(dialog);
+    await closeDialog(dialog);
     showTaskCreatedToast(task);
     await refresh();
   } catch (error) {
@@ -646,7 +749,7 @@ $('#meeting-form').addEventListener('submit', async (event) => {
         notes: form.get('notes'),
       }),
     });
-    closeDialog(dialog);
+    await closeDialog(dialog);
     await refresh();
     setView('latest');
     showNotice('Meeting processed and ready for review.', 'success');
