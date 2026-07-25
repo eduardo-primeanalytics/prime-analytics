@@ -423,6 +423,11 @@ h1 {
   cursor: pointer;
 }
 
+.task-row:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 4px;
+}
+
 .task-created { display: none; color: var(--muted); font-size: .82rem; }
 .task-register .task-row {
   grid-template-columns: 26px minmax(280px, 1fr) minmax(125px, .25fr) minmax(110px, auto) minmax(110px, auto);
@@ -432,17 +437,49 @@ h1 {
 .task-row:hover strong { color: var(--blue); }
 
 .task-check {
+  display: grid;
+  place-items: center;
   width: 18px;
   height: 18px;
+  padding: 0;
   border: 1.5px solid #9ca8b4;
   border-radius: 4px;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  font-size: .75rem;
+  line-height: 1;
+  transition: background-color 120ms ease, border-color 120ms ease, transform 140ms ease;
+}
+
+.task-check::after {
+  content: "✓";
+  opacity: 0;
+  transform: scale(.65);
+  transition: opacity 100ms ease, transform 140ms ease;
+}
+
+.task-check:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+
+.task-check:disabled {
+  cursor: not-allowed;
+  opacity: .45;
 }
 
 .task-row.completed .task-check {
   border-color: var(--green);
   background: var(--green);
-  box-shadow: inset 0 0 0 4px var(--paper);
 }
+
+.task-row.completed .task-check::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.task-row.is-updating .task-check { transform: scale(.88); }
 
 .task-main strong { display: block; color: var(--ink); font-size: .96rem; }
 .task-main small, .task-owner, .task-date { color: var(--muted); font-size: .82rem; }

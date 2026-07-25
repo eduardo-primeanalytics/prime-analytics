@@ -221,8 +221,8 @@
   </dialog>
 
   <template id="task-row-template">
-    <button class="task-row" type="button">
-      <span class="task-check" aria-hidden="true"></span>
+    <div class="task-row" role="button" tabindex="0">
+      <button class="task-check" type="button" data-task-toggle role="checkbox"></button>
       <span class="task-main">
         <strong></strong>
         <small></small>
@@ -230,7 +230,7 @@
       <span class="task-owner"></span>
       <time class="task-created"></time>
       <span class="task-date"></span>
-    </button>
+    </div>
   </template>
 </body>
 </html>

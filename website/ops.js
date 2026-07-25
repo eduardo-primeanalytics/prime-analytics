@@ -199,7 +199,15 @@ function taskRow(task) {
   const template = $('#task-row-template').content.cloneNode(true);
   const row = $('.task-row', template);
   row.dataset.taskId = task.id;
+  row.setAttribute('aria-label', `Open ${task.code}: ${task.title}`);
   row.classList.toggle('completed', task.status === 'completed');
+  const toggle = $('.task-check', row);
+  const completed = task.status === 'completed';
+  const archived = task.status === 'archived';
+  toggle.setAttribute('aria-checked', String(completed));
+  toggle.setAttribute('aria-label', completed ? `Reopen ${task.code}` : `Complete ${task.code}`);
+  toggle.title = archived ? 'Archived tasks cannot be completed' : completed ? 'Reopen task' : 'Mark complete';
+  toggle.disabled = archived;
   $('.task-main strong', row).textContent = task.title;
   $('.task-main small', row).textContent = `${task.code} · ${statusLabel(task.status)}`;
   $('.task-owner', row).textContent = ownerLabel(task);
@@ -218,6 +226,35 @@ function renderTaskRows(container, tasks, emptyMessage) {
     return;
   }
   tasks.forEach((task) => container.append(taskRow(task)));
+}
+
+async function toggleTaskCompletion(toggle) {
+  const row = toggle.closest('.task-row');
+  const task = state.data.tasks.find((item) => item.id === Number(row?.dataset.taskId));
+  if (!task || task.status === 'archived') return;
+  const completed = task.status !== 'completed';
+  toggle.disabled = true;
+  row.classList.add('is-updating');
+  try {
+    await api(`/ops/api/tasks/${task.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status: completed ? 'completed' : 'open' }),
+    });
+    row.classList.toggle('completed', completed);
+    toggle.setAttribute('aria-checked', String(completed));
+    if (!prefersReducedMotion()) {
+      await new Promise((resolve) => window.setTimeout(resolve, 150));
+    }
+    await refresh();
+    showNotice(
+      completed ? `${task.code} marked complete.` : `${task.code} reopened.`,
+      'success',
+    );
+  } catch (error) {
+    toggle.disabled = false;
+    row.classList.remove('is-updating');
+    showNotice(error.message, 'error');
+  }
 }
 
 function renderLatest() {
@@ -648,6 +685,12 @@ document.addEventListener('click', async (event) => {
     await openMeeting(state.data.latestMeeting.id);
   }
 
+  const taskToggle = target.closest('[data-task-toggle]');
+  if (taskToggle) {
+    await toggleTaskCompletion(taskToggle);
+    return;
+  }
+
   const task = target.closest('[data-task-id]');
   if (task) {
     try { await openTask(Number(task.dataset.taskId)); } catch (error) { showNotice(error.message, 'error'); }
@@ -670,6 +713,13 @@ document.addEventListener('click', async (event) => {
     }
     if (action === 'create') openTaskForm();
   }
+});
+
+document.addEventListener('keydown', async (event) => {
+  const row = event.target instanceof Element ? event.target.closest('.task-row') : null;
+  if (!row || event.target !== row || !['Enter', ' '].includes(event.key)) return;
+  event.preventDefault();
+  try { await openTask(Number(row.dataset.taskId)); } catch (error) { showNotice(error.message, 'error'); }
 });
 
 $$('dialog').forEach((dialog) => dialog.addEventListener('click', (event) => {
