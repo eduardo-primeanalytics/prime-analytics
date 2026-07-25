@@ -6,32 +6,56 @@
  * installTrigger() once.
  *
  * Required script properties:
- *   PRIME_OPS_FOLDER_ID
+ *   PRIME_OPS_FOLDER_IDS  (comma- or newline-separated Google Meet folder IDs)
  *   PRIME_OPS_INGEST_URL   (https://primeanalytics.ai/__ops/ingest)
  *   PRIME_OPS_INGEST_TOKEN (same value as the Worker secret)
+ *
+ * PRIME_OPS_FOLDER_ID remains supported as a fallback for older installations.
  */
 
 const LOOKBACK_MINUTES = 20;
+const BACKFILL_DAYS = 30;
 const MAX_FOLDER_DEPTH = 2;
 
 function processNewMeetingNotes() {
   const properties = PropertiesService.getScriptProperties();
-  const folderId = properties.getProperty('PRIME_OPS_FOLDER_ID');
-  const ingestUrl = properties.getProperty('PRIME_OPS_INGEST_URL');
-  const ingestToken = properties.getProperty('PRIME_OPS_INGEST_TOKEN');
-  if (!folderId || !ingestUrl || !ingestToken) {
-    throw new Error('Configure PRIME_OPS_FOLDER_ID, PRIME_OPS_INGEST_URL, and PRIME_OPS_INGEST_TOKEN.');
-  }
-
   const now = new Date();
   const previousScan = properties.getProperty('PRIME_OPS_LAST_SCAN_AT');
   const fallback = new Date(now.getTime() - LOOKBACK_MINUTES * 60 * 1000);
   const scanFrom = previousScan ? new Date(previousScan) : fallback;
   const overlapFrom = new Date(scanFrom.getTime() - LOOKBACK_MINUTES * 60 * 1000);
-  const rootFolder = DriveApp.getFolderById(folderId);
-  const files = collectRecentGoogleDocs_(rootFolder, overlapFrom, 0);
+  processMeetingNotesSince_(overlapFrom);
+  properties.setProperty('PRIME_OPS_LAST_SCAN_AT', now.toISOString());
+}
 
-  files.forEach((file) => {
+/**
+ * Run this manually after adding a founder folder or recovering from an outage.
+ * Duplicate Google Drive file IDs are ignored by Prime Ops, so backfills are safe.
+ */
+function backfillMeetingNotes() {
+  const createdAfter = new Date(Date.now() - BACKFILL_DAYS * 24 * 60 * 60 * 1000);
+  processMeetingNotesSince_(createdAfter);
+  PropertiesService.getScriptProperties().setProperty('PRIME_OPS_LAST_SCAN_AT', new Date().toISOString());
+}
+
+function processMeetingNotesSince_(createdAfter) {
+  const properties = PropertiesService.getScriptProperties();
+  const ingestUrl = properties.getProperty('PRIME_OPS_INGEST_URL');
+  const ingestToken = properties.getProperty('PRIME_OPS_INGEST_TOKEN');
+  const folderIds = getFolderIds_(properties);
+  if (!folderIds.length || !ingestUrl || !ingestToken) {
+    throw new Error('Configure PRIME_OPS_FOLDER_IDS, PRIME_OPS_INGEST_URL, and PRIME_OPS_INGEST_TOKEN.');
+  }
+
+  const filesById = {};
+  folderIds.forEach((folderId) => {
+    const rootFolder = DriveApp.getFolderById(folderId);
+    collectRecentGoogleDocs_(rootFolder, createdAfter, 0)
+      .forEach((file) => { filesById[file.getId()] = file; });
+  });
+
+  Object.keys(filesById).forEach((fileId) => {
+    const file = filesById[fileId];
     const document = DocumentApp.openById(file.getId());
     const notes = document.getBody().getText().trim();
     if (!notes) return;
@@ -56,8 +80,16 @@ function processNewMeetingNotes() {
       throw new Error(`Prime Ops rejected ${file.getName()} (${status}): ${response.getContentText()}`);
     }
   });
+}
 
-  properties.setProperty('PRIME_OPS_LAST_SCAN_AT', now.toISOString());
+function getFolderIds_(properties) {
+  const configured = properties.getProperty('PRIME_OPS_FOLDER_IDS')
+    || properties.getProperty('PRIME_OPS_FOLDER_ID')
+    || '';
+  return configured
+    .split(/[\s,]+/)
+    .map((value) => value.trim())
+    .filter((value, index, values) => value && values.indexOf(value) === index);
 }
 
 function collectRecentGoogleDocs_(folder, createdAfter, depth) {

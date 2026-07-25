@@ -185,7 +185,7 @@ It does **not** send manual task notes. The model returns structured discussion 
 
 ## Automatic Google Drive intake
 
-`automation/google-drive-meeting-ingest.gs` is a standalone Google Apps Script. It checks the meeting organizer's Google Meet folder and its meeting-specific subfolders every five minutes, then sends newly created Google Docs to:
+`automation/google-drive-meeting-ingest.gs` is a standalone Google Apps Script. It checks every configured founder's Google Meet folder and its meeting-specific subfolders every five minutes, then sends newly created Google Docs to:
 
 ```text
 POST https://primeanalytics.ai/__ops/ingest
@@ -201,13 +201,17 @@ In Apps Script, create these script properties:
 
 | Property | Value |
 |---|---|
-| `PRIME_OPS_FOLDER_ID` | ID of the organizer's automatically created `Google Meet` folder |
+| `PRIME_OPS_FOLDER_IDS` | Comma- or newline-separated IDs of the founders' automatically created Google Meet folders |
 | `PRIME_OPS_INGEST_URL` | `https://primeanalytics.ai/__ops/ingest` |
 | `PRIME_OPS_INGEST_TOKEN` | The same value stored in the Worker secret |
 
 Run `installTrigger()` once from Apps Script and approve Google Drive, Docs, external-request, and trigger permissions.
 
-Gemini places each meeting's notes inside a meeting-specific subfolder under the organizer's `Google Meet` folder. The intake therefore scans two folder levels. Pointing it at a separate custom folder will not work unless another automation copies or moves the Gemini documents there.
+Gemini places each meeting's notes in the organizer's Drive, not every attendee's Drive. Each founder who may organize a meeting must share their automatic Google Meet notes folder with the Google account that owns the Apps Script. Add that folder ID to `PRIME_OPS_FOLDER_IDS`; sharing only one notes document does not cover future meetings.
+
+The intake scans two folder levels. Pointing it at a separate custom folder will not work unless another automation copies or moves the Gemini documents there.
+
+After adding a new founder folder, run `backfillMeetingNotes()` manually once. It scans the previous 30 days so already-created notes are not missed. Normal five-minute processing continues through `processNewMeetingNotes()`.
 
 The script deliberately scans with a time overlap. D1 enforces a unique Google Drive file ID, so retries are safe and the same meeting cannot create duplicate records.
 

@@ -290,7 +290,7 @@ Prime Analytics Ops lives at `/ops` and uses three primary views:
 
 Each founder signs in separately through Cloudflare Access. Every task change records the verified actor, previous value, new value, source, and timestamp. Prime Ops AI has its own actor identity: an AI suggestion and the founder who approves it appear as separate history events.
 
-Gemini meeting notes can be collected from a shared Google Drive folder every five minutes. The AI adds discussion occurrences and proposes task changes but does not apply them automatically. Manual task notes are stored separately, excluded from AI reconciliation context, and never overwritten by meeting processing.
+Gemini meeting notes are collected every five minutes from each configured founder organizer folder. Because Google saves notes in the organizer's Drive, every founder who may organize must share their automatic Google Meet notes folder with the Apps Script owner and have its ID configured. The AI adds discussion occurrences and proposes task changes but does not apply them automatically. Manual task notes are stored separately, excluded from AI reconciliation context, and never overwritten by meeting processing.
 
 Cloudflare Access is configured with Google sign-in for the `/ops` app. The Worker still validates every request with `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD`, so the app remains fail-closed unless those runtime values are present and the Access JWT is valid.
 
