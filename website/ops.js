@@ -98,6 +98,21 @@ function showNotice(message, type = '') {
   showNotice.timer = window.setTimeout(() => notice.classList.add('hidden'), 6000);
 }
 
+function hideTaskCreatedToast() {
+  $('#task-created-toast').classList.add('hidden');
+  window.clearTimeout(showTaskCreatedToast.timer);
+}
+
+function showTaskCreatedToast(task) {
+  const toast = $('#task-created-toast');
+  toast.dataset.taskId = task.id;
+  $('#toast-task-code').textContent = task.code;
+  $('#toast-task-title').textContent = task.title;
+  toast.classList.remove('hidden');
+  window.clearTimeout(showTaskCreatedToast.timer);
+  showTaskCreatedToast.timer = window.setTimeout(hideTaskCreatedToast, 12000);
+}
+
 function ownerLabel(task) {
   if (task.owner_name) return task.owner_name;
   if (task.owner_email) return task.owner_email.split('@')[0];
@@ -498,6 +513,18 @@ document.addEventListener('click', async (event) => {
   }
   const close = target.closest('[data-close-dialog]');
   if (close) close.closest('dialog').close();
+
+  const toastAction = target.closest('[data-toast-action]');
+  if (toastAction) {
+    const action = toastAction.dataset.toastAction;
+    const taskId = Number($('#task-created-toast').dataset.taskId);
+    hideTaskCreatedToast();
+    if (action === 'view' && taskId) {
+      setView('tasks');
+      try { await openTask(taskId); } catch (error) { showNotice(error.message, 'error'); }
+    }
+    if (action === 'create') openTaskForm();
+  }
 });
 
 $$('dialog').forEach((dialog) => dialog.addEventListener('click', (event) => {
@@ -527,7 +554,7 @@ $('#task-form').addEventListener('submit', async (event) => {
   submit.textContent = 'Adding…';
   const form = new FormData(formElement);
   try {
-    await api('/ops/api/tasks', {
+    const { task } = await api('/ops/api/tasks', {
       method: 'POST',
       body: JSON.stringify({
         title: form.get('title'),
@@ -539,8 +566,8 @@ $('#task-form').addEventListener('submit', async (event) => {
       }),
     });
     dialog.close();
+    showTaskCreatedToast(task);
     await refresh();
-    showNotice('Task added and attributed to you.', 'success');
   } catch (error) {
     showNotice(error.message, 'error');
   } finally {

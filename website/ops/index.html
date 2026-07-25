@@ -113,6 +113,19 @@
     </section>
   </main>
 
+  <aside id="task-created-toast" class="task-toast hidden" role="status" aria-live="polite">
+    <span class="toast-check" aria-hidden="true">✓</span>
+    <div class="toast-content">
+      <p><strong id="toast-task-code">Task</strong> created</p>
+      <span id="toast-task-title"></span>
+      <div class="toast-actions">
+        <button type="button" data-toast-action="view">View</button>
+        <button type="button" data-toast-action="create">Create another</button>
+      </div>
+    </div>
+    <button class="toast-dismiss" type="button" data-toast-action="dismiss" aria-label="Dismiss">×</button>
+  </aside>
+
   <dialog id="task-dialog" class="dialog task-dialog">
     <div class="dialog-header">
       <div>
