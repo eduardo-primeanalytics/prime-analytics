@@ -546,7 +546,14 @@ input:focus, select:focus, textarea:focus { outline: 2px solid #a8c8f6; border-c
 .proposal h3 { margin: 0; font-size: 1rem; }
 .proposal-evidence { color: var(--muted); font-size: .85rem; }
 .field-review { margin: 15px 0; border-top: 1px solid var(--soft-line); }
-.field-row { display: grid; grid-template-columns: 28px 130px 1fr; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--soft-line); }
+.field-row { display: grid; grid-template-columns: 28px 130px 1fr; align-items: start; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--soft-line); }
+.field-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin: 2px 0 0;
+  padding: 0;
+  accent-color: var(--blue);
+}
 .field-row label { color: var(--muted); font-size: .78rem; }
 .field-row span { overflow-wrap: anywhere; font-size: .86rem; }
 .proposal-actions { display: flex; justify-content: flex-end; gap: 10px; }
@@ -587,4 +594,3 @@ input:focus, select:focus, textarea:focus { outline: 2px solid #a8c8f6; border-c
   .field-row { grid-template-columns: 26px 95px 1fr; }
   .stacked-form, #task-detail, #meeting-detail, .proposal-list, .dialog-header { padding-right: 18px; padding-left: 18px; }
 }
-
