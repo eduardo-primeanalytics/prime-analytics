@@ -6,7 +6,8 @@
  * installTrigger() once.
  *
  * Required script properties:
- *   PRIME_OPS_FOLDER_IDS  (comma- or newline-separated Google Meet folder IDs)
+ *   PRIME_OPS_FOLDER_IDS  (the Apps Script owner's Google Meet folder ID;
+ *                          additional founder folder IDs are optional fallbacks)
  *   PRIME_OPS_INGEST_URL   (https://primeanalytics.ai/__ops/ingest)
  *   PRIME_OPS_INGEST_TOKEN (same value as the Worker secret)
  *
@@ -97,9 +98,9 @@ function collectRecentGoogleDocs_(folder, createdAfter, depth) {
   const files = folder.getFiles();
   while (files.hasNext()) {
     const file = files.next();
-    if (file.getMimeType() === MimeType.GOOGLE_DOCS && file.getDateCreated() >= createdAfter) {
-      results.push(file);
-    }
+    if (file.getDateCreated() < createdAfter) continue;
+    const documentFile = resolveGoogleDoc_(file);
+    if (documentFile) results.push(documentFile);
   }
 
   if (depth >= MAX_FOLDER_DEPTH) return results;
@@ -110,6 +111,18 @@ function collectRecentGoogleDocs_(folder, createdAfter, depth) {
       .forEach((file) => results.push(file));
   }
   return results;
+}
+
+function resolveGoogleDoc_(file) {
+  if (file.getMimeType() === MimeType.GOOGLE_DOCS) return file;
+  if (
+    file.getMimeType() === 'application/vnd.google-apps.shortcut'
+    && file.getTargetMimeType() === MimeType.GOOGLE_DOCS
+    && file.getTargetId()
+  ) {
+    return DriveApp.getFileById(file.getTargetId());
+  }
+  return null;
 }
 
 function inferParticipants_(title, notes) {

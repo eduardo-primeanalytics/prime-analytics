@@ -201,15 +201,15 @@ In Apps Script, create these script properties:
 
 | Property | Value |
 |---|---|
-| `PRIME_OPS_FOLDER_IDS` | Comma- or newline-separated IDs of the founders' automatically created Google Meet folders |
+| `PRIME_OPS_FOLDER_IDS` | The Apps Script owner's Google Meet folder ID; optionally add comma- or newline-separated founder folder IDs as fallbacks |
 | `PRIME_OPS_INGEST_URL` | `https://primeanalytics.ai/__ops/ingest` |
 | `PRIME_OPS_INGEST_TOKEN` | The same value stored in the Worker secret |
 
 Run `installTrigger()` once from Apps Script and approve Google Drive, Docs, external-request, and trigger permissions.
 
-Gemini places each meeting's notes in the organizer's Drive, not every attendee's Drive. Each founder who may organize a meeting must share their automatic Google Meet notes folder with the Google account that owns the Apps Script. Add that folder ID to `PRIME_OPS_FOLDER_IDS`; sharing only one notes document does not cover future meetings.
+Gemini places the source document in the organizer's Drive. For notes shared with an invited participant, Google can create a shortcut in that participant's own Google Meet folder. The intake follows both native Google Docs and these Google Drive shortcuts, using the target document ID for deduplication. This is preferred over scanning Gmail because the Drive document is the canonical record and requires narrower access.
 
-The intake scans two folder levels. Pointing it at a separate custom folder will not work unless another automation copies or moves the Gemini documents there.
+Configure the Apps Script owner's current `Google Meet` folder, not merely the legacy `Meet Recordings` folder. The intake scans two folder levels. If Google does not create participant shortcuts for a founder's meetings, share that founder's organizer folder with the Apps Script owner and add its ID to `PRIME_OPS_FOLDER_IDS` as a fallback.
 
 After adding a new founder folder, run `backfillMeetingNotes()` manually once. It scans the previous 30 days so already-created notes are not missed. Normal five-minute processing continues through `processNewMeetingNotes()`.
 
