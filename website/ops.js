@@ -208,8 +208,12 @@ function renderTasks() {
   const query = state.search.toLowerCase();
   const tasks = state.data.tasks.filter((task) => {
     if (state.taskFilter === 'active' && ['completed', 'archived'].includes(task.status)) return false;
-    if (state.taskFilter === 'mine' && task.owner_email !== state.data.user.email) return false;
+    if (state.taskFilter === 'mine' && (
+      task.owner_email !== state.data.user.email
+      || ['completed', 'archived'].includes(task.status)
+    )) return false;
     if (state.taskFilter === 'completed' && task.status !== 'completed') return false;
+    if (state.taskFilter === 'archived' && task.status !== 'archived') return false;
     if (query && !`${task.code} ${task.title} ${task.description || ''}`.toLowerCase().includes(query)) return false;
     return true;
   });
@@ -286,7 +290,6 @@ function eventDescription(event) {
     task_proposed: `Prime Ops AI proposed this task`,
     task_created_from_proposal: `${actor} approved and created this task`,
     ai_change_approved: `${actor} approved the proposed ${field} change`,
-    task_deleted: `${actor} deleted this task`,
   };
   return descriptions[event.event_type] || `${actor}: ${event.event_type.replace(/_/g, ' ')}`;
 }
@@ -320,7 +323,7 @@ async function openTask(taskId) {
         <textarea name="description" rows="3">${escapeHtml(task.description || '')}</textarea>
       </label>
       <div class="dialog-actions task-detail-actions">
-        <button class="danger-button" id="delete-task" type="button">Delete task</button>
+        <button class="secondary-button" id="archive-task" type="button">Archive task</button>
         <button class="secondary-button" type="submit">Save changes</button>
       </div>
     </form>
@@ -372,22 +375,25 @@ async function openTask(taskId) {
     showNotice('Task updated and recorded in its history.', 'success');
   });
 
-  $('#delete-task').addEventListener('click', async (event) => {
+  $('#archive-task').addEventListener('click', async (event) => {
     const confirmed = window.confirm(
-      `Delete ${task.code} — ${task.title}?\n\nIt will disappear from Prime Ops, but its audit record remains recoverable.`,
+      `Archive ${task.code} — ${task.title}?\n\nIt will leave active views and remain available under Archived.`,
     );
     if (!confirmed) return;
     const button = event.currentTarget;
     button.disabled = true;
-    button.textContent = 'Deleting…';
+    button.textContent = 'Archiving…';
     try {
-      await api(`/ops/api/tasks/${task.id}`, { method: 'DELETE' });
+      await api(`/ops/api/tasks/${task.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status: 'archived' }),
+      });
       $('#task-dialog').close();
       await refresh();
-      showNotice(`${task.code} deleted.`, 'success');
+      showNotice(`${task.code} archived.`, 'success');
     } catch (error) {
       button.disabled = false;
-      button.textContent = 'Delete task';
+      button.textContent = 'Archive task';
       showNotice(error.message, 'error');
     }
   });

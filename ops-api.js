@@ -381,35 +381,6 @@ async function updateTask(request, env, identity, taskId) {
   return json({ task: await getTask(env, taskId) });
 }
 
-async function deleteTask(env, identity, taskId) {
-  const existing = await env.OPS_DB.prepare(`
-    SELECT * FROM tasks WHERE id = ? AND deleted_at IS NULL
-  `).bind(taskId).first();
-  if (!existing) return json({ error: 'Task not found.' }, 404);
-
-  await env.OPS_DB.batch([
-    taskEventStatement(env, {
-      taskId,
-      actorId: identity.email,
-      actorType: 'human',
-      eventType: 'task_deleted',
-      oldValue: {
-        title: existing.title,
-        status: existing.status,
-        owner_email: existing.owner_email,
-      },
-      metadata: { recoverable: true },
-    }),
-    env.OPS_DB.prepare(`
-      UPDATE tasks
-      SET deleted_at = CURRENT_TIMESTAMP, deleted_by_email = ?, updated_at = CURRENT_TIMESTAMP
-      WHERE id = ? AND deleted_at IS NULL
-    `).bind(identity.email, taskId),
-  ]);
-
-  return json({ ok: true, task: { id: taskId, code: taskCode(taskId), title: existing.title } });
-}
-
 async function addTaskNote(request, env, identity, taskId) {
   const task = await env.OPS_DB.prepare(`
     SELECT id FROM tasks WHERE id = ? AND deleted_at IS NULL
@@ -970,9 +941,6 @@ export async function handleOpsRequest(request, env, executionContext) {
     }
     if (taskMatch && request.method === 'PATCH') {
       return updateTask(request, env, identity, Number(taskMatch[1]));
-    }
-    if (taskMatch && request.method === 'DELETE') {
-      return deleteTask(env, identity, Number(taskMatch[1]));
     }
     const noteMatch = url.pathname.match(/^\/ops\/api\/tasks\/(\d+)\/notes$/);
     if (noteMatch && request.method === 'POST') {
