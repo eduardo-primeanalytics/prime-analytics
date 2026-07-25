@@ -164,7 +164,17 @@ async function getBootstrap(env, identity) {
   const [latestMeeting, tasksResult, meetingsResult, proposalsResult, usersResult] = await Promise.all([
     env.OPS_DB.prepare(`
       SELECT id, title, happened_at, summary, source_url, processing_status, created_at
-      FROM meetings ORDER BY happened_at DESC, created_at DESC LIMIT 1
+      FROM meetings
+      ORDER BY
+        happened_at DESC,
+        CASE
+          WHEN EXISTS (
+            SELECT 1 FROM meeting_discussions md WHERE md.meeting_id = meetings.id
+          ) THEN 0
+          ELSE 1
+        END,
+        created_at DESC
+      LIMIT 1
     `).first(),
     env.OPS_DB.prepare(`
       SELECT t.*, u.display_name AS owner_name
