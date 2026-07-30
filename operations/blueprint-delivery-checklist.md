@@ -1,4 +1,4 @@
-# Revenue Data Blueprint — Delivery Checklist
+# Revenue Data Blueprint: Delivery Checklist
 
 Internal operating template. Both founders should review and approve these defaults before using them in a client statement of work. This is not legal advice.
 

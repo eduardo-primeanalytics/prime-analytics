@@ -1,4 +1,4 @@
-# Prime Analytics — primeanalytics.ai
+# Prime Analytics: primeanalytics.ai
 
 Marketing attribution, data infrastructure, and dashboards for US SaaS, e-commerce, and services companies. Static single-page site, no build step.
 
@@ -34,9 +34,9 @@ prime-analytics/
 
 HTML/CSS is page-local and the small measurement script is shared; there is no build step. Don't add a framework or bundler until there's a real reason (a blog, case study pages, or a CMS). Static files are fast to deploy and easy for two people to review in a pull request.
 
-**This is not a pure static-assets project — it has a real Worker script (`worker.js`).** It redirects `http://` → `https://` and `www.` → apex, and attaches security headers (HSTS, CSP, etc.) to every response, then falls through to serving the static files in `website/`. This requires `run_worker_first = true` in `wrangler.toml` — by default, Cloudflare serves static-asset-matching requests (like `/`) directly and **skips the Worker script entirely**, which silently defeats any redirect/header logic unless that flag is set. If headers or redirects ever stop working after a config change, check this first.
+**This is not a pure static-assets project. It has a real Worker script (`worker.js`).** It redirects `http://` → `https://` and `www.` → apex, and attaches security headers (HSTS, CSP, etc.) to every response, then falls through to serving the static files in `website/`. This requires `run_worker_first = true` in `wrangler.toml`. By default, Cloudflare serves static-asset-matching requests (like `/`) directly and **skips the Worker script entirely**, which silently defeats any redirect/header logic unless that flag is set. If headers or redirects ever stop working after a config change, check this first.
 
-**Keep this file out of `website/`.** Anything in that folder is uploaded as a public static asset by `wrangler deploy` — a README with account IDs and internal infra notes previously ended up live at `primeanalytics.ai/README.md` before this was caught and fixed.
+**Keep this file out of `website/`.** Anything in that folder is uploaded as a public static asset by `wrangler deploy`, and a README with account IDs and internal infra notes previously ended up live at `primeanalytics.ai/README.md` before this was caught and fixed.
 
 ## Local development
 
@@ -55,8 +55,8 @@ The tool stack used to be a static list of names sitting low on the page, betwee
 
 Four things about it are easy to break:
 
-- **The brand marks are an inline SVG sprite** (`<svg class="ti-defs">`) near the top of `<main>`, referenced by `<use href="#ti-…">`. They are inline rather than files in `website/` so that `fill:currentColor` works — an `<img src="…svg">` cannot inherit the page's colour, and every mark is tinted by CSS. It also keeps the request count at zero, which matters because the CSP forbids external asset hosts.
-- **The chips are white on purpose, and the colours live in CSS, not in the SVGs.** Each mark is a single monochrome path tinted by a `.tool[data-brand="…"] svg{color:…}` rule using the vendor's official hex. Those hexes are what force the white chip: Hex is `#01011B` and Python is `#3776AB`, and both vanish against the navy panel. If the chips ever go back to the translucent dark used elsewhere on that panel, the dark marks become invisible — recolour the marks first, or keep the chips light. Three hexes are not from the Simple Icons dataset: Fivetran `#306BEA` is from its own wordmark SVG, Hex `#01011B` is the navy from its favicon (the pink is unusable on white), and `SQL` has no brand colour so it falls back to the site ink.
+- **The brand marks are an inline SVG sprite** (`<svg class="ti-defs">`) near the top of `<main>`, referenced by `<use href="#ti-…">`. They are inline rather than files in `website/` so that `fill:currentColor` works, because an `<img src="…svg">` cannot inherit the page's colour and every mark is tinted by CSS. It also keeps the request count at zero, which matters because the CSP forbids external asset hosts.
+- **The chips are white on purpose, and the colours live in CSS, not in the SVGs.** Each mark is a single monochrome path tinted by a `.tool[data-brand="…"] svg{color:…}` rule using the vendor's official hex. Those hexes are what force the white chip: Hex is `#01011B` and Python is `#3776AB`, and both vanish against the navy panel. If the chips ever go back to the translucent dark used elsewhere on that panel, the dark marks become invisible, so recolour the marks first or keep the chips light. Three hexes are not from the Simple Icons dataset: Fivetran `#306BEA` is from its own wordmark SVG, Hex `#01011B` is the navy from its favicon (the pink is unusable on white), and `SQL` has no brand colour so it falls back to the site ink.
 - **There are two identical `.marquee-track` divs and that is deliberate.** The seamless loop is a pure-CSS translate of −100%; the second copy is what fills the gap as the first scrolls out. Edit one track and you must edit the other, or the row visibly jumps every time it wraps. The copy carries `aria-hidden="true"` so screen readers announce the list once.
 - **Hex and Fivetran are not in any public icon set.** Their marks were lifted from the vendors' own assets (Fivetran's wordmark SVG, Hex's `favicon.svg`) and cropped to the glyph via `viewBox`. `SQL` is not a product and has no mark, so it uses a neutral database glyph drawn to match the weight of the real logos. The other eight come from Simple Icons. If a vendor rebrands, the source is the vendor's site, not a CDN we can bump.
 
@@ -105,9 +105,9 @@ The previous hero headline was:
 
 Its supporting copy was:
 
-> We build the pipelines, models, and dashboards that turn your marketing and product data into decisions — from raw events to a warehouse your whole team trusts.
+> We build the pipelines, models, and dashboards that turn your marketing and product data into decisions, from raw events to a warehouse your whole team trusts.
 
-That version was sharper and more memorable, but it positioned Prime Analytics primarily as a marketing-attribution firm. It also implied a level of causal certainty — identifying exactly which dollar produced a sale — that attribution data often cannot support.
+That version was sharper and more memorable, but it positioned Prime Analytics primarily as a marketing-attribution firm. It also implied a level of causal certainty, identifying exactly which dollar produced a sale, that attribution data often cannot support.
 
 The launch revision changed the headline to:
 
@@ -115,7 +115,7 @@ The launch revision changed the headline to:
 
 Its supporting copy is:
 
-> We help growing US companies connect marketing, sales, product, and revenue data — then build the attribution models and reporting their teams need to make confident decisions.
+> We help growing US companies connect marketing, sales, product, and revenue data, then build the attribution models and reporting their teams need to make confident decisions.
 
 The current version is broader, more defensible, and better aligned with the complete offer: attribution, pipelines, warehouses, models, and decision-facing reporting. It can speak to marketing, revenue operations, finance, product, and data leaders rather than only performance marketers. Its tradeoff is that it is less distinctive and less memorable than the previous headline.
 
@@ -125,7 +125,7 @@ If the current headline underperforms or feels too conventional, the preferred h
 
 With:
 
-> We connect your marketing, sales, product, and revenue data — then build the attribution models and reporting your team can trust.
+> We connect your marketing, sales, product, and revenue data, then build the attribution models and reporting your team can trust.
 
 The hybrid preserves the original headline's punch while avoiding the claim that every individual dollar can be attributed with certainty. Do not change the live headline based on preference alone; compare qualified-call conversion, CTA engagement, or structured prospect feedback once the site has enough traffic.
 
@@ -138,7 +138,7 @@ The hybrid preserves the original headline's punch while avoiding the claim that
 - [ ] **Confirm Calendly routing.** Test the complete booking journey on desktop and mobile, including confirmation email, timezone handling, reminders, and the meeting link.
 - [ ] **Confirm shared-lead behavior.** Decide whether both founders join every first call; the site promises direct founder access but currently books through Eduardo's calendar.
 - [ ] **Check the $2,000 economics after 1–2 engagements.** Record real hours, meetings, and revisions; change price or scope if the Blueprint cannot be delivered profitably in five business days.
-- [ ] **Complete brand/legal due diligence.** Search results contain unrelated companies called Prime Analytics, including a `prime-analytics.ai` business. Check US trademark risk and decide whether a consistent descriptor such as "Prime Analytics — Revenue Data Systems" is needed.
+- [ ] **Complete brand/legal due diligence.** Search results contain unrelated companies called Prime Analytics, including a `prime-analytics.ai` business. Check US trademark risk and decide whether a consistent descriptor such as "Prime Analytics: Revenue Data Systems" is needed.
 - [ ] **Claim consistent social profiles.** Use the same company name, descriptor, domain, logo, founder links, and summary on LinkedIn and any other public profile.
 - [x] **Create proof artifacts that are not case studies.** `/sample-blueprint` and `/sample-blueprint-services` are clearly labeled fictional deliverables. Visitors can switch between a B2B SaaS attribution problem that uses BigQuery/dbt and a professional-services reporting problem whose recommended solution is HubSpot plus Google Sheets.
 - [x] **Implement conversion measurement.** Cloudflare Web Analytics remains the aggregate traffic source; a first-party endpoint records an allowlisted set of CTA and sample interactions in Analytics Engine without cookies or direct identifiers. Production delivery still needs verification after each deploy.
@@ -157,7 +157,7 @@ These came out of the Eduardo/Jose call and should stay in the working checklist
 
 - [ ] **Jose: create the Upwork agency account.** Investigate Agency Plus and confirm the best agency setup before spending money on it.
 - [ ] **Eduardo: revisit pricing.** Compare the $2,000 Blueprint against a free discovery call plus a paid follow-on structure, and decide which model is actually strongest for launch.
-- [x] **Eduardo: bring the tech stack higher on the page.** Done — the stack moved from between risk reduction and About to directly under the hero proof strip, and became a logo marquee instead of a list of names. See "Site sections" above.
+- [x] **Eduardo: bring the tech stack higher on the page.** Done. The stack moved from between risk reduction and About to directly under the hero proof strip, and became a logo marquee instead of a list of names. See "Site sections" above.
 - [ ] **Eduardo: finish calendly availability blocking.** Make sure both founders can join when needed and that booking never conflicts with real availability.
 - [ ] **Eduardo/Jose: keep the site at MVP level.** Remove visual clutter, but do not add case-study-style claims or decorative sections that weaken the offer.
 - [ ] **Eduardo: keep the partnership idea warm.** Follow up on the Fanny introduction only if the partner actually has active lead-gen clients that fit the offer.
@@ -166,7 +166,7 @@ These came out of the Eduardo/Jose call and should stay in the working checklist
 
 This checklist records the July 2026 review of ProIQ, DataSolutions, Data Solutions Agency, Value10x, SmartSites, Pegasus One, and Element / The Data Agency. Items are ranked by likely impact for Prime Analytics, not by how frequently competitors use them.
 
-### Highest impact — implemented
+### Highest impact: implemented
 
 - [x] Add a precise **who this is for** section based on business conditions rather than company size alone.
 - [x] Add a restrained **not the right fit** section without rejecting profitable spreadsheet or lightweight work.
@@ -186,7 +186,7 @@ This checklist records the July 2026 review of ProIQ, DataSolutions, Data Soluti
 - [x] Turn the sample Blueprint into a two-example chooser rather than presenting one fictional case as the only possible engagement.
 - [x] Use the second sample to demonstrate that an important problem can justify a paid engagement without requiring a warehouse or complex stack.
 
-### High impact — requires owner preparation
+### High impact: requires owner preparation
 
 - [ ] Build the working document templates behind all eight Blueprint deliverables using the production checklist; the public fictional sample is a sales artifact, not the complete operating template.
 - [ ] Approve or revise the recommended limit of one decision, five sources, three reports, two stakeholder interviews, and one clarification round before putting it in the SOW.
@@ -270,7 +270,7 @@ This pass was implemented after the initial launch audit. Its goal was to remove
 - [x] Kept the examples explicitly fictional and made the choice visible before the click: B2B SaaS attribution or professional-services reporting. This adds useful range without implying client history.
 - [x] Added “Save as PDF” to both examples so a buyer can retain or share the artifact without requiring a form.
 - [x] Changed “complete assessment” to “focused assessment of the agreed business question and relevant systems.” The former could imply an unlimited review for $2,000; the latter matches a fixed-price, five-day engagement.
-- [x] Changed the final button from “Schedule Your Blueprint Call” to **“See If the Blueprint Fits.”** The body already says the call determines fit, so the new label accurately lowers commitment. This was adopted because it is more congruent with the actual call—not merely because it was suggested.
+- [x] Changed the final button from “Schedule Your Blueprint Call” to **“See If the Blueprint Fits.”** The body already says the call determines fit, so the new label accurately lowers commitment. This was adopted because it is more congruent with the actual call, not merely because it was suggested.
 - [x] Kept the reassuring final-CTA body and founder/no-preparation/no-obligation line because they answer the three most likely scheduling anxieties without making an outcome claim.
 - [x] Restored broad homepage metadata and created a substantive marketing-attribution consulting page. The page explains appropriate inputs, outputs, limitations, and process rather than existing only to repeat a keyword.
 - [x] Added Open Graph metadata to the fictional examples so shared links have a deliberate title, description, and image.
@@ -321,13 +321,13 @@ The recommended scope limits in the internal checklist are operating defaults, n
 
 | What | Where | Notes |
 |---|---|---|
-| Source repo | [github.com/eduardo-primeanalytics/prime-analytics](https://github.com/eduardo-primeanalytics/prime-analytics) | GitHub account `eduardo-primeanalytics` (renamed once from a typo'd signup, `eduardo-primeanaytics`). Two unrelated personal GitHub accounts (`eduardo-hellomood`, `DA-educhac`) are also authenticated locally on this machine — not used for this repo. |
-| Hosting | Cloudflare Workers (static assets, not classic Pages) | Cloudflare account **`Educhac23@gmail.com's Account`** (id `334696cbcfac3868e5a054bb7771257d`) — this is the account that already owned the `primeanalytics.ai` DNS zone before this project started, so it was used instead of creating a new one. Worker name: `prime-analytics`. |
-| DNS / SSL | Same Cloudflare account | `primeanalytics.ai` and `www.primeanalytics.ai` are attached as Custom Domains directly on the Worker (see `wrangler.toml` routes) — SSL is auto-provisioned by Cloudflare, no manual cert management. |
-| Business email | Google Workspace | `eduardo@primeanalytics.ai` is a paid Workspace seat; `hello@primeanalytics.ai` is a **free alias** on that same seat (Workspace allows multiple aliases per seat at no extra cost — don't create it as a separate user, that costs another license). MX record for the domain points to `smtp.google.com`; do **not** set up Cloudflare Email Routing for this zone, it would conflict with the existing Workspace MX. |
-| Scheduling | Calendly (free tier) | https://calendly.com/eduardo-primeanalytics/20min — all scheduling CTAs on the site link here. The 20-minute length lowers the commitment for cold traffic. |
-| SEO / indexing | Google Search Console | Domain verified, `sitemap.xml` submitted, and indexing requested for the homepage. As of setup, `site:primeanalytics.ai` returned zero results — brand-new domain with no backlinks, so this was expected. Give it a few days before re-checking. |
-| Email authentication | DNS TXT records | DKIM, SPF, and DMARC all confirmed live via direct DNS lookup: SPF is `v=spf1 include:_spf.google.com ~all`, DMARC is `v=DMARC1; p=none; rua=mailto:hello@primeanalytics.ai` (monitor-only — tighten to `p=quarantine`/`p=reject` later once reports look clean). |
+| Source repo | [github.com/eduardo-primeanalytics/prime-analytics](https://github.com/eduardo-primeanalytics/prime-analytics) | GitHub account `eduardo-primeanalytics` (renamed once from a typo'd signup, `eduardo-primeanaytics`). Two unrelated personal GitHub accounts (`eduardo-hellomood`, `DA-educhac`) are also authenticated locally on this machine, but are not used for this repo. |
+| Hosting | Cloudflare Workers (static assets, not classic Pages) | Cloudflare account **`Educhac23@gmail.com's Account`** (id `334696cbcfac3868e5a054bb7771257d`). This is the account that already owned the `primeanalytics.ai` DNS zone before this project started, so it was used instead of creating a new one. Worker name: `prime-analytics`. |
+| DNS / SSL | Same Cloudflare account | `primeanalytics.ai` and `www.primeanalytics.ai` are attached as Custom Domains directly on the Worker (see `wrangler.toml` routes). SSL is auto-provisioned by Cloudflare, no manual cert management. |
+| Business email | Google Workspace | `eduardo@primeanalytics.ai` is a paid Workspace seat; `hello@primeanalytics.ai` is a **free alias** on that same seat (Workspace allows multiple aliases per seat at no extra cost, so don't create it as a separate user, that costs another license). MX record for the domain points to `smtp.google.com`; do **not** set up Cloudflare Email Routing for this zone, it would conflict with the existing Workspace MX. |
+| Scheduling | Calendly (free tier) | https://calendly.com/eduardo-primeanalytics/20min. All scheduling CTAs on the site link here. The 20-minute length lowers the commitment for cold traffic. |
+| SEO / indexing | Google Search Console | Domain verified, `sitemap.xml` submitted, and indexing requested for the homepage. As of setup, `site:primeanalytics.ai` returned zero results, a brand-new domain with no backlinks, so this was expected. Give it a few days before re-checking. |
+| Email authentication | DNS TXT records | DKIM, SPF, and DMARC all confirmed live via direct DNS lookup: SPF is `v=spf1 include:_spf.google.com ~all`, DMARC is `v=DMARC1; p=none; rua=mailto:hello@primeanalytics.ai` (monitor-only, so tighten to `p=quarantine`/`p=reject` later once reports look clean). |
 
 ## Deploy
 
@@ -337,7 +337,7 @@ The recommended scope limits in the internal checklist are operating defaults, n
 npx wrangler deploy
 ```
 
-`wrangler.toml` pins `account_id` — don't remove it. Whoever runs `wrangler deploy` locally may be authenticated to more than one Cloudflare account (Cloudflare account membership isn't tied 1:1 to the login email), and without a pinned `account_id` wrangler will guess wrong and deploy to/create a Worker in the wrong account.
+`wrangler.toml` pins `account_id`, so don't remove it. Whoever runs `wrangler deploy` locally may be authenticated to more than one Cloudflare account (Cloudflare account membership isn't tied 1:1 to the login email), and without a pinned `account_id` wrangler will guess wrong and deploy to/create a Worker in the wrong account.
 
 `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` are required runtime values for `/ops`. They live in `wrangler.toml` as non-secret application identifiers and must remain aligned with the Access application in Zero Trust.
 
@@ -352,24 +352,24 @@ curl -s "https://primeanalytics.ai/?cb=$(date +%s)" | grep -o "<title>.*</title>
 Don't push straight to `main`. Suggested workflow:
 
 1. Branch per change: `git checkout -b copy/about-section`
-2. Push and open a PR, even solo — it's a paper trail of *why* something changed, which matters for later disagreements.
+2. Push and open a PR, even solo. It's a paper trail of *why* something changed, which matters for later disagreements.
 3. Each partner reviews the other's PRs before merge.
 4. Protect `main` in GitHub repo settings (Settings → Branches → require PR before merge) so this isn't just a norm you can forget under deadline pressure.
-5. After merging, remember the manual `wrangler deploy` step above — merging alone doesn't put it live.
+5. After merging, remember the manual `wrangler deploy` step above. Merging alone doesn't put it live.
 
 ## Open items
 
-- [ ] **Re-price the Revenue Data Blueprint after the first 1–2 real engagements.** The published $2,000 price is benchmark-derived, not costed — nobody has actually timed a real Blueprint yet. Track real hours on the first couple of clients and revisit the number and scope once there's real data.
-- [ ] **Certification/partner badges** — if either founder holds a Snowflake, dbt, or GA4 certification, add it as a trust signal. Costs nothing, needs no client, not yet done.
+- [ ] **Re-price the Revenue Data Blueprint after the first 1–2 real engagements.** The published $2,000 price is benchmark-derived, not costed, and nobody has actually timed a real Blueprint yet. Track real hours on the first couple of clients and revisit the number and scope once there's real data.
+- [ ] **Certification/partner badges.** If either founder holds a Snowflake, dbt, or GA4 certification, add it as a trust signal. Costs nothing, needs no client, not yet done.
 - [x] **Make compliance/data-handling visible.** The homepage now states minimum-access, client-owned-infrastructure, NDA/DPA, and access-removal practices; the privacy page uses matching language.
-- [ ] **Real proof, when it exists** — do not invent case studies or push for them before the first client. Once a client grants permission, add the smallest truthful proof available: a quote, anonymized artifact, or measured outcome.
+- [ ] **Real proof, when it exists.** Do not invent case studies or push for them before the first client. Once a client grants permission, add the smallest truthful proof available: a quote, anonymized artifact, or measured outcome.
 - [ ] **Legal/invoicing structure** for cross-border USD billing. Complete the counsel-reviewed items in `operations/legal-readiness.md` before handling client data.
 - [ ] **Approve the Blueprint operating boundary.** Both founders must accept or revise the proposed source, report, interview, revision, and start-clock limits before the first SOW.
 - [ ] **Verify conversion reporting after launch.** Confirm real events reach `prime_analytics_events`, run the 30-day query in `operations/analytics.md`, and reconcile Calendly clicks against completed bookings.
 - [ ] **Submit the focused page for indexing.** Request indexing for `/marketing-attribution-consulting` in Google Search Console and monitor query quality.
 - [ ] **Real-device QA.** Test navigation, scheduling, example selection, printing to PDF, and keyboard use on current iOS Safari, Android Chrome, and desktop browsers.
 - [x] **Font privacy/performance.** Fonts are self-hosted as WOFF2 assets, the Google disclosure was removed, and the CSP now permits fonts only from the site itself.
-- [ ] **Testimonials / client logos** — deliberately not faked. Add once there are real clients willing to be named or quoted.
+- [ ] **Testimonials / client logos.** Deliberately not faked. Add once there are real clients willing to be named or quoted.
 
 ## Pricing anchor
 
@@ -377,19 +377,19 @@ Don't push straight to `main`. Suggested workflow:
 
 **Why $2,000 and tightly defined, not the originally-researched $2,500 flat fee:**
 - The Blueprint can become open-ended if "map everything" is promised. The public deliverable list defines the expected output; the eventual statement of work must define access assumptions, number of stakeholder sessions, source-system limits, and exclusions.
-- $2,000 at ~20 realistic internal hours lands at roughly $100/hr — consistent with the nearshore/boutique blended rate researched below, for a disciplined Blueprint rather than an unbounded assessment.
-- The closest direct comp (Data Solutions Agency) publishes deliverables from ~$900. With zero case studies or testimonials live yet, pricing much above that gap is a harder sell than the original research fully weighed — $2,000 narrows that gap versus $2,500.
+- $2,000 at ~20 realistic internal hours lands at roughly $100/hr, consistent with the nearshore/boutique blended rate researched below, for a disciplined Blueprint rather than an unbounded assessment.
+- The closest direct comp (Data Solutions Agency) publishes deliverables from ~$900. With zero case studies or testimonials live yet, pricing much above that gap is a harder sell than the original research fully weighed, and $2,000 narrows that gap versus $2,500.
 
 **Not yet published, deliberately:**
 - **Build price range.** No real client has been billed yet, so any range is still benchmark-derived, not costed. Leaving it as "quoted after the Blueprint" is already standard, credible practice and doesn't need a public range to work.
 - **Monthly/retainer tier.** Site copy was cleaned up specifically to remove "fixed price vs. monthly" contradictions (see git log). Reintroducing a retainer product is a real decision that deserves its own pass later, not a rider on the Blueprint-pricing change.
-- **Important:** the $2,000 figure is a benchmark-derived guess, not a costed one — nobody has timed a real Blueprint yet. Revisit after the first 1–2 real engagements (see Open Items).
+- **Important:** the $2,000 figure is a benchmark-derived guess, not a costed one, and nobody has timed a real Blueprint yet. Revisit after the first 1–2 real engagements (see Open Items).
 
 **Market benchmarks used:**
 - US onshore senior data engineers: $150–185/hr; analytics engineers $140–170/hr; dbt specialists $140–160/hr baseline, up to $200–300/hr when dbt is the centerpiece. ([source](https://dataconsultingfirms.com/insights/data-engineering-hourly-rates), [source](https://www.webfx.com/martech/pricing/big-data-consulting/))
 - Small Snowflake implementations: $25,000–$50,000; small assessments/audits alone from $5,000; full migrations $100K+. ([source](https://www.hireinsouth.com/post/best-snowflake-consulting-companies), [source](https://data-sleek.com/snowflake-consulting-services/))
-- Marketing attribution audits from ~$5K, monthly retainers up to $20K for larger clients — but boutique agencies (2–15 people, which is us) charge markedly less than enterprise firms for the same scope. ([source](https://www.cometly.com/post/marketing-attribution-consultant-pricing))
+- Marketing attribution audits from ~$5K, monthly retainers up to $20K for larger clients, but boutique agencies (2–15 people, which is us) charge markedly less than enterprise firms for the same scope. ([source](https://www.cometly.com/post/marketing-attribution-consultant-pricing))
 - General project-based agency work: $5,000–$50,000+ per project. ([source](https://www.darkroomagency.com/observatory/marketing-agency-cost-2026-pricing-by-service))
-- Nearshore LatAm senior data/dev talent: $80–$115/hr at full timezone overlap, vs. $150–250/hr for US mid-market firms and $400+/hr for top-tier US specialists — a 40–65% discount for equivalent seniority. ([source](https://www.hireinsouth.com/post/nearshore-development-rates), [source](https://distantjob.com/blog/offshore-developer-rates/))
-- Direct competitor reality check: Data Solutions Agency publishes *"deliverables start at 800 EUR, missions at 1,500 EUR"* (~$900/$1,600) — "small deliverables" pricing (one dashboard, one dbt model), not full warehouse builds. Not a comparable benchmark for our Build phase, but a real signal on audit-tier pricing from the closest direct comp.
-- The tension to hold in mind: the site's own commitment is *"both founders, no hand-offs — no account managers, no rotating junior staff."* That's a premium-access claim — pricing shouldn't read as "cheap because junior/offshore," it should read as "same senior access, less overhead."
+- Nearshore LatAm senior data/dev talent: $80–$115/hr at full timezone overlap, vs. $150–250/hr for US mid-market firms and $400+/hr for top-tier US specialists, a 40–65% discount for equivalent seniority. ([source](https://www.hireinsouth.com/post/nearshore-development-rates), [source](https://distantjob.com/blog/offshore-developer-rates/))
+- Direct competitor reality check: Data Solutions Agency publishes *"deliverables start at 800 EUR, missions at 1,500 EUR"* (~$900/$1,600), which is "small deliverables" pricing (one dashboard, one dbt model), not full warehouse builds. Not a comparable benchmark for our Build phase, but a real signal on audit-tier pricing from the closest direct comp.
+- The tension to hold in mind: the site's own commitment is *"both founders, no hand-offs, no account managers, no rotating junior staff."* That's a premium-access claim, so pricing shouldn't read as "cheap because junior/offshore," it should read as "same senior access, less overhead."

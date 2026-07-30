@@ -1,5 +1,5 @@
 /**
- * Prime Analytics Ops — Google Drive meeting intake
+ * Prime Analytics Ops: Google Drive meeting intake
  *
  * Add this file to a standalone Google Apps Script project owned by the Google
  * Workspace user who receives the meeting notes. Configure the script
