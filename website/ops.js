@@ -517,7 +517,7 @@ async function openTask(taskId) {
 
   $('#archive-task').addEventListener('click', async (event) => {
     const confirmed = window.confirm(
-      `Archive ${task.code} — ${task.title}?\n\nIt will leave active views and remain available under Archived.`,
+      `Archive ${task.code}: ${task.title}?\n\nIt will leave active views and remain available under Archived.`,
     );
     if (!confirmed) return;
     const button = event.currentTarget;
